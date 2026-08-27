@@ -17,8 +17,8 @@ export async function verifyPassword(plain: string, hash: string): Promise<boole
 
 export type TokenPayload = {
   id: string;
-  role: "SUPER_ADMIN" | "BRANCH_MANAGER" | "TELLER";
-  branchId?: string; // present for branch users, absent for super admin
+  role: string; // "SUPER_ADMIN" or any custom staff role name (e.g. "TELLER", "CASHIER", "RECEPTIONIST")
+  branchId?: string;
 };
 
 export function signToken(payload: TokenPayload): string {

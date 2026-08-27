@@ -1,6 +1,8 @@
 import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
+import { LanguageProvider } from "@/context/LanguageContext";
+
 
 export const metadata: Metadata = {
   title: "Port Transfer System",
@@ -25,7 +27,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         />
       </head>
       <body className="font-[Inter] antialiased">
-        <ThemeProvider>{children}</ThemeProvider>
+        <LanguageProvider >
+          <ThemeProvider>{children}</ThemeProvider>
+       </LanguageProvider >
       </body>
     </html>
   );

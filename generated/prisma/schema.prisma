@@ -276,3 +276,21 @@ model AuditLog {
   @@index([entityType, entityId])
   @@map("audit_log")
 }
+
+model RolePermission {
+  id            String   @id @default(uuid())
+  role          String // TELLER | BRANCH_MANAGER
+  permissionKey String   @map("permission_key")
+  enabled       Boolean  @default(true)
+  updatedAt     DateTime @updatedAt @map("updated_at")
+
+  @@unique([role, permissionKey])
+  @@map("role_permission")
+}
+
+model Role {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  isSystem  Boolean  @default(false) @map("is_system")
+  createdAt DateTime @default(now()) @map("created_at")
+}

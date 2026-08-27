@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/require-staff";
 
+
 const refundSchema = z.object({
   pickupCode: z.string().length(16),
   senderName: z.string().min(2).optional(),
@@ -12,6 +13,11 @@ const refundSchema = z.object({
 export async function POST(req: NextRequest) {
   const auth = requireStaff(req);
   if (auth instanceof NextResponse) return auth;
+
+  const { hasPermission } = await import("@/lib/permissions");
+if (!(await hasPermission(auth.role, "PROCESS_REFUND"))) {
+  return NextResponse.json({ error: "You don't have permission to process refunds" }, { status: 403 });
+}
 
   const body = await req.json();
   const parsed = refundSchema.safeParse(body);

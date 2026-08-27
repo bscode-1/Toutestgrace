@@ -11,9 +11,10 @@ type Tier = {
   commissionType: "PERCENTAGE" | "FLAT";
   commissionPercent: number | null;
   commissionFlatAmount: number | null;
+  activeFrom: string;
+  activeTo: string | null;
   createdAt: string;
 };
-
 type BranchInfo = { name: string; currency: { symbol: string } | null };
 
 export default function CommissionTiersPage() {
@@ -33,6 +34,8 @@ export default function CommissionTiersPage() {
   const [commissionFlatAmount, setCommissionFlatAmount] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const [editingTier, setEditingTier] = useState<Tier | null>(null);
 
   async function loadData() {
     setLoading(true);
@@ -92,6 +95,70 @@ export default function CommissionTiersPage() {
     }
   }
 
+  function openEditTier(t: Tier) {
+    setEditingTier(t);
+    setMinAmount(String(t.minAmount));
+    setMaxAmount(String(t.maxAmount));
+    setCommissionType(t.commissionType);
+    setCommissionPercent(t.commissionPercent !== null ? String(t.commissionPercent) : "");
+    setCommissionFlatAmount(t.commissionFlatAmount !== null ? String(t.commissionFlatAmount) : "");
+    setFormError(null);
+    setShowForm(true);
+  }
+
+  async function handleUpdate(e: React.FormEvent) {
+    e.preventDefault();
+    if (!editingTier) return;
+    setFormError(null);
+    setSubmitting(true);
+    try {
+      const body: Record<string, unknown> = {
+        minAmount: Number(minAmount),
+        maxAmount: Number(maxAmount),
+        commissionType,
+      };
+      if (commissionType === "PERCENTAGE") {
+        body.commissionPercent = Number(commissionPercent);
+      } else {
+        body.commissionFlatAmount = Number(commissionFlatAmount);
+      }
+
+      const res = await apiFetch(`/api/branches/${branchId}/commission-tiers/${editingTier.id}`, {
+        method: "PATCH",
+        body: JSON.stringify(body),
+      });
+      if (!res.ok) {
+        const data = await res.json().catch(() => ({}));
+        throw new Error(data.error?.formErrors?.[0] || data.error || "Failed to update tier");
+      }
+      setMinAmount("");
+      setMaxAmount("");
+      setCommissionPercent("");
+      setCommissionFlatAmount("");
+      setEditingTier(null);
+      setShowForm(false);
+      await loadData();
+    } catch (err) {
+      setFormError((err as Error).message);
+    } finally {
+      setSubmitting(false);
+    }
+  }
+
+  async function retireTier(t: Tier) {
+    if (!confirm("Retire this commission tier? Past transactions keep referencing it, but it will no longer be used for new transfers.")) return;
+    try {
+      const res = await apiFetch(`/api/branches/${branchId}/commission-tiers/${t.id}`, {
+        method: "DELETE",
+      });
+      const data = await res.json();
+      if (!res.ok) throw new Error(data.error || "Failed to retire tier");
+      await loadData();
+    } catch (err) {
+      alert((err as Error).message);
+    }
+  }
+
   const currencySymbol = branch?.currency?.symbol || "$";
 
   return (
@@ -111,7 +178,14 @@ export default function CommissionTiersPage() {
           </p>
         </div>
         <button
-          onClick={() => setShowForm(!showForm)}
+          onClick={() => {
+            setEditingTier(null);
+            setMinAmount("");
+            setMaxAmount("");
+            setCommissionPercent("");
+            setCommissionFlatAmount("");
+            setShowForm(!showForm);
+          }}
           className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-4 py-2.5 hover:opacity-90 transition-opacity"
         >
           <i className="fa-solid fa-plus text-xs" />
@@ -121,10 +195,17 @@ export default function CommissionTiersPage() {
 
       {showForm && (
         <form
-          onSubmit={handleCreate}
+          onSubmit={editingTier ? handleUpdate : handleCreate}
           className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm mb-6 space-y-4 card-hover"
         >
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Add a commission tier</h3>
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">
+            {editingTier ? "Revise Commission Tier" : "Add a commission tier"}
+          </h3>
+          {editingTier && (
+            <p className="text-xs text-amber-500">
+              Saving will retire the current tier and create a new one — this preserves history for past transactions.
+            </p>
+          )}
 
           {formError && (
             <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
@@ -172,22 +253,20 @@ export default function CommissionTiersPage() {
                 <button
                   type="button"
                   onClick={() => setCommissionType("PERCENTAGE")}
-                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium border transition-colors ${
-                    commissionType === "PERCENTAGE"
-                      ? "bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-400"
-                      : "border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400"
-                  }`}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium border transition-colors ${commissionType === "PERCENTAGE"
+                    ? "bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-400"
+                    : "border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400"
+                    }`}
                 >
                   Percentage
                 </button>
                 <button
                   type="button"
                   onClick={() => setCommissionType("FLAT")}
-                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium border transition-colors ${
-                    commissionType === "FLAT"
-                      ? "bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-400"
-                      : "border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400"
-                  }`}
+                  className={`flex-1 py-2.5 rounded-xl text-sm font-medium border transition-colors ${commissionType === "FLAT"
+                    ? "bg-blue-50 dark:bg-blue-900/30 border-blue-300 dark:border-blue-600 text-blue-700 dark:text-blue-400"
+                    : "border-slate-200 dark:border-slate-600 text-slate-500 dark:text-slate-400"
+                    }`}
                 >
                   Flat Fee
                 </button>
@@ -236,14 +315,7 @@ export default function CommissionTiersPage() {
               disabled={submitting}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              {submitting ? "Creating..." : "Create Tier"}
-            </button>
-            <button
-              type="button"
-              onClick={() => setShowForm(false)}
-              className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200"
-            >
-              Cancel
+              {submitting ? "Saving..." : editingTier ? "Save Revision" : "Create Tier"}
             </button>
           </div>
         </form>
@@ -269,16 +341,19 @@ export default function CommissionTiersPage() {
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover">
           <table className="w-full text-sm">
             <thead>
-              <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
+                            <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
                 <th className="px-5 py-3 font-medium">Amount Range</th>
                 <th className="px-5 py-3 font-medium">Type</th>
                 <th className="px-5 py-3 font-medium">Charge</th>
+                <th className="px-5 py-3 font-medium">Last Changed</th>
+                <th className="px-5 py-3 font-medium">Status</th>
+                <th className="px-5 py-3 font-medium"></th>
               </tr>
             </thead>
             <tbody>
-              {tiers
+                            {tiers
                 .slice()
-                .sort((a, b) => Number(a.minAmount) - Number(b.minAmount))
+                .sort((a, b) => Number(a.minAmount) - Number(b.minAmount) || new Date(b.activeFrom).getTime() - new Date(a.activeFrom).getTime())
                 .map((t) => (
                   <tr
                     key={t.id}
@@ -291,19 +366,52 @@ export default function CommissionTiersPage() {
                     </td>
                     <td className="px-5 py-4">
                       <span
-                        className={`text-xs font-medium px-2.5 py-1 rounded-full ${
-                          t.commissionType === "FLAT"
-                            ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400"
-                            : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
-                        }`}
+                        className={`text-xs font-medium px-2.5 py-1 rounded-full ${t.commissionType === "FLAT"
+                          ? "bg-indigo-100 text-indigo-700 dark:bg-indigo-900/30 dark:text-indigo-400"
+                          : "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400"
+                          }`}
                       >
                         {t.commissionType === "FLAT" ? "Flat Fee" : "Percentage"}
                       </span>
                     </td>
-                    <td className="px-5 py-4 font-semibold text-slate-900 dark:text-white">
+                                       <td className="px-5 py-4 font-semibold text-slate-900 dark:text-white">
                       {t.commissionType === "FLAT"
                         ? `${currencySymbol}${Number(t.commissionFlatAmount)}`
                         : `${Number(t.commissionPercent)}%`}
+                    </td>
+                    <td className="px-5 py-4 text-slate-500 dark:text-slate-400">
+                      {new Date(t.activeFrom).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })}
+                    </td>
+                    <td className="px-5 py-4">
+                      {t.activeTo === null ? (
+                        <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400">
+                          Current
+                        </span>
+                      ) : (
+                        <span className="text-xs font-medium px-2.5 py-1 rounded-full bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400">
+                          Retired {new Date(t.activeTo).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
+                        </span>
+                      )}
+                    </td>
+                    <td className="px-5 py-4">
+                      {t.activeTo === null && (
+                        <div className="flex items-center gap-3 justify-end">
+                          <button
+                            onClick={() => openEditTier(t)}
+                            className="text-slate-400 hover:text-blue-600 dark:hover:text-blue-400"
+                            aria-label="Edit"
+                          >
+                            <i className="fa-solid fa-pen text-xs" />
+                          </button>
+                          <button
+                            onClick={() => retireTier(t)}
+                            className="text-slate-400 hover:text-red-600 dark:hover:text-red-400"
+                            aria-label="Retire"
+                          >
+                            <i className="fa-solid fa-trash text-xs" />
+                          </button>
+                        </div>
+                      )}
                     </td>
                   </tr>
                 ))}

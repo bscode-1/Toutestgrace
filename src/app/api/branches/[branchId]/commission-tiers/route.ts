@@ -80,9 +80,11 @@ export async function GET(
 
   const { branchId } = await params;
 
+  // Return the FULL history — current and retired tiers — so the admin
+  // can see exactly when each rate took effect and when it was replaced.
   const tiers = await prisma.commissionTier.findMany({
-    where: { branchId, activeTo: null },
-    orderBy: { minAmount: "asc" },
+    where: { branchId },
+    orderBy: [{ minAmount: "asc" }, { activeFrom: "desc" }],
   });
 
   return NextResponse.json({ tiers });

@@ -18,6 +18,8 @@ BRANCH B[id] = 8fa0e561-5c6f-4581-a0eb-2b0f09f7af44
 Email: admin@porttransfer.com
 Password: ChangeMe123!
 
+DATABASE_URL='postgresql://neondb_owner:npg_5drvX6wyRJen@ep-frosty-dew-ax60cvtm-pooler.c-4.us-east-2.aws.neon.tech/neondb?sslmode=require&channel_binding=require'
+
 
 Step 1: Install PrerequisitesEnable IIS: Open the Start menu, type "Turn Windows features on or off", and press Enter. Check the box for Internet Information Services and click OK.Node.js: Download and install the latest LTS version from the Official Node.js Website.HttpPlatformHandler: Download and install HttpPlatformHandler v1.2 from Microsoft. This module manages the Node.js process lifecycle and forwards incoming IIS traffic directly to your Next.js application.Step 2: Configure Next.js for Standalone OutputBy default, Next.js expects a Node server with access to full developer dependencies. Enabling the standalone feature bundles only the files needed for production, making it perfect for IIS deployments.Update your next.config.js or next.config.mjs file:javascript/** @type {import('next').NextConfig} */
 const nextConfig = {
@@ -58,3 +60,16 @@ Log in as John (john@branch-a.com / Manager123!) at /login — should land on /b
 9320366841413760
 
 Restart, log in as Mary (mary@branch-b.com or whatever her working email ended up being, Manager123!), go to /branch/complete
+
+
+git config --global user.name "Russel"
+git config --global user.email "majaliwaswedi@gmail.com"
+
+ssh-keygen -t ed25519 -C "majaliwaswedi@gmail.com"
+
+The key fingerprint is:
+ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsRlZQbK/dz5AY4UbRpK6Fo76+gFHvkoZt99anVjcJ3 majaliwaswedi@gmail.com
+
+
+git remote add origin git@github.com:git@github.com:bscode-1/Money_Transfer_app.git
+git push -u origin main

@@ -8,7 +8,7 @@ const createUserSchema = z.object({
   name: z.string().min(2),
   email: z.string().email(),
   password: z.string().min(6),
-  role: z.enum(["TELLER", "BRANCH_MANAGER"]),
+  role: z.string().min(2),
   branchId: z.string().uuid(),
   preferredLanguage: z.enum(["en", "fr"]).default("en"),
 });
@@ -32,6 +32,11 @@ export async function POST(req: NextRequest) {
   if (!branch) {
     return NextResponse.json({ error: "Branch not found" }, { status: 404 });
   }
+
+   const roleExists = await prisma.role.findUnique({ where: { name: role } });
+if (!roleExists) {
+  return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+}
 
   const passwordHash = await hashPassword(password);
 

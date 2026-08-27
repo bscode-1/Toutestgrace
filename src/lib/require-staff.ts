@@ -16,9 +16,9 @@ export function requireStaff(req: NextRequest): TokenPayload | NextResponse {
   const token = authHeader.replace("Bearer ", "");
   const payload = verifyToken(token);
 
-  if (!payload || (payload.role !== "TELLER" && payload.role !== "BRANCH_MANAGER")) {
-    return NextResponse.json({ error: "Unauthorized: branch staff access required" }, { status: 403 });
-  }
+ if (!payload || payload.role === "SUPER_ADMIN") {
+  return NextResponse.json({ error: "Unauthorized: branch staff access required" }, { status: 403 });
+}
 
   return payload;
 }

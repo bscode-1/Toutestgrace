@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/client-auth";
 import Pagination from "@/components/Pagination";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Topup = {
   id: string;
@@ -33,6 +34,8 @@ export default function TopupsPage() {
   const [note, setNote] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  
+   const { t } = useLanguage();
 
   async function loadData() {
     setLoading(true);
@@ -86,9 +89,9 @@ export default function TopupsPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Topups</h1>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{t("topups")}</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            {topups.length} topup{topups.length === 1 ? "" : "s"} issued
+            {topups.length} {t("topupsIssued")} {t("issueTopup")}
           </p>
         </div>
         <button
@@ -105,7 +108,7 @@ export default function TopupsPage() {
           onSubmit={handleCreate}
           className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm mb-6 space-y-4 card-hover"
         >
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Issue a branch topup</h3>
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("issueBranchTopup")}</h3>
 
           {formError && (
             <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
@@ -116,7 +119,7 @@ export default function TopupsPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Branch
+                {t("branch")}
               </label>
               <select
                 required
@@ -139,7 +142,7 @@ export default function TopupsPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Amount
+                {t("amount")}
               </label>
               <input
                 type="number"
@@ -172,14 +175,14 @@ export default function TopupsPage() {
               disabled={submitting}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              {submitting ? "Issuing..." : "Issue Topup"}
+              {submitting ? "..." : t("issueTopup")}
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
               className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200"
             >
-              Cancel
+              {t("cancel")}
             </button>
           </div>
         </form>
@@ -195,20 +198,21 @@ export default function TopupsPage() {
       {!loading && topups.length === 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-10 text-center shadow-sm">
           <i className="fa-solid fa-credit-card text-3xl text-slate-300 dark:text-slate-600 mb-3" />
-          <p className="text-sm text-slate-500 dark:text-slate-400">No topups issued yet.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{t("noTopupsYet")}.</p>
         </div>
       )}
 
       {!loading && topups.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover">
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                <th className="px-5 py-3 font-medium">Receipt #</th>
-                <th className="px-5 py-3 font-medium">Branch</th>
-                <th className="px-5 py-3 font-medium">Manager</th>
-                <th className="px-5 py-3 font-medium">Amount</th>
-                <th className="px-5 py-3 font-medium">Date</th>
+                <th className="px-5 py-3 font-medium">{t("receiptNumber")} #</th>
+                <th className="px-5 py-3 font-medium">{t("branch")}</th>
+                <th className="px-5 py-3 font-medium">{t("manager")}</th>
+                <th className="px-5 py-3 font-medium">{t("amount")}</th>
+                <th className="px-5 py-3 font-medium">{t("date")}</th>
               </tr>
             </thead>
             <tbody>
@@ -230,6 +234,7 @@ export default function TopupsPage() {
               ))}
             </tbody>
           </table>
+          </div>
           <Pagination
             currentPage={page}
             totalItems={topups.length}

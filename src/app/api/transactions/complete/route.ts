@@ -13,6 +13,11 @@ export async function POST(req: NextRequest) {
   const auth = requireStaff(req);
   if (auth instanceof NextResponse) return auth;
 
+  const { hasPermission } = await import("@/lib/permissions");
+if (!(await hasPermission(auth.role, "COMPLETE_PICKUP"))) {
+  return NextResponse.json({ error: "You don't have permission to complete pickups" }, { status: 403 });
+}
+
   const body = await req.json();
   const parsed = completeSchema.safeParse(body);
 

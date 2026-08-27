@@ -3,6 +3,7 @@ import Link from "next/link";
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/client-auth";
 import Pagination from "@/components/Pagination";
+import { useLanguage } from "@/context/LanguageContext";
 
 
 type Branch = {
@@ -33,6 +34,8 @@ export default function BranchesPage() {
   const [branchCode, setBranchCode] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+
+  const { t } = useLanguage();
 
   async function loadBranches() {
     setLoading(true);
@@ -89,17 +92,17 @@ export default function BranchesPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Branches</h1>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{t("branches")}</h1>
           <p className="text-sm text-slate-500 dark:text-slate-400">
-            {branches.length} branch{branches.length === 1 ? "" : "es"} in the system
+            {branches.length} {t("branchesInSystem")}
           </p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
           className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-4 py-2.5 hover:opacity-90 transition-opacity"
         >
-          <i className="fa-solid fa-plus text-xs" />
-          New Branch
+         <i className="fa-solid fa-plus text-xs" />
+          {t("newBranch")}  
         </button>
       </div>
 
@@ -108,7 +111,7 @@ export default function BranchesPage() {
           onSubmit={handleCreate}
           className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm mb-6 space-y-4 card-hover"
         >
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Create a new branch</h3>
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("createNewBranch")}</h3>
 
           {formError && (
             <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">
@@ -119,7 +122,7 @@ export default function BranchesPage() {
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Branch name
+                {t("branchName")}
               </label>
               <input
                 type="text"
@@ -132,7 +135,7 @@ export default function BranchesPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Branch code
+                {t("branchCode")}
               </label>
               <input
                 type="text"
@@ -144,7 +147,7 @@ export default function BranchesPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                City / Location
+                {t("cityLocation")}
               </label>
               <input
                 type="text"
@@ -156,7 +159,7 @@ export default function BranchesPage() {
             </div>
             <div>
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Phone number
+                {t("phoneNumber")}
               </label>
               <input
                 type="text"
@@ -168,7 +171,7 @@ export default function BranchesPage() {
             </div>
             <div className="sm:col-span-2">
               <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                Full address
+                {t("fullAddress")}
               </label>
               <input
                 type="text"
@@ -186,14 +189,14 @@ export default function BranchesPage() {
               disabled={submitting}
               className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              {submitting ? "Creating..." : "Create Branch"}
+             {submitting ? "..." : t("createBranch")}
             </button>
             <button
               type="button"
               onClick={() => setShowForm(false)}
               className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200"
             >
-              Cancel
+              {t("cancel")}
             </button>
           </div>
         </form>
@@ -209,13 +212,14 @@ export default function BranchesPage() {
       {!loading && branches.length === 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-10 text-center shadow-sm">
           <i className="fa-solid fa-building-columns text-3xl text-slate-300 dark:text-slate-600 mb-3" />
-          <p className="text-sm text-slate-500 dark:text-slate-400">No branches yet — create your first one.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{t("noBranchesYet")}</p>
         </div>
       )}
 
       {!loading && branches.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover">
-          <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
                 <th className="px-5 py-3 font-medium">Branch</th>
@@ -263,7 +267,8 @@ export default function BranchesPage() {
                 </tr>
               ))}
             </tbody>
-                    </table>
+            </table>
+          </div>
           <Pagination
             currentPage={page}
             totalItems={branches.length}

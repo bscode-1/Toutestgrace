@@ -7,6 +7,7 @@ import QuickStats from "@/components/QuickStats";
 import StatusDonutChart from "@/components/StatusDonutChart";
 import VolumeTrendChart from "@/components/VolumeTrendChart";
 import RecentTransactions from "@/components/RecentTransactions";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Summary = {
   totalSent: { count: number; amount: number };
@@ -25,6 +26,7 @@ export default function AdminDashboardPage() {
   const [branchCount, setBranchCount] = useState<number | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const { t } = useLanguage();
 
   useEffect(() => {
     async function load() {
@@ -57,25 +59,25 @@ export default function AdminDashboardPage() {
   if (!summary) return null;
 
   const cards = [
-    { label: "Total Sent", count: summary.totalSent.count, amount: summary.totalSent.amount, gradient: "from-rose-400 to-pink-500", icon: "fa-paper-plane" },
-    { label: "Total Received", count: summary.totalReceived.count, amount: summary.totalReceived.amount, gradient: "from-blue-500 to-indigo-600", icon: "fa-hand-holding-dollar" },
-    { label: "Pending", count: summary.pending.count, amount: summary.pending.amount, gradient: "from-amber-400 to-orange-500", icon: "fa-clock" },
-    { label: "Completed", count: summary.completed.count, amount: summary.completed.amount, gradient: "from-teal-500 to-emerald-600", icon: "fa-check-double" },
-    { label: "Refunded", count: summary.refunded.count, amount: summary.refunded.amount, gradient: "from-slate-500 to-slate-700", icon: "fa-rotate-left" },
+    { label: t("totalSent"), count: summary.totalSent.count, amount: summary.totalSent.amount, gradient: "from-rose-400 to-pink-500", icon: "fa-paper-plane" },
+    { label: t("totalReceived"), count: summary.totalReceived.count, amount: summary.totalReceived.amount, gradient: "from-blue-500 to-indigo-600", icon: "fa-hand-holding-dollar" },
+    { label: t("pending"), count: summary.pending.count, amount: summary.pending.amount, gradient: "from-amber-400 to-orange-500", icon: "fa-clock" },
+    { label: t("completed"), count: summary.completed.count, amount: summary.completed.amount, gradient: "from-teal-500 to-emerald-600", icon: "fa-check-double" },
+    { label: t("refunded"), count: summary.refunded.count, amount: summary.refunded.amount, gradient: "from-slate-500 to-slate-700", icon: "fa-rotate-left" },
   ];
 
   const quickStats = [
-    { icon: "fa-solid fa-building-columns", label: "Branches", value: String(branchCount ?? "—"), color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-900/30" },
-    { icon: "fa-solid fa-hourglass-half", label: "Pending", value: String(summary.pending.count), color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-900/30" },
-    { icon: "fa-solid fa-check", label: "Completed Today", value: String(summary.completed.count), color: "text-green-500", bg: "bg-green-50 dark:bg-green-900/30" },
-    { icon: "fa-solid fa-rotate-left", label: "Refunded Today", value: String(summary.refunded.count), color: "text-slate-500", bg: "bg-slate-100 dark:bg-slate-700" },
+    { icon: "fa-solid fa-building-columns", label: t("branches"), value: String(branchCount ?? "—"), color: "text-blue-500", bg: "bg-blue-50 dark:bg-blue-900/30" },
+    { icon: "fa-solid fa-hourglass-half", label: t("pending"), value: String(summary.pending.count), color: "text-amber-500", bg: "bg-amber-50 dark:bg-amber-900/30" },
+    { icon: "fa-solid fa-check", label: t("completed"), value: String(summary.completed.count), color: "text-green-500", bg: "bg-green-50 dark:bg-green-900/30" },
+    { icon: "fa-solid fa-rotate-left", label: t("refunded"), value: String(summary.refunded.count), color: "text-slate-500", bg: "bg-slate-100 dark:bg-slate-700" },
   ];
 
   return (
     <div>
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Dashboard</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">System-wide activity, today</p>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{t("dashboard")}</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">{t("systemWideActivityToday")}</p>
       </div>
 
       <SummaryCards metrics={cards} />

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { useRouter } from "next/navigation";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -10,6 +11,7 @@ export default function LoginPage() {
   const [showPassword, setShowPassword] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
+ const { t, language, setLanguage } = useLanguage();
 
   async function handleLogin(e: React.FormEvent) {
     e.preventDefault();
@@ -55,17 +57,24 @@ export default function LoginPage() {
       {/* Right (visually) — form, 30% */}
       <div className="w-full lg:w-[40%] min-h-screen flex flex-col items-center justify-center p-8 sm:p-12 bg-white">
         <div className="w-full max-w-sm">
-          <div className="flex items-center gap-2 mb-10">
+         <div className="flex items-center justify-between mb-10">
+          <div className="flex items-center gap-2">
             <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
               <i className="fa-solid fa-building-columns text-white text-sm" />
             </div>
             <span className="text-lg font-semibold text-slate-900">Port Transfer</span>
           </div>
+          <button
+            type="button"
+            onClick={() => setLanguage(language === "en" ? "fr" : "en")}
+            className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-100 text-slate-600 hover:bg-slate-200 transition"
+          >
+            {language === "en" ? "FR" : "EN"}
+          </button>
+        </div>
 
-          <h1 className="text-2xl font-bold text-slate-900 mb-2">Welcome Back!</h1>
-          <p className="text-sm text-slate-500 mb-8">
-            Sign in to manage branches, transactions, and transfers.
-          </p>
+         <h1 className="text-2xl font-bold text-slate-900 mb-2">{t("welcomeBack")}</h1>
+          <p className="text-sm text-slate-500 mb-8">{t("signInSubtitle")}</p>
 
           <form onSubmit={handleLogin} className="space-y-5">
             {error && (
@@ -75,7 +84,7 @@ export default function LoginPage() {
             )}
 
             <div>
-              <label className="block text-sm font-medium text-slate-700 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-slate-700 mb-1.5">{t("email")}</label>
               <div className="relative">
                 <i className="fa-solid fa-envelope absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm" />
                 <input
@@ -91,9 +100,9 @@ export default function LoginPage() {
 
             <div>
               <div className="flex items-center justify-between mb-1.5">
-                <label className="block text-sm font-medium text-slate-700">Password</label>
+                <label className="block text-sm font-medium text-slate-700">{t("password")}</label>
                 <a href="#" className="text-xs font-medium text-blue-600 hover:underline">
-                  Forgot password?
+                  {t("forgotPassword")} ?
                 </a>
               </div>
               <div className="relative">
@@ -122,7 +131,7 @@ export default function LoginPage() {
               disabled={loading}
               className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
             >
-              {loading ? "Signing in..." : "Sign In"}
+              {loading ? "..." : t("signIn")}
             </button>
           </form>
 

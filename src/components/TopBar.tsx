@@ -3,11 +3,13 @@
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { logout } from "@/lib/client-auth";
+import { useLanguage } from "@/context/LanguageContext";
 
 export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
   const { theme, toggleTheme } = useTheme();
   const [showNotif, setShowNotif] = useState(false);
   const [today, setToday] = useState("");
+  const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
     setToday(
@@ -34,8 +36,8 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
         <div className="hidden sm:flex items-center gap-3">
           <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2">
             <i className="fa-solid fa-building-columns text-blue-500 text-sm" />
-            <span className="text-sm font-medium text-slate-700 dark:text-slate-200">All Branches</span>
-            <span className="text-xs text-slate-400">• System Overview</span>
+              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t("allBranches")}</span>
+              <span className="text-xs text-slate-400">• {t("systemOverview")}</span>
           </div>
 
           <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
@@ -46,6 +48,12 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
       </div>
 
       <div className="flex items-center gap-2 lg:gap-3">
+         <button
+          onClick={() => setLanguage(language === "en" ? "fr" : "en")}
+          className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition"
+        >
+          {language === "en" ? "FR" : "EN"}
+        </button>
         <button
           onClick={toggleTheme}
           className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition"

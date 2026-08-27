@@ -264,6 +264,21 @@ exports.Prisma.AuditLogScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.RolePermissionScalarFieldEnum = {
+  id: 'id',
+  role: 'role',
+  permissionKey: 'permissionKey',
+  enabled: 'enabled',
+  updatedAt: 'updatedAt'
+};
+
+exports.Prisma.RoleScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  isSystem: 'isSystem',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -303,7 +318,9 @@ exports.Prisma.ModelName = {
   SubLedgerEntry: 'SubLedgerEntry',
   GeneralLedgerEntry: 'GeneralLedgerEntry',
   Topup: 'Topup',
-  AuditLog: 'AuditLog'
+  AuditLog: 'AuditLog',
+  RolePermission: 'RolePermission',
+  Role: 'Role'
 };
 
 /**

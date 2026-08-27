@@ -19,6 +19,12 @@ export async function POST(req: NextRequest) {
   const auth = requireStaff(req);
   if (auth instanceof NextResponse) return auth;
 
+  const { hasPermission } = await import("@/lib/permissions");
+  if (!(await hasPermission(auth.role, "CREATE_TRANSFER"))) {
+    return NextResponse.json({ error: "You don't have permission to create transfers" }, { status: 403 });
+  }
+
+
   const body = await req.json();
   const parsed = createTransactionSchema.safeParse(body);
 
@@ -117,6 +123,7 @@ export async function GET(req: NextRequest) {
   const { verifyToken } = await import("@/lib/auth");
   const payload = token ? verifyToken(token) : null;
 
+
   if (!payload) {
     return NextResponse.json({ error: "Missing or invalid Authorization header" }, { status: 401 });
   }
@@ -126,6 +133,13 @@ export async function GET(req: NextRequest) {
   if (!isSuperAdmin && !isStaff) {
     return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
   }
+
+  if (isStaff) {
+  const { hasPermission } = await import("@/lib/permissions");
+  if (!(await hasPermission(payload.role, "VIEW_TRANSACTIONS"))) {
+    return NextResponse.json({ error: "You don't have permission to view transactions" }, { status: 403 });
+  }
+}
 
   const { searchParams } = new URL(req.url);
   const limit = Math.min(Number(searchParams.get("limit")) || 100, 500);

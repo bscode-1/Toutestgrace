@@ -179,7 +179,8 @@ export default function AuditLogPage() {
 
             {!loading && logs.length > 0 && (
                 <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover">
-                    <table className="w-full text-sm">
+          <div className="overflow-x-auto">
+            <table className="w-full text-sm">
                         <thead>
                             <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
                                 <th className="px-5 py-3 font-medium">Entity</th>
@@ -250,6 +251,7 @@ export default function AuditLogPage() {
                             ))}
                         </tbody>
                     </table>
+                    </div>
                     <Pagination currentPage={page} totalItems={logs.length} pageSize={PAGE_SIZE} onPageChange={setPage} />
                 </div>
             )}
