@@ -10,6 +10,7 @@ import {
   Filler,
   Tooltip,
   Legend,
+  TooltipItem,
 } from "chart.js";
 import { Line } from "react-chartjs-2";
 
@@ -66,8 +67,8 @@ export default function VolumeTrendChart({ days }: { days: Day[] }) {
         padding: 12,
         cornerRadius: 10,
         callbacks: {
-          label: (ctx: { dataset: { label?: string }; parsed: { y: number } }) =>
-            `${ctx.dataset.label || ""}: $${ctx.parsed.y.toLocaleString()}`,
+          label: (ctx: TooltipItem<"line">) =>
+            `${ctx.dataset.label || ""}: $${(ctx.parsed.y ?? 0).toLocaleString()}`,
         },
       },
     },
