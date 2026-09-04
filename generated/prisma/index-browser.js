@@ -279,6 +279,34 @@ exports.Prisma.RoleScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.ExpenseScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  category: 'category',
+  description: 'description',
+  amount: 'amount',
+  paidById: 'paidById',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.SalaryPaymentScalarFieldEnum = {
+  id: 'id',
+  staffId: 'staffId',
+  staffName: 'staffName',
+  amount: 'amount',
+  period: 'period',
+  paidById: 'paidById',
+  paidAt: 'paidAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.ExpenseCategoryScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.SortOrder = {
   asc: 'asc',
   desc: 'desc'
@@ -320,7 +348,10 @@ exports.Prisma.ModelName = {
   Topup: 'Topup',
   AuditLog: 'AuditLog',
   RolePermission: 'RolePermission',
-  Role: 'Role'
+  Role: 'Role',
+  Expense: 'Expense',
+  SalaryPayment: 'SalaryPayment',
+  ExpenseCategory: 'ExpenseCategory'
 };
 
 /**

@@ -5,22 +5,26 @@ import { usePathname } from "next/navigation";
 import { useEffect, useState } from "react";
 import { logout, getUser } from "@/lib/client-auth";
 import { useTheme } from "@/context/ThemeContext";
+import { useLanguage } from "@/context/LanguageContext";
 
-const NAV_ITEMS = [
-  { label: "Dashboard", href: "/branch", icon: "fa-house", permission: null },
-  { label: "New Transfer", href: "/branch/new-transfer", icon: "fa-paper-plane", permission: "CREATE_TRANSFER" },
-  { label: "Complete Pickup", href: "/branch/complete", icon: "fa-hand-holding-dollar", permission: "COMPLETE_PICKUP" },
-  { label: "Refund", href: "/branch/refund", icon: "fa-rotate-left", permission: "PROCESS_REFUND" },
-  { label: "Transactions", href: "/branch/transactions", icon: "fa-right-left", permission: "VIEW_TRANSACTIONS" },
-];
 
 export default function BranchLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
   const { theme, toggleTheme } = useTheme();
+  const { t, language, setLanguage } = useLanguage();
   const [userName, setUserName] = useState("");
   const [today, setToday] = useState("");
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [permissions, setPermissions] = useState<Record<string, boolean> | null>(null);
+
+  const NAV_ITEMS = [
+    { label: t("dashboard"), href: "/branch", icon: "fa-house", permission: null },
+    { label: t("newTransfer"), href: "/branch/new-transfer", icon: "fa-paper-plane", permission: "CREATE_TRANSFER" },
+    { label: t("completePickup"), href: "/branch/complete", icon: "fa-hand-holding-dollar", permission: "COMPLETE_PICKUP" },
+    { label: t("refund"), href: "/branch/refund", icon: "fa-rotate-left", permission: "PROCESS_REFUND" },
+    { label: t("transactions"), href: "/branch/transactions", icon: "fa-right-left", permission: "VIEW_TRANSACTIONS" },
+  ];
+
 
   useEffect(() => {
     const user = getUser();
@@ -169,6 +173,12 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
           </div>
 
           <div className="flex items-center gap-2 lg:gap-3">
+            <button
+              onClick={() => setLanguage(language === "en" ? "fr" : "en")}
+              className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition"
+            >
+              {language === "en" ? "FR" : "EN"}
+            </button>
             <button
               onClick={toggleTheme}
               className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition"

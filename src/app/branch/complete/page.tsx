@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { apiFetch } from "@/lib/client-auth";
+import { useLanguage } from "@/context/LanguageContext";
 
 type CompletedTransaction = {
   id: string;
@@ -13,7 +14,8 @@ type CompletedTransaction = {
   status: string;
 };
 
-export default function CompletePickupPage() {
+export default function CompletePickupPage() {  
+  const { t, language, setLanguage } = useLanguage();
   const [pickupCode, setPickupCode] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [submitting, setSubmitting] = useState(false);
@@ -58,14 +60,14 @@ export default function CompletePickupPage() {
           <div className="w-14 h-14 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
             <i className="fa-solid fa-hand-holding-dollar text-green-600 dark:text-green-400 text-xl" />
           </div>
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">Payout Complete</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">{t("payoutComplete")}</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
             Hand ${Number(result.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })} to{" "}
             {result.receiverName}
           </p>
 
           <div className="bg-slate-50 dark:bg-slate-700 rounded-2xl p-6 mb-6">
-            <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Amount Paid Out</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("payOut")}</p>
             <p className="text-3xl font-bold text-green-600 dark:text-green-400">
               ${Number(result.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}
             </p>
@@ -73,11 +75,11 @@ export default function CompletePickupPage() {
 
           <div className="grid grid-cols-2 gap-3 text-left mb-6">
             <div>
-              <p className="text-xs text-slate-400">Sender</p>
+              <p className="text-xs text-slate-400">{t("senderName")}</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">{result.senderName}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Receiver</p>
+              <p className="text-xs text-slate-400">{t("receiverName")}</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">{result.receiverName}</p>
             </div>
           </div>
@@ -96,9 +98,9 @@ export default function CompletePickupPage() {
   return (
     <div className="max-w-lg mx-auto">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Complete Pickup</h1>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{t("completePickup")}</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
-          Enter the pickup code to pay out a client
+          {t("enterPickupCode")}
         </p>
       </div>
 
@@ -111,7 +113,7 @@ export default function CompletePickupPage() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            Pickup code
+            {t("pickupCode")}
           </label>
           <input
             type="text"
@@ -126,7 +128,7 @@ export default function CompletePickupPage() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            Receiver name (optional cross-check)
+            {t("receiverNameCheck")}
           </label>
           <input
             type="text"

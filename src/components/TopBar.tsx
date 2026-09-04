@@ -48,6 +48,14 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
       </div>
 
       <div className="flex items-center gap-2 lg:gap-3">
+        <a
+          href="/admin/reports"
+          className="w-9 h-9 rounded-lg bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition"
+          aria-label="Reports"
+          title="Reports"
+        >
+          <i className="fa-solid fa-chart-simple text-sm" />
+        </a>
          <button
           onClick={() => setLanguage(language === "en" ? "fr" : "en")}
           className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition"

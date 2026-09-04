@@ -70,6 +70,8 @@ model SuperAdmin {
   branchesCreated Branch[]
   topupsInitiated Topup[]
   auditLogs       AuditLog[]
+  expensesPaid    Expense[]
+  salariesPaid    SalaryPayment[]
 
   @@map("super_admin")
 }
@@ -102,6 +104,7 @@ model Branch {
   subLedgerEntries     SubLedgerEntry[]
   generalLedgerEntries GeneralLedgerEntry[]
   topups               Topup[]
+  expenses             Expense[]
 
   @@map("branch")
 }
@@ -121,12 +124,13 @@ model AppUser {
   isActive          Boolean  @default(true) @map("is_active")
   createdAt         DateTime @default(now()) @map("created_at")
 
-  managesBranch         Branch?       @relation("BranchManager")
-  createdTransactions   Transaction[] @relation("CreatedByTeller")
-  completedTransactions Transaction[] @relation("CompletedByTeller")
-  refundedTransactions  Transaction[] @relation("RefundedByTeller")
-  topupsReceived        Topup[]       @relation("BranchManagerTopup")
+  managesBranch         Branch?         @relation("BranchManager")
+  createdTransactions   Transaction[]   @relation("CreatedByTeller")
+  completedTransactions Transaction[]   @relation("CompletedByTeller")
+  refundedTransactions  Transaction[]   @relation("RefundedByTeller")
+  topupsReceived        Topup[]         @relation("BranchManagerTopup")
   auditLogs             AuditLog[]
+  salaryPayments        SalaryPayment[]
 
   @@map("app_user")
 }
@@ -293,4 +297,42 @@ model Role {
   name      String   @unique
   isSystem  Boolean  @default(false) @map("is_system")
   createdAt DateTime @default(now()) @map("created_at")
+}
+
+model Expense {
+  id          String     @id @default(uuid())
+  branchId    String?    @map("branch_id")
+  branch      Branch?    @relation(fields: [branchId], references: [id])
+  category    String // RENT, UTILITIES, BILLS, SUPPLIES, OTHER, etc.
+  description String?
+  amount      Decimal    @db.Decimal(18, 2)
+  paidById    String     @map("paid_by")
+  paidBy      SuperAdmin @relation(fields: [paidById], references: [id])
+  paidAt      DateTime   @default(now()) @map("paid_at")
+  createdAt   DateTime   @default(now()) @map("created_at")
+
+  @@map("expense")
+}
+
+model SalaryPayment {
+  id        String     @id @default(uuid())
+  staffId   String?    @map("staff_id")
+  staff     AppUser?   @relation(fields: [staffId], references: [id])
+  staffName String     @map("staff_name") // snapshot, survives staff deletion
+  amount    Decimal    @db.Decimal(18, 2)
+  period    String // e.g. "August 2026"
+  paidById  String     @map("paid_by")
+  paidBy    SuperAdmin @relation(fields: [paidById], references: [id])
+  paidAt    DateTime   @default(now()) @map("paid_at")
+  createdAt DateTime   @default(now()) @map("created_at")
+
+  @@map("salary_payment")
+}
+
+model ExpenseCategory {
+  id        String   @id @default(uuid())
+  name      String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+
+  @@map("expense_category")
 }

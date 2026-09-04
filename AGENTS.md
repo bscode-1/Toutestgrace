@@ -73,3 +73,13 @@ ssh-ed25519 AAAAC3NzaC1lZDI1NTE5AAAAIKsRlZQbK/dz5AY4UbRpK6Fo76+gFHvkoZt99anVjcJ3
 
 git remote add origin git@github.com:git@github.com:bscode-1/Money_Transfer_app.git
 git push -u origin main
+
+
+
+
+$2b$10$NgMN1lW9hnFMhmbKj0K/muBqrAEPJs/iedEotXPvaKT/2zCBXXycu
+$2b$10$fKhQn3mh5R83aGMfsPEzV.lCDucOFDSLz4/giPPMaUblbODncXcFy
+
+postgresql://neondb_owner:xxxxxep-bold-butterfly-aydxr7o1.c-5.us-east-2.aws.neon.tech/neondb?sslmode=verify-full'
+DATABASE_URL="postgresql://user:password@host:5432/dbname?sslmode=verify-full"
+sslmode=verify-full

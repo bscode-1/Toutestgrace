@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiFetch } from "@/lib/client-auth";
+import { apiFetch, getUser } from "@/lib/client-auth";
+import { useLanguage } from "@/context/LanguageContext";
 
 type BranchOption = { id: string; name: string; location: string | null };
 
@@ -17,6 +18,7 @@ type CreatedTransaction = {
 };
 
 export default function NewTransferPage() {
+  const { t, language, setLanguage } = useLanguage();
   const [branches, setBranches] = useState<BranchOption[]>([]);
   const [receiverBranchId, setReceiverBranchId] = useState("");
   const [senderName, setSenderName] = useState("");
@@ -31,11 +33,22 @@ export default function NewTransferPage() {
   const [formError, setFormError] = useState<string | null>(null);
   const [result, setResult] = useState<CreatedTransaction | null>(null);
 
+  
+  
+
   useEffect(() => {
-    apiFetch("/api/branches/directory")
-      .then((res) => (res.ok ? res.json() : { branches: [] }))
-      .then((data) => setBranches(data.branches || []));
-  }, []);
+  const user = getUser();
+  apiFetch("/api/branches/directory")
+    .then((res) => (res.ok ? res.json() : { branches: [] }))
+    .then((data) => {
+      const allBranches = data.branches || [];
+      const filtered = user?.branchId
+        ? allBranches.filter((b: { id: string }) => b.id !== user.branchId)
+        : allBranches;
+      setBranches(filtered);
+    });
+}, []);
+
 
   useEffect(() => {
     const amount = Number(amountSent);
@@ -106,13 +119,13 @@ export default function NewTransferPage() {
           <div className="w-14 h-14 rounded-full bg-green-100 dark:bg-green-900/30 flex items-center justify-center mx-auto mb-4">
             <i className="fa-solid fa-check text-green-600 dark:text-green-400 text-xl" />
           </div>
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">Transfer Created</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">{t("transferCreated")}</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
             Give this pickup code to {result.senderName} to share with {result.receiverName}
           </p>
 
           <div className="bg-slate-50 dark:bg-slate-700 rounded-2xl p-6 mb-6">
-            <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Pickup Code</p>
+            <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("pickupCode")}</p>
             <p className="text-3xl font-bold tracking-widest text-slate-900 dark:text-white font-mono">
               {result.pickupCode}
             </p>
@@ -120,19 +133,19 @@ export default function NewTransferPage() {
 
           <div className="grid grid-cols-3 gap-3 text-left mb-6">
             <div>
-              <p className="text-xs text-slate-400">Sent</p>
+              <p className="text-xs text-slate-400">{t("sent")}</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">
                 ${Number(result.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Commission</p>
+              <p className="text-xs text-slate-400">{t("commission")}</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">
                 ${Number(result.commissionAmount).toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Payable</p>
+              <p className="text-xs text-slate-400">Receiver Gets</p>
               <p className="text-sm font-semibold text-green-600 dark:text-green-400">
                 ${Number(result.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </p>
@@ -147,11 +160,11 @@ export default function NewTransferPage() {
               className="flex items-center justify-center gap-2 bg-slate-900 dark:bg-slate-700 text-white text-sm font-medium rounded-xl py-3 hover:opacity-90 transition-opacity"
             >
               <i className="fa-solid fa-print text-xs" />
-              Print
+              {t("printReceipt")}
             </a>
 
             <a href={`https://wa.me/?text=${encodeURIComponent(
-              `Money transfer receipt\n\nSender: ${result.senderName}\nReceiver: ${result.receiverName}\nAmount: $${Number(result.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nPickup Code: ${result.pickupCode}\n\nReceipt: ${typeof window !== "undefined" ? window.location.origin : ""}/branch/receipt/${result.id}`
+              `Money transfer receipt\n\nSender: ${result.senderName}\nReceiver: ${result.receiverName}\nAmount Sent: $${Number(result.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nAmount Receiver Gets: $${Number(result.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nPickup Code: ${result.pickupCode}\n\nReceipt: ${typeof window !== "undefined" ? window.location.origin : ""}/branch/receipt/${result.id}`
             )}`}
               target="_blank"
               rel="noopener noreferrer"
@@ -165,7 +178,7 @@ export default function NewTransferPage() {
             onClick={startNewTransfer}
             className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl py-3 hover:opacity-90 transition-opacity"
           >
-            New Transfer
+            {t("newTransfer")}
           </button>
 
 
@@ -177,8 +190,8 @@ export default function NewTransferPage() {
   return (
     <div className="max-w-2xl mx-auto">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">New Transfer</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">Send money to another branch</p>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{t("newTransfer")}</h1>
+        <p className="text-sm text-slate-500 dark:text-slate-400">{t("sendMoneyToBranch")}</p>
       </div>
 
       <form onSubmit={handleSubmit} className="bg-white dark:bg-slate-800 rounded-2xl p-6 shadow-sm space-y-5 card-hover">
@@ -190,7 +203,7 @@ export default function NewTransferPage() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            Receiving branch
+            {t("receivingBranch")}
           </label>
           <select
             required
@@ -198,7 +211,7 @@ export default function NewTransferPage() {
             onChange={(e) => setReceiverBranchId(e.target.value)}
             className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
           >
-            <option value="">Select a branch</option>
+            <option value="">{t("selectBranch")}</option>
             {branches.map((b) => (
               <option key={b.id} value={b.id}>
                 {b.name} {b.location ? `— ${b.location}` : ""}
@@ -210,7 +223,7 @@ export default function NewTransferPage() {
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-              Sender name
+              {t("senderName")}
             </label>
             <input
               type="text"
@@ -223,7 +236,7 @@ export default function NewTransferPage() {
           </div>
           <div>
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-              Sender ID number (optional)
+              {t("senderIdOptional")}
             </label>
             <input
               type="text"
@@ -235,7 +248,7 @@ export default function NewTransferPage() {
           </div>
           <div className="sm:col-span-2">
             <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-              Receiver name
+              {t("receiverName")}
             </label>
             <input
               type="text"
@@ -250,7 +263,7 @@ export default function NewTransferPage() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            Amount to send
+            {t("amountToSend")}
           </label>
           <div className="relative">
             <span className="absolute left-3.5 top-1/2 -translate-y-1/2 text-slate-400 text-sm">$</span>
@@ -271,7 +284,7 @@ export default function NewTransferPage() {
           {preview && (
             <div className="mt-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 grid grid-cols-2 gap-4">
               <div>
-                <p className="text-xs text-slate-500 dark:text-slate-400">Commission</p>
+                <p className="text-xs text-slate-500 dark:text-slate-400">{t("commission")}</p>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">
                   ${preview.commissionAmount.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </p>

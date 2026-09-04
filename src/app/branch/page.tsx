@@ -2,6 +2,7 @@
 
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/client-auth";
+import { useLanguage } from "@/context/LanguageContext";
 
 type BranchInfo = {
   id: string;
@@ -29,6 +30,7 @@ type Tx = {
   receiverBranch: { name: string };
 };
 
+
 const statusStyle: Record<string, string> = {
   PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
   COMPLETED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
@@ -36,6 +38,7 @@ const statusStyle: Record<string, string> = {
 };
 
 export default function BranchDashboardPage() {
+  const { t } = useLanguage();
   const [branchInfo, setBranchInfo] = useState<BranchInfo | null>(null);
   const [balance, setBalance] = useState<number | null>(null);
   const [summary, setSummary] = useState<Summary | null>(null);
@@ -75,9 +78,9 @@ export default function BranchDashboardPage() {
   const currencySymbol = branchInfo?.currency?.symbol || "$";
 
   const quickActions = [
-    { label: "New Transfer", href: "/branch/new-transfer", icon: "fa-paper-plane", gradient: "from-blue-500 to-indigo-600" },
-    { label: "Complete Pickup", href: "/branch/complete", icon: "fa-hand-holding-dollar", gradient: "from-teal-500 to-emerald-600" },
-    { label: "Refund", href: "/branch/refund", icon: "fa-rotate-left", gradient: "from-rose-400 to-pink-500" },
+    { label: t("newTransfer"), href: "/branch/new-transfer", icon: "fa-paper-plane", gradient: "from-blue-500 to-indigo-600" },
+    { label: t("completePickup"), href: "/branch/complete", icon: "fa-hand-holding-dollar", gradient: "from-teal-500 to-emerald-600" },
+    { label: t("refund"), href: "/branch/refund", icon: "fa-rotate-left", gradient: "from-rose-400 to-pink-500" },
   ];
 
   return (
@@ -87,7 +90,7 @@ export default function BranchDashboardPage() {
         <div>
           <div className="flex items-center gap-2">
             <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
-              {branchInfo?.name || "My Branch"}
+              {branchInfo?.name || t("myBranch")}
             </h1>
             {branchInfo && (
               <span
@@ -127,26 +130,26 @@ export default function BranchDashboardPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Branch Balance</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("branchBalance")}</p>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">
             {currencySymbol}
             {balance !== null ? Number(balance).toLocaleString("en-US", { minimumFractionDigits: 2 }) : "—"}
           </p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Sent Today</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("sentToday")}</p>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">
             {summary ? summary.totalSent.count : "—"}
           </p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Received Today</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("receivedToday")}</p>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">
             {summary ? summary.totalReceived.count : "—"}
           </p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Pending</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("pending")}</p>
           <p className="text-2xl font-bold text-amber-500">{summary ? summary.pending.count : "—"}</p>
         </div>
       </div>
@@ -154,7 +157,7 @@ export default function BranchDashboardPage() {
       {/* Recent transactions */}
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover">
         <div className="p-5 border-b border-slate-100 dark:border-slate-700">
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Recent Activity</h3>
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("recentActivity")}</h3>
         </div>
         {transactions.length === 0 ? (
           <p className="text-sm text-slate-400 p-5">No transactions yet.</p>

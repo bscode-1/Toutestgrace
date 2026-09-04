@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireSuperAdmin } from "@/lib/require-super-admin";
-import { PERMISSION_KEYS, STAFF_ROLES } from "@/lib/permissions";
+import { PERMISSION_KEYS } from "@/lib/permissions";
 
 // GET /api/permissions — full matrix (role x permission), creating any
 // missing rows as enabled=true so the grid is always complete
@@ -10,14 +10,18 @@ export async function GET(req: NextRequest) {
   const auth = requireSuperAdmin(req);
   if (auth instanceof NextResponse) return auth;
 
+  // Pull the ACTUAL current list of roles (built-in + any custom ones the
+  // super admin has created) instead of a hardcoded two-role list.
+  const allRoles = await prisma.role.findMany();
+
   const existing = await prisma.rolePermission.findMany();
   const existingKeys = new Set(existing.map((r) => `${r.role}:${r.permissionKey}`));
 
-  const missing: { role: string; permissionKey: string; enabled: boolean }[] = [];
-  for (const role of STAFF_ROLES) {
+    const missing: { role: string; permissionKey: string; enabled: boolean }[] = [];
+  for (const role of allRoles) {
     for (const key of PERMISSION_KEYS) {
-      if (!existingKeys.has(`${role}:${key}`)) {
-        missing.push({ role, permissionKey: key, enabled: true });
+      if (!existingKeys.has(`${role.name}:${key}`)) {
+        missing.push({ role: role.name, permissionKey: key, enabled: true });
       }
     }
   }
@@ -34,7 +38,7 @@ export async function GET(req: NextRequest) {
 }
 
 const toggleSchema = z.object({
-  role: z.enum(["TELLER", "BRANCH_MANAGER"]),
+  role: z.string().min(1), // any role name — built-in or custom
   permissionKey: z.enum(PERMISSION_KEYS),
   enabled: z.boolean(),
 });

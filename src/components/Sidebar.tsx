@@ -19,6 +19,9 @@ export default function Sidebar({ collapsed, onNavigate }: { collapsed: boolean;
     { label: t("topups"), icon: "fa-solid fa-credit-card", href: "/admin/topups" },
     { label: t("transactions"), icon: "fa-solid fa-right-left", href: "/admin/transactions" },
     { label: t("commissionReport"), icon: "fa-solid fa-right-left", href: "/admin/reports/commission" },
+    { label: t("accounts"), icon: "fa-solid fa-building-columns", href: "/admin/accounts" },
+    { label: t("expenses"), icon: "fa-solid fa-file-invoice-dollar", href: "/admin/accounts/expenses" },
+    { label: t("salaries"), icon: "fa-solid fa-money-check-dollar", href: "/admin/accounts/salaries" },
     { label: t("auditLog"), icon: "fa-solid fa-clipboard-list", href: "/admin/audit-log" },
     { label: "Permissions", icon: "fa-solid fa-shield-halved", href: "/admin/permissions" },
     ({ label: "Roles", icon: "fa-solid fa-user-tag", href: "/admin/roles" })

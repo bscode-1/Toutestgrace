@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/client-auth";
 import { QRCodeSVG } from "qrcode.react";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Transaction = {
   id: string;
@@ -23,6 +24,8 @@ type Transaction = {
 };
 
 export default function ReceiptPage() {
+  
+  const { t, language, setLanguage } = useLanguage();
   const params = useParams();
   const transactionId = params.transactionId as string;
 
@@ -86,46 +89,46 @@ export default function ReceiptPage() {
 
         <div className="space-y-1.5 text-sm mb-4">
           <div className="flex justify-between">
-            <span className="text-slate-500">Sender</span>
+            <span className="text-slate-500">{t("senderName")}</span>
             <span className="font-medium text-slate-900">{tx.senderName}</span>
           </div>
           {tx.senderIdNumber && (
             <div className="flex justify-between">
-              <span className="text-slate-500">Sender ID</span>
+              <span className="text-slate-500">{t("senderIdOptional")}</span>
               <span className="font-medium text-slate-900">{tx.senderIdNumber}</span>
             </div>
           )}
           <div className="flex justify-between">
-            <span className="text-slate-500">Receiver</span>
+            <span className="text-slate-500">{t("receiverName")}</span>
             <span className="font-medium text-slate-900">{tx.receiverName}</span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Receiving branch</span>
+            <span className="text-slate-500">{t("receivingBranch")}</span>
             <span className="font-medium text-slate-900">{tx.receiverBranch.name}</span>
           </div>
         </div>
 
         <div className="border-t border-dashed border-slate-300 pt-3 space-y-1.5 text-sm mb-4">
           <div className="flex justify-between">
-            <span className="text-slate-500">Amount sent</span>
+            <span className="text-slate-500">Amount Sent by Sender</span>
             <span className="font-medium text-slate-900">
               ${Number(tx.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}
             </span>
           </div>
           <div className="flex justify-between">
-            <span className="text-slate-500">Commission</span>
+            <span className="text-slate-500">{t("commission")}</span>
             <span className="font-medium text-slate-900">
               ${Number(tx.commissionAmount).toLocaleString("en-US", { minimumFractionDigits: 2 })}
             </span>
           </div>
           <div className="flex justify-between text-base font-bold pt-1 border-t border-slate-100">
-            <span>Payable</span>
+            <span>Amount Receiver Gets</span>
             <span>${Number(tx.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
           </div>
         </div>
 
         <div className="border-t border-dashed border-slate-300 pt-4 text-center">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Pickup Code</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("pickupCode")}</p>
           <p className="text-2xl font-bold tracking-widest text-slate-900 font-mono mb-4">{tx.pickupCode}</p>
           <div className="flex justify-center mb-2">
             <QRCodeSVG value={tx.qrCodeData} size={120} />
@@ -146,8 +149,8 @@ export default function ReceiptPage() {
             Print
           </button>
           
-           <a  href={`https://wa.me/?text=${encodeURIComponent(
-              `Money transfer receipt\n\nSender: ${tx.senderName}\nReceiver: ${tx.receiverName}\nAmount: $${Number(tx.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nPickup Code: ${tx.pickupCode}\n\nReceipt: ${typeof window !== "undefined" ? window.location.href : ""}`
+           <a href={`https://wa.me/?text=${encodeURIComponent(
+              `Money transfer receipt\n\nSender: ${tx.senderName}\nReceiver: ${tx.receiverName}\nAmount Sent: $${Number(tx.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nAmount Receiver Gets: $${Number(tx.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nPickup Code: ${tx.pickupCode}\n\nReceipt: ${typeof window !== "undefined" ? window.location.href : ""}`
             )}`}
             target="_blank"
             rel="noopener noreferrer"

@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import { apiFetch } from "@/lib/client-auth";
+import { useLanguage } from "@/context/LanguageContext";
 
 type RefundedTransaction = {
   id: string;
@@ -13,11 +14,13 @@ type RefundedTransaction = {
 };
 
 export default function RefundPage() {
+  const { t, language, setLanguage } = useLanguage();
   const [pickupCode, setPickupCode] = useState("");
   const [senderName, setSenderName] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [result, setResult] = useState<RefundedTransaction | null>(null);
+
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -57,7 +60,7 @@ export default function RefundPage() {
           <div className="w-14 h-14 rounded-full bg-slate-100 dark:bg-slate-700 flex items-center justify-center mx-auto mb-4">
             <i className="fa-solid fa-rotate-left text-slate-600 dark:text-slate-300 text-xl" />
           </div>
-          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">Refund Complete</h2>
+          <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">{t("refundComplete")}</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
             Hand the full amount back to {result.senderName}
           </p>
@@ -67,16 +70,16 @@ export default function RefundPage() {
             <p className="text-3xl font-bold text-slate-900 dark:text-white">
               ${Number(result.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}
             </p>
-            <p className="text-xs text-slate-400 mt-1">No commission kept</p>
+            <p className="text-xs text-slate-400 mt-1">{t("noCommissionKept")}</p>
           </div>
 
           <div className="grid grid-cols-2 gap-3 text-left mb-6">
             <div>
-              <p className="text-xs text-slate-400">Sender</p>
+              <p className="text-xs text-slate-400">{t("senderName")}</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">{result.senderName}</p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Original Receiver</p>
+              <p className="text-xs text-slate-400">{t("receiverNameCheck")}</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">{result.receiverName}</p>
             </div>
           </div>
@@ -95,7 +98,7 @@ export default function RefundPage() {
   return (
     <div className="max-w-lg mx-auto">
       <div className="mb-6">
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Refund</h1>
+        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{t("refund")}</h1>
         <p className="text-sm text-slate-500 dark:text-slate-400">
           Sender changed their mind — return the full amount
         </p>
@@ -118,7 +121,7 @@ export default function RefundPage() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-            Pickup code
+            {t("pickupCode")}
           </label>
           <input
             type="text"
