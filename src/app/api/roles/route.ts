@@ -11,7 +11,7 @@ const SYSTEM_ROLES = [
 
 // GET /api/roles — list all roles, seeding the two built-in ones if missing
 export async function GET(req: NextRequest) {
-  const auth = requirePermission(req, "VIEW_ROLES");
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   for (const r of SYSTEM_ROLES) {
