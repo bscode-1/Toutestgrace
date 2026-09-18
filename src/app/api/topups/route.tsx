@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
 
 // GET /api/topups — list all topups (super admin only)
 export async function GET(req: NextRequest) {
-  const auth = await requirePermission(req, "VIEW_ROLES");
+  const auth = await requirePermission(req, "MANAGE_PERMISSIONS");
   if (auth instanceof NextResponse) return auth;
 
   const topups = await prisma.topup.findMany({

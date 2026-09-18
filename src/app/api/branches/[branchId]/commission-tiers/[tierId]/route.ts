@@ -89,7 +89,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ branchId: string; tierId: string }> }
 ) {
-  const auth = await requirePermission(req, "VIEW_ROLES");
+  const auth = await requirePermission(req, "MANAGE_PERMISSIONS");
   if (auth instanceof NextResponse) return auth;
 
   const { branchId, tierId } = await params;

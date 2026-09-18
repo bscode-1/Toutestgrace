@@ -75,7 +75,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ branchId: string }> }
 ) {
-  const auth = await requirePermission(req, "VIEW_ROLES");
+  const auth = await requirePermission(req, "MANAGE_PERMISSIONS");
   if (auth instanceof NextResponse) return auth;
 
   const { branchId } = await params;

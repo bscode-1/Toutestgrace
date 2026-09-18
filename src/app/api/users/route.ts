@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
 // GET /api/users — list all staff (super admin only)
 export async function GET(req: NextRequest) {
-  const auth = await requirePermission(req, "VIEW_ROLES");
+  const auth = await requirePermission(req, "MANAGE_PERMISSIONS");
   if (auth instanceof NextResponse) return auth;
 
   const users = await prisma.appUser.findMany({

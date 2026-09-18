@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
 // GET /api/branches — list all branches (super admin only, for now)
 export async function GET(req: NextRequest) {
-  const auth = await requirePermission(req, "VIEW_ROLES");
+  const auth = await requirePermission(req, "MANAGE_PERMISSIONS");
   if (auth instanceof NextResponse) return auth;
 
   const branches = await prisma.branch.findMany({
