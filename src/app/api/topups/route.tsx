@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 import crypto from "crypto";
 
 const createTopupSchema = z.object({
@@ -17,7 +17,7 @@ function generateReceiptNumber(): string {
 
 // POST /api/topups — super admin injects funds into a branch
 export async function POST(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const body = await req.json();
@@ -84,7 +84,7 @@ export async function POST(req: NextRequest) {
 
 // GET /api/topups — list all topups (super admin only)
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const topups = await prisma.topup.findMany({

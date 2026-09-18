@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 const createBranchSchema = z.object({
   name: z.string().min(2),
@@ -15,7 +15,7 @@ const createBranchSchema = z.object({
 
 // POST /api/branches — create a new branch (super admin only)
 export async function POST(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth; // unauthorized
 
   const body = await req.json();
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
 // GET /api/branches — list all branches (super admin only, for now)
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const branches = await prisma.branch.findMany({

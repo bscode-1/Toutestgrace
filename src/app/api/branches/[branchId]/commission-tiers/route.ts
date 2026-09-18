@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 const createTierSchema = z
   .object({
@@ -23,7 +23,7 @@ export async function POST(
   req: NextRequest,
   { params }: { params: Promise<{ branchId: string }> }
 ) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const { branchId } = await params;
@@ -75,7 +75,7 @@ export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ branchId: string }> }
 ) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const { branchId } = await params;

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 // GET /api/branches/:branchId/balance — running ledger balance (super admin only)
 export async function GET(
   req: NextRequest,
   { params }: { params: Promise<{ branchId: string }> }
 ) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const { branchId } = await params;

@@ -2,7 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { hashPassword } from "@/lib/auth";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 const createUserSchema = z.object({
   name: z.string().min(2),
@@ -15,7 +15,7 @@ const createUserSchema = z.object({
 
 // POST /api/users — create a teller or branch manager (super admin only)
 export async function POST(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const body = await req.json();
@@ -58,7 +58,7 @@ export async function POST(req: NextRequest) {
 
 // GET /api/users — list all staff (super admin only)
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const users = await prisma.appUser.findMany({
