@@ -32,7 +32,7 @@ const createRoleSchema = z.object({
 
 // POST /api/roles — create a new custom role (requires MANAGE_ROLES)
 export async function POST(req: NextRequest) {
-  const auth = requirePermission(req, "MANAGE_ROLES");
+  const auth = await requirePermission(req, "MANAGE_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const body = await req.json();

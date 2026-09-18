@@ -8,7 +8,7 @@ export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ roleId: string }> }
 ) {
-  const auth = requirePermission(req, "MANAGE_ROLES");
+  const auth = await requirePermission(req, "MANAGE_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const { roleId } = await params;
