@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { requireStaff } from "@/lib/require-staff";
-import { PERMISSION_KEYS, hasPermission } from "@/lib/permissions";
+import { hasPermission } from "@/lib/permissions";
+import { PERMISSION_KEYS } from "@/lib/permission-constants";
 
 // GET /api/branch/me/permissions — which actions the logged-in staff member's
 // role is currently allowed to perform

@@ -43,7 +43,7 @@ const toggleSchema = z.object({
 
 // PATCH /api/permissions — toggle one permission for one role (requires MANAGE_PERMISSIONS)
 export async function PATCH(req: NextRequest) {
-  const auth = requirePermission(req, "MANAGE_PERMISSIONS");
+  const auth = await requirePermission(req, "MANAGE_PERMISSIONS");
   if (auth instanceof NextResponse) return auth;
 
   const body = await req.json();
