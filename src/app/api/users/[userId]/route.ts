@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 const updateUserSchema = z.object({
   name: z.string().min(2).optional(),
@@ -11,12 +11,12 @@ const updateUserSchema = z.object({
   isActive: z.boolean().optional(),
 });
 
-// PATCH /api/users/:userId — edit staff details or activate/deactivate (super admin only)
+// PATCH /api/users/:userId — edit staff details or activate/deactivate
 export async function PATCH(
   req: NextRequest,
   { params }: { params: Promise<{ userId: string }> }
 ) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "MANAGE_STAFF");
   if (auth instanceof NextResponse) return auth;
 
   const { userId } = await params;
@@ -57,7 +57,8 @@ export async function PATCH(
         entityType: "BRANCH",
         entityId: managedBranch.id,
         action: "MANAGER_UNASSIGNED_DEACTIVATED",
-        performedByAdminId: auth.id,
+        performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+        performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
         metadata: { reason: "manager reassigned or role changed", userId },
       },
     });
@@ -73,7 +74,8 @@ export async function PATCH(
       entityType: "APP_USER",
       entityId: userId,
       action: "UPDATED",
-      performedByAdminId: auth.id,
+      performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+      performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
       metadata: parsed.data,
     },
   });
@@ -83,12 +85,12 @@ export async function PATCH(
 }
 
 // DELETE /api/users/:userId — only allowed if they have zero transaction history
-// and are not currently assigned as a branch manager (super admin only)
+// and are not currently assigned as a branch manager
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ userId: string }> }
 ) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "MANAGE_STAFF");
   if (auth instanceof NextResponse) return auth;
 
   const { userId } = await params;
@@ -127,7 +129,8 @@ export async function DELETE(
       entityType: "APP_USER",
       entityId: userId,
       action: "DELETED",
-      performedByAdminId: auth.id,
+      performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+      performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
       metadata: {},
     },
   });

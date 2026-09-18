@@ -1,0 +1,8 @@
+Magic Handover Prompt:
+"Summarize this entire session/project as a structured handover document. 
+Include the primary goal, recent progress made (emphasizing what was done in the last 30 minutes), 
+key decisions and the reasoning behind them, current blockers or open questions, and concrete next steps. 
+Format it cleanly in Markdown so I can point a fresh session to it." 
+
+Fresh Prompt: "Read the HANDOVER.md file first to internalize the context, 
+               then let me know when you are ready to continue with the next steps."

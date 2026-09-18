@@ -1,6 +1,6 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 // GET /api/reports/cash-at-hand?from=&to=
 // The headline "Cash at Hand" is the company's current running position:
@@ -11,7 +11,7 @@ import { requireSuperAdmin } from "@/lib/require-super-admin";
 // breakdown shown alongside it — the headline itself is always the
 // live, all-time balance.
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_REPORTS");
   if (auth instanceof NextResponse) return auth;
 
   const { searchParams } = new URL(req.url);

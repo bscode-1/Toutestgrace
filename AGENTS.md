@@ -80,6 +80,8 @@ git push -u origin main
 $2b$10$NgMN1lW9hnFMhmbKj0K/muBqrAEPJs/iedEotXPvaKT/2zCBXXycu
 $2b$10$fKhQn3mh5R83aGMfsPEzV.lCDucOFDSLz4/giPPMaUblbODncXcFy
 
+$env:DATABASE_URL="postgresql://neondb_owner:npg_oIX5sC8WNMQB@ep-bold-butterfly-aydxr7o1.c-5.us-east-2.aws.neon.tech/neondb?sslmode=verify-full"
+
 postgresql://neondb_owner:xxxxxep-bold-butterfly-aydxr7o1.c-5.us-east-2.aws.neon.tech/neondb?sslmode=verify-full'
 DATABASE_URL="postgresql://user:password@host:5432/dbname?sslmode=verify-full"
 sslmode=verify-full

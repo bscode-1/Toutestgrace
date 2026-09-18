@@ -1,10 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
-// GET /api/audit-log — filterable audit trail (super admin only)
+// GET /api/audit-log — filterable audit trail
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_AUDIT_LOG");
   if (auth instanceof NextResponse) return auth;
 
   const { searchParams } = new URL(req.url);

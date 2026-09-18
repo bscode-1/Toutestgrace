@@ -1,132 +1,139 @@
 import { NextRequest, NextResponse } from "next/server";
-import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
 import { z } from "zod";
+import { prisma } from "@/lib/prisma";
+import { requirePermission } from "@/lib/require-permission";
 
-export async function GET(
-  req: NextRequest,
-  { params }: { params: Promise<{ branchId: string }> }
-) {
-  const auth = requireSuperAdmin(req);
-  if (auth instanceof NextResponse) return auth;
-
-  const { branchId } = await params;
-
-  const branch = await prisma.branch.findUnique({
-    where: { id: branchId },
-    include: {
-      manager: { select: { name: true, email: true } },
-      currency: { select: { code: true, symbol: true } },
-    },
-  });
-
-  if (!branch) {
-    return NextResponse.json({ error: "Branch not found" }, { status: 404 });
-  }
-
-  return NextResponse.json({ branch });
-}
-
-
-const updateBranchSchema = z.object({
+const updateUserSchema = z.object({
   name: z.string().min(2).optional(),
-  location: z.string().optional(),
-  address: z.string().optional(),
-  phone: z.string().optional(),
-  branchCode: z.string().optional(),
-  status: z.enum(["ACTIVE", "INACTIVE"]).optional(),
+  email: z.string().email().optional(),
+  role: z.string().min(2).optional(),
+  branchId: z.string().uuid().optional(),
+  isActive: z.boolean().optional(),
 });
 
-// PATCH /api/branches/:branchId — edit details, or deactivate/reactivate (super admin only)
+// PATCH /api/users/:userId — edit staff details or activate/deactivate
 export async function PATCH(
   req: NextRequest,
-  { params }: { params: Promise<{ branchId: string }> }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "MANAGE_STAFF");
   if (auth instanceof NextResponse) return auth;
 
-  const { branchId } = await params;
+  const { userId } = await params;
   const body = await req.json();
-  const parsed = updateBranchSchema.safeParse(body);
+  const parsed = updateUserSchema.safeParse(body);
 
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  const existing = await prisma.branch.findUnique({ where: { id: branchId } });
+  const existing = await prisma.appUser.findUnique({ where: { id: userId } });
   if (!existing) {
-    return NextResponse.json({ error: "Branch not found" }, { status: 404 });
+    return NextResponse.json({ error: "Staff member not found" }, { status: 404 });
   }
 
-  // Re-activating still requires a manager — same rule as the initial creation flow
-  if (parsed.data.status === "ACTIVE" && !existing.managerId) {
-    return NextResponse.json(
-      { error: "Cannot activate: assign a manager to this branch first" },
-      { status: 400 }
-    );
+  if (parsed.data.branchId) {
+    const branchExists = await prisma.branch.findUnique({ where: { id: parsed.data.branchId } });
+    if (!branchExists) {
+      return NextResponse.json({ error: "Target branch not found" }, { status: 404 });
+    }
   }
 
-  const branch = await prisma.branch.update({
-    where: { id: branchId },
+  // If this person currently manages a branch, and we're changing their role away
+  // from BRANCH_MANAGER or moving them to a different branch, that branch loses
+  // its manager — auto-unassign it (and it falls back to INACTIVE, same rule as
+  // branch creation) rather than leaving a dangling/inconsistent assignment.
+  const managedBranch = await prisma.branch.findFirst({ where: { managerId: userId } });
+  const losingManagerRole = parsed.data.role && parsed.data.role !== "BRANCH_MANAGER";
+  const movingBranch = parsed.data.branchId && parsed.data.branchId !== existing.branchId;
+
+  if (managedBranch && (losingManagerRole || movingBranch)) {
+    await prisma.branch.update({
+      where: { id: managedBranch.id },
+      data: { managerId: null, status: "INACTIVE" },
+    });
+    await prisma.auditLog.create({
+      data: {
+        entityType: "BRANCH",
+        entityId: managedBranch.id,
+        action: "MANAGER_UNASSIGNED_DEACTIVATED",
+        performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+        performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
+        metadata: { reason: "manager reassigned or role changed", userId },
+      },
+    });
+  }
+
+  const user = await prisma.appUser.update({
+    where: { id: userId },
     data: parsed.data,
   });
 
   await prisma.auditLog.create({
     data: {
-      entityType: "BRANCH",
-      entityId: branchId,
-      action: parsed.data.status ? `STATUS_CHANGED_TO_${parsed.data.status}` : "UPDATED",
-      performedByAdminId: auth.id,
+      entityType: "APP_USER",
+      entityId: userId,
+      action: "UPDATED",
+      performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+      performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
       metadata: parsed.data,
     },
   });
 
-  return NextResponse.json({ branch });
+  const { passwordHash: _omit, ...safeUser } = user;
+  return NextResponse.json({ user: safeUser });
 }
 
-// DELETE /api/branches/:branchId — only allowed if the branch has zero
-// dependent records (no transactions, topups, staff, or ledger history)
+// DELETE /api/users/:userId — only allowed if they have zero transaction history
+// and are not currently assigned as a branch manager
 export async function DELETE(
   req: NextRequest,
-  { params }: { params: Promise<{ branchId: string }> }
+  { params }: { params: Promise<{ userId: string }> }
 ) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "MANAGE_STAFF");
   if (auth instanceof NextResponse) return auth;
 
-  const { branchId } = await params;
+  const { userId } = await params;
 
-  const [txCount, topupCount, staffCount, ledgerCount] = await Promise.all([
-    prisma.transaction.count({
-      where: { OR: [{ senderBranchId: branchId }, { receiverBranchId: branchId }] },
-    }),
-    prisma.topup.count({ where: { branchId } }),
-    prisma.appUser.count({ where: { branchId } }),
-    prisma.generalLedgerEntry.count({ where: { branchId } }),
+  const [createdCount, completedCount, refundedCount, managedBranch] = await Promise.all([
+    prisma.transaction.count({ where: { createdById: userId } }),
+    prisma.transaction.count({ where: { completedById: userId } }),
+    prisma.transaction.count({ where: { refundedById: userId } }),
+    prisma.branch.findFirst({ where: { managerId: userId } }),
   ]);
 
-  if (txCount > 0 || topupCount > 0 || staffCount > 0 || ledgerCount > 0) {
+  const totalTxActivity = createdCount + completedCount + refundedCount;
+
+  if (totalTxActivity > 0) {
     return NextResponse.json(
       {
-        error: `Cannot delete: this branch has ${txCount} transaction(s), ${topupCount} topup(s), ${staffCount} staff member(s), and ${ledgerCount} ledger entry(ies) tied to it. Deactivate it instead.`,
+        error: `Cannot delete: this staff member has ${totalTxActivity} transaction(s) on record. Deactivate the account instead.`,
       },
       { status: 400 }
     );
   }
 
-  // Safe to remove — clean up its (empty) commission tiers first, then the branch itself
-  await prisma.commissionTier.deleteMany({ where: { branchId } });
-  await prisma.branch.delete({ where: { id: branchId } });
+  if (managedBranch) {
+    return NextResponse.json(
+      {
+        error: `Cannot delete: this person is currently the manager of ${managedBranch.name}. Reassign that branch's manager first.`,
+      },
+      { status: 400 }
+    );
+  }
+
+  await prisma.appUser.delete({ where: { id: userId } });
 
   await prisma.auditLog.create({
     data: {
-      entityType: "BRANCH",
-      entityId: branchId,
+      entityType: "APP_USER",
+      entityId: userId,
       action: "DELETED",
-      performedByAdminId: auth.id,
+      performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+      performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
       metadata: {},
     },
   });
 
   return NextResponse.json({ success: true });
 }
-

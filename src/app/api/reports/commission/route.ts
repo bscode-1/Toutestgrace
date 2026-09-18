@@ -1,24 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { verifyToken } from "@/lib/auth";
+import { requirePermission } from "@/lib/require-permission";
 
 // GET /api/reports/commission?from=&to=&branchId=
 // Commission is only counted from COMPLETED transactions — a refund returns
 // the full amount including commission, so nothing was actually earned there.
 export async function GET(req: NextRequest) {
-  const authHeader = req.headers.get("authorization");
-  const token = authHeader?.startsWith("Bearer ") ? authHeader.replace("Bearer ", "") : null;
-  const payload = token ? verifyToken(token) : null;
-
-  if (!payload) {
-    return NextResponse.json({ error: "Missing or invalid Authorization header" }, { status: 401 });
-  }
-
-  const isSuperAdmin = payload.role === "SUPER_ADMIN";
-  const isStaff = payload.role === "TELLER" || payload.role === "BRANCH_MANAGER";
-  if (!isSuperAdmin && !isStaff) {
-    return NextResponse.json({ error: "Unauthorized" }, { status: 403 });
-  }
+  const auth = await requirePermission(req, "VIEW_COMMISSION_REPORT");
+  if (auth instanceof NextResponse) return auth;
 
   const { searchParams } = new URL(req.url);
   const fromParam = searchParams.get("from");
@@ -28,7 +17,10 @@ export async function GET(req: NextRequest) {
   const from = fromParam ? new Date(fromParam) : new Date(new Date().setDate(new Date().getDate() - 30));
   const to = toParam ? new Date(toParam + "T23:59:59") : new Date();
 
-  const scopedBranchId = isStaff ? payload.branchId : branchIdParam || undefined;
+  // Super admin (or any role broad enough to hold VIEW_COMMISSION_REPORT without
+  // a branch tie) can filter by branchId or see everything; staff with their
+  // own branch are always scoped to it, regardless of branchId in the query.
+  const scopedBranchId = auth.role === "SUPER_ADMIN" ? branchIdParam || undefined : auth.branchId;
 
   const where = {
     status: "COMPLETED" as const,

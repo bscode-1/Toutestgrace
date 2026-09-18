@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 const createExpenseSchema = z.object({
   branchId: z.string().uuid().optional(),
@@ -11,9 +11,9 @@ const createExpenseSchema = z.object({
   paidAt: z.string().optional(), // ISO date, defaults to now
 });
 
-// POST /api/expenses — record a paid expense (super admin only)
+// POST /api/expenses — record a paid expense
 export async function POST(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "MANAGE_EXPENSES");
   if (auth instanceof NextResponse) return auth;
 
   const body = await req.json();
@@ -47,7 +47,8 @@ export async function POST(req: NextRequest) {
       entityType: "EXPENSE",
       entityId: expense.id,
       action: "CREATED",
-      performedByAdminId: auth.id,
+      performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+      performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
       metadata: { category, amount, branchId },
     },
   });
@@ -55,9 +56,9 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ expense }, { status: 201 });
 }
 
-// GET /api/expenses?category=&from=&to=&branchId= — list, filterable (super admin only)
+// GET /api/expenses?category=&from=&to=&branchId= — list, filterable
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_EXPENSES");
   if (auth instanceof NextResponse) return auth;
 
   const { searchParams } = new URL(req.url);

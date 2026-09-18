@@ -1,7 +1,8 @@
+// src/app/api/roles/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 const SYSTEM_ROLES = [
   { name: "BRANCH_MANAGER", displayName: "Branch Manager" },
@@ -10,7 +11,7 @@ const SYSTEM_ROLES = [
 
 // GET /api/roles — list all roles, seeding the two built-in ones if missing
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = requirePermission(req, "VIEW_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   for (const r of SYSTEM_ROLES) {
@@ -29,9 +30,9 @@ const createRoleSchema = z.object({
   name: z.string().min(2).max(40),
 });
 
-// POST /api/roles — create a new custom role (super admin only)
+// POST /api/roles — create a new custom role (requires MANAGE_ROLES)
 export async function POST(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = requirePermission(req, "MANAGE_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const body = await req.json();
@@ -40,7 +41,6 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
-  // Normalize to a stable key: "Cashier" -> "CASHIER", "Front Desk" -> "FRONT_DESK"
   const key = parsed.data.name.trim().toUpperCase().replace(/\s+/g, "_");
 
   const existing = await prisma.role.findUnique({ where: { name: key } });
@@ -52,12 +52,15 @@ export async function POST(req: NextRequest) {
     data: { name: key, isSystem: false },
   });
 
+  // ⚠️ ASSUMPTION pending confirmation: AuditLog has both performedByAdminId
+  // and performedByUserId as separate nullable FKs; branch on actor type.
   await prisma.auditLog.create({
     data: {
       entityType: "ROLE",
       entityId: role.id,
       action: "CREATED",
-      performedByAdminId: auth.id,
+      performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+      performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
       metadata: { name: key },
     },
   });

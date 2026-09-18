@@ -1,7 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 const createSalarySchema = z.object({
   staffId: z.string().uuid().optional(),
@@ -11,9 +11,9 @@ const createSalarySchema = z.object({
   paidAt: z.string().optional(),
 });
 
-// POST /api/salaries — record a salary payment (super admin only)
+// POST /api/salaries — record a salary payment
 export async function POST(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "MANAGE_SALARIES");
   if (auth instanceof NextResponse) return auth;
 
   const body = await req.json();
@@ -40,7 +40,8 @@ export async function POST(req: NextRequest) {
       entityType: "SALARY",
       entityId: salary.id,
       action: "PAID",
-      performedByAdminId: auth.id,
+      performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+      performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
       metadata: { staffName, amount, period },
     },
   });
@@ -48,9 +49,9 @@ export async function POST(req: NextRequest) {
   return NextResponse.json({ salary }, { status: 201 });
 }
 
-// GET /api/salaries?from=&to= — list, filterable (super admin only)
+// GET /api/salaries?from=&to= — list, filterable
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_SALARIES");
   if (auth instanceof NextResponse) return auth;
 
   const { searchParams } = new URL(req.url);

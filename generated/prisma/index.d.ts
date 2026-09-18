@@ -44,6 +44,11 @@ export type Branch = $Result.DefaultSelection<Prisma.$BranchPayload>
  */
 export type AppUser = $Result.DefaultSelection<Prisma.$AppUserPayload>
 /**
+ * Model Partner
+ * 
+ */
+export type Partner = $Result.DefaultSelection<Prisma.$PartnerPayload>
+/**
  * Model CommissionTier
  * 
  */
@@ -84,6 +89,11 @@ export type RolePermission = $Result.DefaultSelection<Prisma.$RolePermissionPayl
  */
 export type Role = $Result.DefaultSelection<Prisma.$RolePayload>
 /**
+ * Model PickupEvent
+ * 
+ */
+export type PickupEvent = $Result.DefaultSelection<Prisma.$PickupEventPayload>
+/**
  * Model Expense
  * 
  */
@@ -98,6 +108,35 @@ export type SalaryPayment = $Result.DefaultSelection<Prisma.$SalaryPaymentPayloa
  * 
  */
 export type ExpenseCategory = $Result.DefaultSelection<Prisma.$ExpenseCategoryPayload>
+/**
+ * Model FundSource
+ * 
+ */
+export type FundSource = $Result.DefaultSelection<Prisma.$FundSourcePayload>
+/**
+ * Model PartnerDistribution
+ * 
+ */
+export type PartnerDistribution = $Result.DefaultSelection<Prisma.$PartnerDistributionPayload>
+
+/**
+ * Enums
+ */
+export namespace $Enums {
+  export const TransactionStatus: {
+  PENDING: 'PENDING',
+  PARTIAL: 'PARTIAL',
+  COMPLETED: 'COMPLETED',
+  REFUNDED: 'REFUNDED'
+};
+
+export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
+
+}
+
+export type TransactionStatus = $Enums.TransactionStatus
+
+export const TransactionStatus: typeof $Enums.TransactionStatus
 
 /**
  * ##  Prisma Client ʲˢ
@@ -281,6 +320,16 @@ export class PrismaClient<
   get appUser(): Prisma.AppUserDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.partner`: Exposes CRUD operations for the **Partner** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more Partners
+    * const partners = await prisma.partner.findMany()
+    * ```
+    */
+  get partner(): Prisma.PartnerDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.commissionTier`: Exposes CRUD operations for the **CommissionTier** model.
     * Example usage:
     * ```ts
@@ -361,6 +410,16 @@ export class PrismaClient<
   get role(): Prisma.RoleDelegate<ExtArgs, ClientOptions>;
 
   /**
+   * `prisma.pickupEvent`: Exposes CRUD operations for the **PickupEvent** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PickupEvents
+    * const pickupEvents = await prisma.pickupEvent.findMany()
+    * ```
+    */
+  get pickupEvent(): Prisma.PickupEventDelegate<ExtArgs, ClientOptions>;
+
+  /**
    * `prisma.expense`: Exposes CRUD operations for the **Expense** model.
     * Example usage:
     * ```ts
@@ -389,6 +448,26 @@ export class PrismaClient<
     * ```
     */
   get expenseCategory(): Prisma.ExpenseCategoryDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.fundSource`: Exposes CRUD operations for the **FundSource** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more FundSources
+    * const fundSources = await prisma.fundSource.findMany()
+    * ```
+    */
+  get fundSource(): Prisma.FundSourceDelegate<ExtArgs, ClientOptions>;
+
+  /**
+   * `prisma.partnerDistribution`: Exposes CRUD operations for the **PartnerDistribution** model.
+    * Example usage:
+    * ```ts
+    * // Fetch zero or more PartnerDistributions
+    * const partnerDistributions = await prisma.partnerDistribution.findMany()
+    * ```
+    */
+  get partnerDistribution(): Prisma.PartnerDistributionDelegate<ExtArgs, ClientOptions>;
 }
 
 export namespace Prisma {
@@ -842,6 +921,7 @@ export namespace Prisma {
     SuperAdmin: 'SuperAdmin',
     Branch: 'Branch',
     AppUser: 'AppUser',
+    Partner: 'Partner',
     CommissionTier: 'CommissionTier',
     Transaction: 'Transaction',
     SubLedgerEntry: 'SubLedgerEntry',
@@ -850,9 +930,12 @@ export namespace Prisma {
     AuditLog: 'AuditLog',
     RolePermission: 'RolePermission',
     Role: 'Role',
+    PickupEvent: 'PickupEvent',
     Expense: 'Expense',
     SalaryPayment: 'SalaryPayment',
-    ExpenseCategory: 'ExpenseCategory'
+    ExpenseCategory: 'ExpenseCategory',
+    FundSource: 'FundSource',
+    PartnerDistribution: 'PartnerDistribution'
   };
 
   export type ModelName = (typeof ModelName)[keyof typeof ModelName]
@@ -868,7 +951,7 @@ export namespace Prisma {
       omit: GlobalOmitOptions
     }
     meta: {
-      modelProps: "systemConfig" | "currency" | "exchangeRate" | "superAdmin" | "branch" | "appUser" | "commissionTier" | "transaction" | "subLedgerEntry" | "generalLedgerEntry" | "topup" | "auditLog" | "rolePermission" | "role" | "expense" | "salaryPayment" | "expenseCategory"
+      modelProps: "systemConfig" | "currency" | "exchangeRate" | "superAdmin" | "branch" | "appUser" | "partner" | "commissionTier" | "transaction" | "subLedgerEntry" | "generalLedgerEntry" | "topup" | "auditLog" | "rolePermission" | "role" | "pickupEvent" | "expense" | "salaryPayment" | "expenseCategory" | "fundSource" | "partnerDistribution"
       txIsolationLevel: Prisma.TransactionIsolationLevel
     }
     model: {
@@ -1313,6 +1396,80 @@ export namespace Prisma {
           count: {
             args: Prisma.AppUserCountArgs<ExtArgs>
             result: $Utils.Optional<AppUserCountAggregateOutputType> | number
+          }
+        }
+      }
+      Partner: {
+        payload: Prisma.$PartnerPayload<ExtArgs>
+        fields: Prisma.PartnerFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PartnerFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PartnerFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>
+          }
+          findFirst: {
+            args: Prisma.PartnerFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PartnerFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>
+          }
+          findMany: {
+            args: Prisma.PartnerFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>[]
+          }
+          create: {
+            args: Prisma.PartnerCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>
+          }
+          createMany: {
+            args: Prisma.PartnerCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PartnerCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>[]
+          }
+          delete: {
+            args: Prisma.PartnerDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>
+          }
+          update: {
+            args: Prisma.PartnerUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>
+          }
+          deleteMany: {
+            args: Prisma.PartnerDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PartnerUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PartnerUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>[]
+          }
+          upsert: {
+            args: Prisma.PartnerUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerPayload>
+          }
+          aggregate: {
+            args: Prisma.PartnerAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePartner>
+          }
+          groupBy: {
+            args: Prisma.PartnerGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PartnerGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PartnerCountArgs<ExtArgs>
+            result: $Utils.Optional<PartnerCountAggregateOutputType> | number
           }
         }
       }
@@ -1908,6 +2065,80 @@ export namespace Prisma {
           }
         }
       }
+      PickupEvent: {
+        payload: Prisma.$PickupEventPayload<ExtArgs>
+        fields: Prisma.PickupEventFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PickupEventFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PickupEventFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>
+          }
+          findFirst: {
+            args: Prisma.PickupEventFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PickupEventFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>
+          }
+          findMany: {
+            args: Prisma.PickupEventFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>[]
+          }
+          create: {
+            args: Prisma.PickupEventCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>
+          }
+          createMany: {
+            args: Prisma.PickupEventCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PickupEventCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>[]
+          }
+          delete: {
+            args: Prisma.PickupEventDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>
+          }
+          update: {
+            args: Prisma.PickupEventUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>
+          }
+          deleteMany: {
+            args: Prisma.PickupEventDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PickupEventUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PickupEventUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>[]
+          }
+          upsert: {
+            args: Prisma.PickupEventUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PickupEventPayload>
+          }
+          aggregate: {
+            args: Prisma.PickupEventAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePickupEvent>
+          }
+          groupBy: {
+            args: Prisma.PickupEventGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PickupEventGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PickupEventCountArgs<ExtArgs>
+            result: $Utils.Optional<PickupEventCountAggregateOutputType> | number
+          }
+        }
+      }
       Expense: {
         payload: Prisma.$ExpensePayload<ExtArgs>
         fields: Prisma.ExpenseFieldRefs
@@ -2130,6 +2361,154 @@ export namespace Prisma {
           }
         }
       }
+      FundSource: {
+        payload: Prisma.$FundSourcePayload<ExtArgs>
+        fields: Prisma.FundSourceFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.FundSourceFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.FundSourceFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>
+          }
+          findFirst: {
+            args: Prisma.FundSourceFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.FundSourceFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>
+          }
+          findMany: {
+            args: Prisma.FundSourceFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>[]
+          }
+          create: {
+            args: Prisma.FundSourceCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>
+          }
+          createMany: {
+            args: Prisma.FundSourceCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.FundSourceCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>[]
+          }
+          delete: {
+            args: Prisma.FundSourceDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>
+          }
+          update: {
+            args: Prisma.FundSourceUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>
+          }
+          deleteMany: {
+            args: Prisma.FundSourceDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.FundSourceUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.FundSourceUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>[]
+          }
+          upsert: {
+            args: Prisma.FundSourceUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$FundSourcePayload>
+          }
+          aggregate: {
+            args: Prisma.FundSourceAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregateFundSource>
+          }
+          groupBy: {
+            args: Prisma.FundSourceGroupByArgs<ExtArgs>
+            result: $Utils.Optional<FundSourceGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.FundSourceCountArgs<ExtArgs>
+            result: $Utils.Optional<FundSourceCountAggregateOutputType> | number
+          }
+        }
+      }
+      PartnerDistribution: {
+        payload: Prisma.$PartnerDistributionPayload<ExtArgs>
+        fields: Prisma.PartnerDistributionFieldRefs
+        operations: {
+          findUnique: {
+            args: Prisma.PartnerDistributionFindUniqueArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload> | null
+          }
+          findUniqueOrThrow: {
+            args: Prisma.PartnerDistributionFindUniqueOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>
+          }
+          findFirst: {
+            args: Prisma.PartnerDistributionFindFirstArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload> | null
+          }
+          findFirstOrThrow: {
+            args: Prisma.PartnerDistributionFindFirstOrThrowArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>
+          }
+          findMany: {
+            args: Prisma.PartnerDistributionFindManyArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>[]
+          }
+          create: {
+            args: Prisma.PartnerDistributionCreateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>
+          }
+          createMany: {
+            args: Prisma.PartnerDistributionCreateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          createManyAndReturn: {
+            args: Prisma.PartnerDistributionCreateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>[]
+          }
+          delete: {
+            args: Prisma.PartnerDistributionDeleteArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>
+          }
+          update: {
+            args: Prisma.PartnerDistributionUpdateArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>
+          }
+          deleteMany: {
+            args: Prisma.PartnerDistributionDeleteManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateMany: {
+            args: Prisma.PartnerDistributionUpdateManyArgs<ExtArgs>
+            result: BatchPayload
+          }
+          updateManyAndReturn: {
+            args: Prisma.PartnerDistributionUpdateManyAndReturnArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>[]
+          }
+          upsert: {
+            args: Prisma.PartnerDistributionUpsertArgs<ExtArgs>
+            result: $Utils.PayloadToResult<Prisma.$PartnerDistributionPayload>
+          }
+          aggregate: {
+            args: Prisma.PartnerDistributionAggregateArgs<ExtArgs>
+            result: $Utils.Optional<AggregatePartnerDistribution>
+          }
+          groupBy: {
+            args: Prisma.PartnerDistributionGroupByArgs<ExtArgs>
+            result: $Utils.Optional<PartnerDistributionGroupByOutputType>[]
+          }
+          count: {
+            args: Prisma.PartnerDistributionCountArgs<ExtArgs>
+            result: $Utils.Optional<PartnerDistributionCountAggregateOutputType> | number
+          }
+        }
+      }
     }
   } & {
     other: {
@@ -2259,6 +2638,7 @@ export namespace Prisma {
     superAdmin?: SuperAdminOmit
     branch?: BranchOmit
     appUser?: AppUserOmit
+    partner?: PartnerOmit
     commissionTier?: CommissionTierOmit
     transaction?: TransactionOmit
     subLedgerEntry?: SubLedgerEntryOmit
@@ -2267,9 +2647,12 @@ export namespace Prisma {
     auditLog?: AuditLogOmit
     rolePermission?: RolePermissionOmit
     role?: RoleOmit
+    pickupEvent?: PickupEventOmit
     expense?: ExpenseOmit
     salaryPayment?: SalaryPaymentOmit
     expenseCategory?: ExpenseCategoryOmit
+    fundSource?: FundSourceOmit
+    partnerDistribution?: PartnerDistributionOmit
   }
 
   /* Types for Logging */
@@ -2426,6 +2809,9 @@ export namespace Prisma {
    */
 
   export type SuperAdminCountOutputType = {
+    partnersCreated: number
+    fundSourcesRecorded: number
+    distributionsRecorded: number
     branchesCreated: number
     topupsInitiated: number
     auditLogs: number
@@ -2434,6 +2820,9 @@ export namespace Prisma {
   }
 
   export type SuperAdminCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    partnersCreated?: boolean | SuperAdminCountOutputTypeCountPartnersCreatedArgs
+    fundSourcesRecorded?: boolean | SuperAdminCountOutputTypeCountFundSourcesRecordedArgs
+    distributionsRecorded?: boolean | SuperAdminCountOutputTypeCountDistributionsRecordedArgs
     branchesCreated?: boolean | SuperAdminCountOutputTypeCountBranchesCreatedArgs
     topupsInitiated?: boolean | SuperAdminCountOutputTypeCountTopupsInitiatedArgs
     auditLogs?: boolean | SuperAdminCountOutputTypeCountAuditLogsArgs
@@ -2450,6 +2839,27 @@ export namespace Prisma {
      * Select specific fields to fetch from the SuperAdminCountOutputType
      */
     select?: SuperAdminCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * SuperAdminCountOutputType without action
+   */
+  export type SuperAdminCountOutputTypeCountPartnersCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnerWhereInput
+  }
+
+  /**
+   * SuperAdminCountOutputType without action
+   */
+  export type SuperAdminCountOutputTypeCountFundSourcesRecordedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FundSourceWhereInput
+  }
+
+  /**
+   * SuperAdminCountOutputType without action
+   */
+  export type SuperAdminCountOutputTypeCountDistributionsRecordedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnerDistributionWhereInput
   }
 
   /**
@@ -2493,6 +2903,7 @@ export namespace Prisma {
    */
 
   export type BranchCountOutputType = {
+    distributions: number
     users: number
     commissionTiers: number
     sentTransactions: number
@@ -2504,6 +2915,7 @@ export namespace Prisma {
   }
 
   export type BranchCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    distributions?: boolean | BranchCountOutputTypeCountDistributionsArgs
     users?: boolean | BranchCountOutputTypeCountUsersArgs
     commissionTiers?: boolean | BranchCountOutputTypeCountCommissionTiersArgs
     sentTransactions?: boolean | BranchCountOutputTypeCountSentTransactionsArgs
@@ -2523,6 +2935,13 @@ export namespace Prisma {
      * Select specific fields to fetch from the BranchCountOutputType
      */
     select?: BranchCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * BranchCountOutputType without action
+   */
+  export type BranchCountOutputTypeCountDistributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnerDistributionWhereInput
   }
 
   /**
@@ -2593,6 +3012,7 @@ export namespace Prisma {
     topupsReceived: number
     auditLogs: number
     salaryPayments: number
+    pickupEvents: number
   }
 
   export type AppUserCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -2602,6 +3022,7 @@ export namespace Prisma {
     topupsReceived?: boolean | AppUserCountOutputTypeCountTopupsReceivedArgs
     auditLogs?: boolean | AppUserCountOutputTypeCountAuditLogsArgs
     salaryPayments?: boolean | AppUserCountOutputTypeCountSalaryPaymentsArgs
+    pickupEvents?: boolean | AppUserCountOutputTypeCountPickupEventsArgs
   }
 
   // Custom InputTypes
@@ -2657,6 +3078,53 @@ export namespace Prisma {
     where?: SalaryPaymentWhereInput
   }
 
+  /**
+   * AppUserCountOutputType without action
+   */
+  export type AppUserCountOutputTypeCountPickupEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PickupEventWhereInput
+  }
+
+
+  /**
+   * Count Type PartnerCountOutputType
+   */
+
+  export type PartnerCountOutputType = {
+    fundSources: number
+    distributions: number
+  }
+
+  export type PartnerCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    fundSources?: boolean | PartnerCountOutputTypeCountFundSourcesArgs
+    distributions?: boolean | PartnerCountOutputTypeCountDistributionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * PartnerCountOutputType without action
+   */
+  export type PartnerCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerCountOutputType
+     */
+    select?: PartnerCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * PartnerCountOutputType without action
+   */
+  export type PartnerCountOutputTypeCountFundSourcesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FundSourceWhereInput
+  }
+
+  /**
+   * PartnerCountOutputType without action
+   */
+  export type PartnerCountOutputTypeCountDistributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnerDistributionWhereInput
+  }
+
 
   /**
    * Count Type CommissionTierCountOutputType
@@ -2696,11 +3164,13 @@ export namespace Prisma {
   export type TransactionCountOutputType = {
     subLedgerEntries: number
     generalLedgerEntries: number
+    pickupEvents: number
   }
 
   export type TransactionCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     subLedgerEntries?: boolean | TransactionCountOutputTypeCountSubLedgerEntriesArgs
     generalLedgerEntries?: boolean | TransactionCountOutputTypeCountGeneralLedgerEntriesArgs
+    pickupEvents?: boolean | TransactionCountOutputTypeCountPickupEventsArgs
   }
 
   // Custom InputTypes
@@ -2726,6 +3196,13 @@ export namespace Prisma {
    */
   export type TransactionCountOutputTypeCountGeneralLedgerEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GeneralLedgerEntryWhereInput
+  }
+
+  /**
+   * TransactionCountOutputType without action
+   */
+  export type TransactionCountOutputTypeCountPickupEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PickupEventWhereInput
   }
 
 
@@ -2757,6 +3234,37 @@ export namespace Prisma {
    */
   export type TopupCountOutputTypeCountGeneralLedgerEntriesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     where?: GeneralLedgerEntryWhereInput
+  }
+
+
+  /**
+   * Count Type FundSourceCountOutputType
+   */
+
+  export type FundSourceCountOutputType = {
+    distributions: number
+  }
+
+  export type FundSourceCountOutputTypeSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    distributions?: boolean | FundSourceCountOutputTypeCountDistributionsArgs
+  }
+
+  // Custom InputTypes
+  /**
+   * FundSourceCountOutputType without action
+   */
+  export type FundSourceCountOutputTypeDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSourceCountOutputType
+     */
+    select?: FundSourceCountOutputTypeSelect<ExtArgs> | null
+  }
+
+  /**
+   * FundSourceCountOutputType without action
+   */
+  export type FundSourceCountOutputTypeCountDistributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnerDistributionWhereInput
   }
 
 
@@ -6393,6 +6901,9 @@ export namespace Prisma {
     preferredLanguage?: boolean
     isActive?: boolean
     createdAt?: boolean
+    partnersCreated?: boolean | SuperAdmin$partnersCreatedArgs<ExtArgs>
+    fundSourcesRecorded?: boolean | SuperAdmin$fundSourcesRecordedArgs<ExtArgs>
+    distributionsRecorded?: boolean | SuperAdmin$distributionsRecordedArgs<ExtArgs>
     branchesCreated?: boolean | SuperAdmin$branchesCreatedArgs<ExtArgs>
     topupsInitiated?: boolean | SuperAdmin$topupsInitiatedArgs<ExtArgs>
     auditLogs?: boolean | SuperAdmin$auditLogsArgs<ExtArgs>
@@ -6433,6 +6944,9 @@ export namespace Prisma {
 
   export type SuperAdminOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "preferredLanguage" | "isActive" | "createdAt", ExtArgs["result"]["superAdmin"]>
   export type SuperAdminInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    partnersCreated?: boolean | SuperAdmin$partnersCreatedArgs<ExtArgs>
+    fundSourcesRecorded?: boolean | SuperAdmin$fundSourcesRecordedArgs<ExtArgs>
+    distributionsRecorded?: boolean | SuperAdmin$distributionsRecordedArgs<ExtArgs>
     branchesCreated?: boolean | SuperAdmin$branchesCreatedArgs<ExtArgs>
     topupsInitiated?: boolean | SuperAdmin$topupsInitiatedArgs<ExtArgs>
     auditLogs?: boolean | SuperAdmin$auditLogsArgs<ExtArgs>
@@ -6446,6 +6960,9 @@ export namespace Prisma {
   export type $SuperAdminPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     name: "SuperAdmin"
     objects: {
+      partnersCreated: Prisma.$PartnerPayload<ExtArgs>[]
+      fundSourcesRecorded: Prisma.$FundSourcePayload<ExtArgs>[]
+      distributionsRecorded: Prisma.$PartnerDistributionPayload<ExtArgs>[]
       branchesCreated: Prisma.$BranchPayload<ExtArgs>[]
       topupsInitiated: Prisma.$TopupPayload<ExtArgs>[]
       auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
@@ -6854,6 +7371,9 @@ export namespace Prisma {
    */
   export interface Prisma__SuperAdminClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
     readonly [Symbol.toStringTag]: "PrismaPromise"
+    partnersCreated<T extends SuperAdmin$partnersCreatedArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdmin$partnersCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    fundSourcesRecorded<T extends SuperAdmin$fundSourcesRecordedArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdmin$fundSourcesRecordedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    distributionsRecorded<T extends SuperAdmin$distributionsRecordedArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdmin$distributionsRecordedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     branchesCreated<T extends SuperAdmin$branchesCreatedArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdmin$branchesCreatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     topupsInitiated<T extends SuperAdmin$topupsInitiatedArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdmin$topupsInitiatedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditLogs<T extends SuperAdmin$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdmin$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -7288,6 +7808,78 @@ export namespace Prisma {
   }
 
   /**
+   * SuperAdmin.partnersCreated
+   */
+  export type SuperAdmin$partnersCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    where?: PartnerWhereInput
+    orderBy?: PartnerOrderByWithRelationInput | PartnerOrderByWithRelationInput[]
+    cursor?: PartnerWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PartnerScalarFieldEnum | PartnerScalarFieldEnum[]
+  }
+
+  /**
+   * SuperAdmin.fundSourcesRecorded
+   */
+  export type SuperAdmin$fundSourcesRecordedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    where?: FundSourceWhereInput
+    orderBy?: FundSourceOrderByWithRelationInput | FundSourceOrderByWithRelationInput[]
+    cursor?: FundSourceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FundSourceScalarFieldEnum | FundSourceScalarFieldEnum[]
+  }
+
+  /**
+   * SuperAdmin.distributionsRecorded
+   */
+  export type SuperAdmin$distributionsRecordedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    where?: PartnerDistributionWhereInput
+    orderBy?: PartnerDistributionOrderByWithRelationInput | PartnerDistributionOrderByWithRelationInput[]
+    cursor?: PartnerDistributionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PartnerDistributionScalarFieldEnum | PartnerDistributionScalarFieldEnum[]
+  }
+
+  /**
    * SuperAdmin.branchesCreated
    */
   export type SuperAdmin$branchesCreatedArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -7657,6 +8249,7 @@ export namespace Prisma {
     manager?: boolean | Branch$managerArgs<ExtArgs>
     currency?: boolean | Branch$currencyArgs<ExtArgs>
     createdBySuperAdmin?: boolean | SuperAdminDefaultArgs<ExtArgs>
+    distributions?: boolean | Branch$distributionsArgs<ExtArgs>
     users?: boolean | Branch$usersArgs<ExtArgs>
     commissionTiers?: boolean | Branch$commissionTiersArgs<ExtArgs>
     sentTransactions?: boolean | Branch$sentTransactionsArgs<ExtArgs>
@@ -7727,6 +8320,7 @@ export namespace Prisma {
     manager?: boolean | Branch$managerArgs<ExtArgs>
     currency?: boolean | Branch$currencyArgs<ExtArgs>
     createdBySuperAdmin?: boolean | SuperAdminDefaultArgs<ExtArgs>
+    distributions?: boolean | Branch$distributionsArgs<ExtArgs>
     users?: boolean | Branch$usersArgs<ExtArgs>
     commissionTiers?: boolean | Branch$commissionTiersArgs<ExtArgs>
     sentTransactions?: boolean | Branch$sentTransactionsArgs<ExtArgs>
@@ -7754,6 +8348,7 @@ export namespace Prisma {
       manager: Prisma.$AppUserPayload<ExtArgs> | null
       currency: Prisma.$CurrencyPayload<ExtArgs> | null
       createdBySuperAdmin: Prisma.$SuperAdminPayload<ExtArgs>
+      distributions: Prisma.$PartnerDistributionPayload<ExtArgs>[]
       users: Prisma.$AppUserPayload<ExtArgs>[]
       commissionTiers: Prisma.$CommissionTierPayload<ExtArgs>[]
       sentTransactions: Prisma.$TransactionPayload<ExtArgs>[]
@@ -8174,6 +8769,7 @@ export namespace Prisma {
     manager<T extends Branch$managerArgs<ExtArgs> = {}>(args?: Subset<T, Branch$managerArgs<ExtArgs>>): Prisma__AppUserClient<$Result.GetResult<Prisma.$AppUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     currency<T extends Branch$currencyArgs<ExtArgs> = {}>(args?: Subset<T, Branch$currencyArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     createdBySuperAdmin<T extends SuperAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdminDefaultArgs<ExtArgs>>): Prisma__SuperAdminClient<$Result.GetResult<Prisma.$SuperAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    distributions<T extends Branch$distributionsArgs<ExtArgs> = {}>(args?: Subset<T, Branch$distributionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     users<T extends Branch$usersArgs<ExtArgs> = {}>(args?: Subset<T, Branch$usersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AppUserPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     commissionTiers<T extends Branch$commissionTiersArgs<ExtArgs> = {}>(args?: Subset<T, Branch$commissionTiersArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$CommissionTierPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     sentTransactions<T extends Branch$sentTransactionsArgs<ExtArgs> = {}>(args?: Subset<T, Branch$sentTransactionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
@@ -8663,6 +9259,30 @@ export namespace Prisma {
   }
 
   /**
+   * Branch.distributions
+   */
+  export type Branch$distributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    where?: PartnerDistributionWhereInput
+    orderBy?: PartnerDistributionOrderByWithRelationInput | PartnerDistributionOrderByWithRelationInput[]
+    cursor?: PartnerDistributionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PartnerDistributionScalarFieldEnum | PartnerDistributionScalarFieldEnum[]
+  }
+
+  /**
    * Branch.users
    */
   export type Branch$usersArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -8886,6 +9506,7 @@ export namespace Prisma {
   export type AppUserMinAggregateOutputType = {
     id: string | null
     name: string | null
+    phone: string | null
     email: string | null
     passwordHash: string | null
     role: string | null
@@ -8898,6 +9519,7 @@ export namespace Prisma {
   export type AppUserMaxAggregateOutputType = {
     id: string | null
     name: string | null
+    phone: string | null
     email: string | null
     passwordHash: string | null
     role: string | null
@@ -8910,6 +9532,7 @@ export namespace Prisma {
   export type AppUserCountAggregateOutputType = {
     id: number
     name: number
+    phone: number
     email: number
     passwordHash: number
     role: number
@@ -8924,6 +9547,7 @@ export namespace Prisma {
   export type AppUserMinAggregateInputType = {
     id?: true
     name?: true
+    phone?: true
     email?: true
     passwordHash?: true
     role?: true
@@ -8936,6 +9560,7 @@ export namespace Prisma {
   export type AppUserMaxAggregateInputType = {
     id?: true
     name?: true
+    phone?: true
     email?: true
     passwordHash?: true
     role?: true
@@ -8948,6 +9573,7 @@ export namespace Prisma {
   export type AppUserCountAggregateInputType = {
     id?: true
     name?: true
+    phone?: true
     email?: true
     passwordHash?: true
     role?: true
@@ -9033,6 +9659,7 @@ export namespace Prisma {
   export type AppUserGroupByOutputType = {
     id: string
     name: string
+    phone: string | null
     email: string
     passwordHash: string
     role: string
@@ -9062,6 +9689,7 @@ export namespace Prisma {
   export type AppUserSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    phone?: boolean
     email?: boolean
     passwordHash?: boolean
     role?: boolean
@@ -9077,12 +9705,14 @@ export namespace Prisma {
     topupsReceived?: boolean | AppUser$topupsReceivedArgs<ExtArgs>
     auditLogs?: boolean | AppUser$auditLogsArgs<ExtArgs>
     salaryPayments?: boolean | AppUser$salaryPaymentsArgs<ExtArgs>
+    pickupEvents?: boolean | AppUser$pickupEventsArgs<ExtArgs>
     _count?: boolean | AppUserCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["appUser"]>
 
   export type AppUserSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    phone?: boolean
     email?: boolean
     passwordHash?: boolean
     role?: boolean
@@ -9096,6 +9726,7 @@ export namespace Prisma {
   export type AppUserSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
     id?: boolean
     name?: boolean
+    phone?: boolean
     email?: boolean
     passwordHash?: boolean
     role?: boolean
@@ -9109,6 +9740,7 @@ export namespace Prisma {
   export type AppUserSelectScalar = {
     id?: boolean
     name?: boolean
+    phone?: boolean
     email?: boolean
     passwordHash?: boolean
     role?: boolean
@@ -9118,7 +9750,7 @@ export namespace Prisma {
     createdAt?: boolean
   }
 
-  export type AppUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "passwordHash" | "role" | "branchId" | "preferredLanguage" | "isActive" | "createdAt", ExtArgs["result"]["appUser"]>
+  export type AppUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "phone" | "email" | "passwordHash" | "role" | "branchId" | "preferredLanguage" | "isActive" | "createdAt", ExtArgs["result"]["appUser"]>
   export type AppUserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     managesBranch?: boolean | AppUser$managesBranchArgs<ExtArgs>
@@ -9128,6 +9760,7 @@ export namespace Prisma {
     topupsReceived?: boolean | AppUser$topupsReceivedArgs<ExtArgs>
     auditLogs?: boolean | AppUser$auditLogsArgs<ExtArgs>
     salaryPayments?: boolean | AppUser$salaryPaymentsArgs<ExtArgs>
+    pickupEvents?: boolean | AppUser$pickupEventsArgs<ExtArgs>
     _count?: boolean | AppUserCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type AppUserIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -9148,10 +9781,12 @@ export namespace Prisma {
       topupsReceived: Prisma.$TopupPayload<ExtArgs>[]
       auditLogs: Prisma.$AuditLogPayload<ExtArgs>[]
       salaryPayments: Prisma.$SalaryPaymentPayload<ExtArgs>[]
+      pickupEvents: Prisma.$PickupEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
       name: string
+      phone: string | null
       email: string
       passwordHash: string
       role: string
@@ -9561,6 +10196,7 @@ export namespace Prisma {
     topupsReceived<T extends AppUser$topupsReceivedArgs<ExtArgs> = {}>(args?: Subset<T, AppUser$topupsReceivedArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$TopupPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     auditLogs<T extends AppUser$auditLogsArgs<ExtArgs> = {}>(args?: Subset<T, AppUser$auditLogsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$AuditLogPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     salaryPayments<T extends AppUser$salaryPaymentsArgs<ExtArgs> = {}>(args?: Subset<T, AppUser$salaryPaymentsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SalaryPaymentPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pickupEvents<T extends AppUser$pickupEventsArgs<ExtArgs> = {}>(args?: Subset<T, AppUser$pickupEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -9592,6 +10228,7 @@ export namespace Prisma {
   interface AppUserFieldRefs {
     readonly id: FieldRef<"AppUser", 'String'>
     readonly name: FieldRef<"AppUser", 'String'>
+    readonly phone: FieldRef<"AppUser", 'String'>
     readonly email: FieldRef<"AppUser", 'String'>
     readonly passwordHash: FieldRef<"AppUser", 'String'>
     readonly role: FieldRef<"AppUser", 'String'>
@@ -10163,6 +10800,30 @@ export namespace Prisma {
   }
 
   /**
+   * AppUser.pickupEvents
+   */
+  export type AppUser$pickupEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    where?: PickupEventWhereInput
+    orderBy?: PickupEventOrderByWithRelationInput | PickupEventOrderByWithRelationInput[]
+    cursor?: PickupEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PickupEventScalarFieldEnum | PickupEventScalarFieldEnum[]
+  }
+
+  /**
    * AppUser without action
    */
   export type AppUserDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -10178,6 +10839,1159 @@ export namespace Prisma {
      * Choose, which related nodes to fetch as well
      */
     include?: AppUserInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model Partner
+   */
+
+  export type AggregatePartner = {
+    _count: PartnerCountAggregateOutputType | null
+    _min: PartnerMinAggregateOutputType | null
+    _max: PartnerMaxAggregateOutputType | null
+  }
+
+  export type PartnerMinAggregateOutputType = {
+    id: string | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    createdById: string | null
+    createdAt: Date | null
+  }
+
+  export type PartnerMaxAggregateOutputType = {
+    id: string | null
+    name: string | null
+    email: string | null
+    phone: string | null
+    createdById: string | null
+    createdAt: Date | null
+  }
+
+  export type PartnerCountAggregateOutputType = {
+    id: number
+    name: number
+    email: number
+    phone: number
+    createdById: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PartnerMinAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    createdById?: true
+    createdAt?: true
+  }
+
+  export type PartnerMaxAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    createdById?: true
+    createdAt?: true
+  }
+
+  export type PartnerCountAggregateInputType = {
+    id?: true
+    name?: true
+    email?: true
+    phone?: true
+    createdById?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PartnerAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Partner to aggregate.
+     */
+    where?: PartnerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Partners to fetch.
+     */
+    orderBy?: PartnerOrderByWithRelationInput | PartnerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PartnerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Partners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Partners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned Partners
+    **/
+    _count?: true | PartnerCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PartnerMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PartnerMaxAggregateInputType
+  }
+
+  export type GetPartnerAggregateType<T extends PartnerAggregateArgs> = {
+        [P in keyof T & keyof AggregatePartner]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePartner[P]>
+      : GetScalarType<T[P], AggregatePartner[P]>
+  }
+
+
+
+
+  export type PartnerGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnerWhereInput
+    orderBy?: PartnerOrderByWithAggregationInput | PartnerOrderByWithAggregationInput[]
+    by: PartnerScalarFieldEnum[] | PartnerScalarFieldEnum
+    having?: PartnerScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PartnerCountAggregateInputType | true
+    _min?: PartnerMinAggregateInputType
+    _max?: PartnerMaxAggregateInputType
+  }
+
+  export type PartnerGroupByOutputType = {
+    id: string
+    name: string
+    email: string | null
+    phone: string | null
+    createdById: string | null
+    createdAt: Date
+    _count: PartnerCountAggregateOutputType | null
+    _min: PartnerMinAggregateOutputType | null
+    _max: PartnerMaxAggregateOutputType | null
+  }
+
+  type GetPartnerGroupByPayload<T extends PartnerGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PartnerGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PartnerGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PartnerGroupByOutputType[P]>
+            : GetScalarType<T[P], PartnerGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PartnerSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    createdBy?: boolean | Partner$createdByArgs<ExtArgs>
+    fundSources?: boolean | Partner$fundSourcesArgs<ExtArgs>
+    distributions?: boolean | Partner$distributionsArgs<ExtArgs>
+    _count?: boolean | PartnerCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["partner"]>
+
+  export type PartnerSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    createdBy?: boolean | Partner$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["partner"]>
+
+  export type PartnerSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+    createdBy?: boolean | Partner$createdByArgs<ExtArgs>
+  }, ExtArgs["result"]["partner"]>
+
+  export type PartnerSelectScalar = {
+    id?: boolean
+    name?: boolean
+    email?: boolean
+    phone?: boolean
+    createdById?: boolean
+    createdAt?: boolean
+  }
+
+  export type PartnerOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "email" | "phone" | "createdById" | "createdAt", ExtArgs["result"]["partner"]>
+  export type PartnerInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | Partner$createdByArgs<ExtArgs>
+    fundSources?: boolean | Partner$fundSourcesArgs<ExtArgs>
+    distributions?: boolean | Partner$distributionsArgs<ExtArgs>
+    _count?: boolean | PartnerCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type PartnerIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | Partner$createdByArgs<ExtArgs>
+  }
+  export type PartnerIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    createdBy?: boolean | Partner$createdByArgs<ExtArgs>
+  }
+
+  export type $PartnerPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "Partner"
+    objects: {
+      createdBy: Prisma.$SuperAdminPayload<ExtArgs> | null
+      fundSources: Prisma.$FundSourcePayload<ExtArgs>[]
+      distributions: Prisma.$PartnerDistributionPayload<ExtArgs>[]
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      name: string
+      email: string | null
+      phone: string | null
+      createdById: string | null
+      createdAt: Date
+    }, ExtArgs["result"]["partner"]>
+    composites: {}
+  }
+
+  type PartnerGetPayload<S extends boolean | null | undefined | PartnerDefaultArgs> = $Result.GetResult<Prisma.$PartnerPayload, S>
+
+  type PartnerCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PartnerFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PartnerCountAggregateInputType | true
+    }
+
+  export interface PartnerDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['Partner'], meta: { name: 'Partner' } }
+    /**
+     * Find zero or one Partner that matches the filter.
+     * @param {PartnerFindUniqueArgs} args - Arguments to find a Partner
+     * @example
+     * // Get one Partner
+     * const partner = await prisma.partner.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PartnerFindUniqueArgs>(args: SelectSubset<T, PartnerFindUniqueArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one Partner that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PartnerFindUniqueOrThrowArgs} args - Arguments to find a Partner
+     * @example
+     * // Get one Partner
+     * const partner = await prisma.partner.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PartnerFindUniqueOrThrowArgs>(args: SelectSubset<T, PartnerFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Partner that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerFindFirstArgs} args - Arguments to find a Partner
+     * @example
+     * // Get one Partner
+     * const partner = await prisma.partner.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PartnerFindFirstArgs>(args?: SelectSubset<T, PartnerFindFirstArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first Partner that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerFindFirstOrThrowArgs} args - Arguments to find a Partner
+     * @example
+     * // Get one Partner
+     * const partner = await prisma.partner.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PartnerFindFirstOrThrowArgs>(args?: SelectSubset<T, PartnerFindFirstOrThrowArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more Partners that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all Partners
+     * const partners = await prisma.partner.findMany()
+     * 
+     * // Get first 10 Partners
+     * const partners = await prisma.partner.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const partnerWithIdOnly = await prisma.partner.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PartnerFindManyArgs>(args?: SelectSubset<T, PartnerFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a Partner.
+     * @param {PartnerCreateArgs} args - Arguments to create a Partner.
+     * @example
+     * // Create one Partner
+     * const Partner = await prisma.partner.create({
+     *   data: {
+     *     // ... data to create a Partner
+     *   }
+     * })
+     * 
+     */
+    create<T extends PartnerCreateArgs>(args: SelectSubset<T, PartnerCreateArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many Partners.
+     * @param {PartnerCreateManyArgs} args - Arguments to create many Partners.
+     * @example
+     * // Create many Partners
+     * const partner = await prisma.partner.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PartnerCreateManyArgs>(args?: SelectSubset<T, PartnerCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many Partners and returns the data saved in the database.
+     * @param {PartnerCreateManyAndReturnArgs} args - Arguments to create many Partners.
+     * @example
+     * // Create many Partners
+     * const partner = await prisma.partner.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many Partners and only return the `id`
+     * const partnerWithIdOnly = await prisma.partner.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PartnerCreateManyAndReturnArgs>(args?: SelectSubset<T, PartnerCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a Partner.
+     * @param {PartnerDeleteArgs} args - Arguments to delete one Partner.
+     * @example
+     * // Delete one Partner
+     * const Partner = await prisma.partner.delete({
+     *   where: {
+     *     // ... filter to delete one Partner
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PartnerDeleteArgs>(args: SelectSubset<T, PartnerDeleteArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one Partner.
+     * @param {PartnerUpdateArgs} args - Arguments to update one Partner.
+     * @example
+     * // Update one Partner
+     * const partner = await prisma.partner.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PartnerUpdateArgs>(args: SelectSubset<T, PartnerUpdateArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more Partners.
+     * @param {PartnerDeleteManyArgs} args - Arguments to filter Partners to delete.
+     * @example
+     * // Delete a few Partners
+     * const { count } = await prisma.partner.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PartnerDeleteManyArgs>(args?: SelectSubset<T, PartnerDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Partners.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many Partners
+     * const partner = await prisma.partner.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PartnerUpdateManyArgs>(args: SelectSubset<T, PartnerUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more Partners and returns the data updated in the database.
+     * @param {PartnerUpdateManyAndReturnArgs} args - Arguments to update many Partners.
+     * @example
+     * // Update many Partners
+     * const partner = await prisma.partner.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more Partners and only return the `id`
+     * const partnerWithIdOnly = await prisma.partner.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PartnerUpdateManyAndReturnArgs>(args: SelectSubset<T, PartnerUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one Partner.
+     * @param {PartnerUpsertArgs} args - Arguments to update or create a Partner.
+     * @example
+     * // Update or create a Partner
+     * const partner = await prisma.partner.upsert({
+     *   create: {
+     *     // ... data to create a Partner
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the Partner we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PartnerUpsertArgs>(args: SelectSubset<T, PartnerUpsertArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of Partners.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerCountArgs} args - Arguments to filter Partners to count.
+     * @example
+     * // Count the number of Partners
+     * const count = await prisma.partner.count({
+     *   where: {
+     *     // ... the filter for the Partners we want to count
+     *   }
+     * })
+    **/
+    count<T extends PartnerCountArgs>(
+      args?: Subset<T, PartnerCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PartnerCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a Partner.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PartnerAggregateArgs>(args: Subset<T, PartnerAggregateArgs>): Prisma.PrismaPromise<GetPartnerAggregateType<T>>
+
+    /**
+     * Group by Partner.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PartnerGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PartnerGroupByArgs['orderBy'] }
+        : { orderBy?: PartnerGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PartnerGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPartnerGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the Partner model
+   */
+  readonly fields: PartnerFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for Partner.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PartnerClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    createdBy<T extends Partner$createdByArgs<ExtArgs> = {}>(args?: Subset<T, Partner$createdByArgs<ExtArgs>>): Prisma__SuperAdminClient<$Result.GetResult<Prisma.$SuperAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    fundSources<T extends Partner$fundSourcesArgs<ExtArgs> = {}>(args?: Subset<T, Partner$fundSourcesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    distributions<T extends Partner$distributionsArgs<ExtArgs> = {}>(args?: Subset<T, Partner$distributionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the Partner model
+   */
+  interface PartnerFieldRefs {
+    readonly id: FieldRef<"Partner", 'String'>
+    readonly name: FieldRef<"Partner", 'String'>
+    readonly email: FieldRef<"Partner", 'String'>
+    readonly phone: FieldRef<"Partner", 'String'>
+    readonly createdById: FieldRef<"Partner", 'String'>
+    readonly createdAt: FieldRef<"Partner", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * Partner findUnique
+   */
+  export type PartnerFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * Filter, which Partner to fetch.
+     */
+    where: PartnerWhereUniqueInput
+  }
+
+  /**
+   * Partner findUniqueOrThrow
+   */
+  export type PartnerFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * Filter, which Partner to fetch.
+     */
+    where: PartnerWhereUniqueInput
+  }
+
+  /**
+   * Partner findFirst
+   */
+  export type PartnerFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * Filter, which Partner to fetch.
+     */
+    where?: PartnerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Partners to fetch.
+     */
+    orderBy?: PartnerOrderByWithRelationInput | PartnerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Partners.
+     */
+    cursor?: PartnerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Partners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Partners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Partners.
+     */
+    distinct?: PartnerScalarFieldEnum | PartnerScalarFieldEnum[]
+  }
+
+  /**
+   * Partner findFirstOrThrow
+   */
+  export type PartnerFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * Filter, which Partner to fetch.
+     */
+    where?: PartnerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Partners to fetch.
+     */
+    orderBy?: PartnerOrderByWithRelationInput | PartnerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for Partners.
+     */
+    cursor?: PartnerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Partners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Partners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Partners.
+     */
+    distinct?: PartnerScalarFieldEnum | PartnerScalarFieldEnum[]
+  }
+
+  /**
+   * Partner findMany
+   */
+  export type PartnerFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * Filter, which Partners to fetch.
+     */
+    where?: PartnerWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of Partners to fetch.
+     */
+    orderBy?: PartnerOrderByWithRelationInput | PartnerOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing Partners.
+     */
+    cursor?: PartnerWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` Partners from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` Partners.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of Partners.
+     */
+    distinct?: PartnerScalarFieldEnum | PartnerScalarFieldEnum[]
+  }
+
+  /**
+   * Partner create
+   */
+  export type PartnerCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * The data needed to create a Partner.
+     */
+    data: XOR<PartnerCreateInput, PartnerUncheckedCreateInput>
+  }
+
+  /**
+   * Partner createMany
+   */
+  export type PartnerCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many Partners.
+     */
+    data: PartnerCreateManyInput | PartnerCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * Partner createManyAndReturn
+   */
+  export type PartnerCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * The data used to create many Partners.
+     */
+    data: PartnerCreateManyInput | PartnerCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Partner update
+   */
+  export type PartnerUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * The data needed to update a Partner.
+     */
+    data: XOR<PartnerUpdateInput, PartnerUncheckedUpdateInput>
+    /**
+     * Choose, which Partner to update.
+     */
+    where: PartnerWhereUniqueInput
+  }
+
+  /**
+   * Partner updateMany
+   */
+  export type PartnerUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update Partners.
+     */
+    data: XOR<PartnerUpdateManyMutationInput, PartnerUncheckedUpdateManyInput>
+    /**
+     * Filter which Partners to update
+     */
+    where?: PartnerWhereInput
+    /**
+     * Limit how many Partners to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * Partner updateManyAndReturn
+   */
+  export type PartnerUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * The data used to update Partners.
+     */
+    data: XOR<PartnerUpdateManyMutationInput, PartnerUncheckedUpdateManyInput>
+    /**
+     * Filter which Partners to update
+     */
+    where?: PartnerWhereInput
+    /**
+     * Limit how many Partners to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * Partner upsert
+   */
+  export type PartnerUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * The filter to search for the Partner to update in case it exists.
+     */
+    where: PartnerWhereUniqueInput
+    /**
+     * In case the Partner found by the `where` argument doesn't exist, create a new Partner with this data.
+     */
+    create: XOR<PartnerCreateInput, PartnerUncheckedCreateInput>
+    /**
+     * In case the Partner was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PartnerUpdateInput, PartnerUncheckedUpdateInput>
+  }
+
+  /**
+   * Partner delete
+   */
+  export type PartnerDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
+    /**
+     * Filter which Partner to delete.
+     */
+    where: PartnerWhereUniqueInput
+  }
+
+  /**
+   * Partner deleteMany
+   */
+  export type PartnerDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which Partners to delete
+     */
+    where?: PartnerWhereInput
+    /**
+     * Limit how many Partners to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * Partner.createdBy
+   */
+  export type Partner$createdByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the SuperAdmin
+     */
+    select?: SuperAdminSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the SuperAdmin
+     */
+    omit?: SuperAdminOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: SuperAdminInclude<ExtArgs> | null
+    where?: SuperAdminWhereInput
+  }
+
+  /**
+   * Partner.fundSources
+   */
+  export type Partner$fundSourcesArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    where?: FundSourceWhereInput
+    orderBy?: FundSourceOrderByWithRelationInput | FundSourceOrderByWithRelationInput[]
+    cursor?: FundSourceWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: FundSourceScalarFieldEnum | FundSourceScalarFieldEnum[]
+  }
+
+  /**
+   * Partner.distributions
+   */
+  export type Partner$distributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    where?: PartnerDistributionWhereInput
+    orderBy?: PartnerDistributionOrderByWithRelationInput | PartnerDistributionOrderByWithRelationInput[]
+    cursor?: PartnerDistributionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PartnerDistributionScalarFieldEnum | PartnerDistributionScalarFieldEnum[]
+  }
+
+  /**
+   * Partner without action
+   */
+  export type PartnerDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Partner
+     */
+    select?: PartnerSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Partner
+     */
+    omit?: PartnerOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerInclude<ExtArgs> | null
   }
 
 
@@ -11401,12 +13215,14 @@ export namespace Prisma {
     amountSent: Decimal | null
     commissionAmount: Decimal | null
     amountPayable: Decimal | null
+    amountCollected: Decimal | null
   }
 
   export type TransactionSumAggregateOutputType = {
     amountSent: Decimal | null
     commissionAmount: Decimal | null
     amountPayable: Decimal | null
+    amountCollected: Decimal | null
   }
 
   export type TransactionMinAggregateOutputType = {
@@ -11431,6 +13247,8 @@ export namespace Prisma {
     createdAt: Date | null
     completedAt: Date | null
     refundedAt: Date | null
+    parentTransactionId: string | null
+    amountCollected: Decimal | null
   }
 
   export type TransactionMaxAggregateOutputType = {
@@ -11455,6 +13273,8 @@ export namespace Prisma {
     createdAt: Date | null
     completedAt: Date | null
     refundedAt: Date | null
+    parentTransactionId: string | null
+    amountCollected: Decimal | null
   }
 
   export type TransactionCountAggregateOutputType = {
@@ -11479,6 +13299,8 @@ export namespace Prisma {
     createdAt: number
     completedAt: number
     refundedAt: number
+    parentTransactionId: number
+    amountCollected: number
     _all: number
   }
 
@@ -11487,12 +13309,14 @@ export namespace Prisma {
     amountSent?: true
     commissionAmount?: true
     amountPayable?: true
+    amountCollected?: true
   }
 
   export type TransactionSumAggregateInputType = {
     amountSent?: true
     commissionAmount?: true
     amountPayable?: true
+    amountCollected?: true
   }
 
   export type TransactionMinAggregateInputType = {
@@ -11517,6 +13341,8 @@ export namespace Prisma {
     createdAt?: true
     completedAt?: true
     refundedAt?: true
+    parentTransactionId?: true
+    amountCollected?: true
   }
 
   export type TransactionMaxAggregateInputType = {
@@ -11541,6 +13367,8 @@ export namespace Prisma {
     createdAt?: true
     completedAt?: true
     refundedAt?: true
+    parentTransactionId?: true
+    amountCollected?: true
   }
 
   export type TransactionCountAggregateInputType = {
@@ -11565,6 +13393,8 @@ export namespace Prisma {
     createdAt?: true
     completedAt?: true
     refundedAt?: true
+    parentTransactionId?: true
+    amountCollected?: true
     _all?: true
   }
 
@@ -11676,6 +13506,8 @@ export namespace Prisma {
     createdAt: Date
     completedAt: Date | null
     refundedAt: Date | null
+    parentTransactionId: string | null
+    amountCollected: Decimal
     _count: TransactionCountAggregateOutputType | null
     _avg: TransactionAvgAggregateOutputType | null
     _sum: TransactionSumAggregateOutputType | null
@@ -11719,6 +13551,8 @@ export namespace Prisma {
     createdAt?: boolean
     completedAt?: boolean
     refundedAt?: boolean
+    parentTransactionId?: boolean
+    amountCollected?: boolean
     senderBranch?: boolean | BranchDefaultArgs<ExtArgs>
     receiverBranch?: boolean | BranchDefaultArgs<ExtArgs>
     currency?: boolean | Transaction$currencyArgs<ExtArgs>
@@ -11728,6 +13562,7 @@ export namespace Prisma {
     refundedBy?: boolean | Transaction$refundedByArgs<ExtArgs>
     subLedgerEntries?: boolean | Transaction$subLedgerEntriesArgs<ExtArgs>
     generalLedgerEntries?: boolean | Transaction$generalLedgerEntriesArgs<ExtArgs>
+    pickupEvents?: boolean | Transaction$pickupEventsArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["transaction"]>
 
@@ -11753,6 +13588,8 @@ export namespace Prisma {
     createdAt?: boolean
     completedAt?: boolean
     refundedAt?: boolean
+    parentTransactionId?: boolean
+    amountCollected?: boolean
     senderBranch?: boolean | BranchDefaultArgs<ExtArgs>
     receiverBranch?: boolean | BranchDefaultArgs<ExtArgs>
     currency?: boolean | Transaction$currencyArgs<ExtArgs>
@@ -11784,6 +13621,8 @@ export namespace Prisma {
     createdAt?: boolean
     completedAt?: boolean
     refundedAt?: boolean
+    parentTransactionId?: boolean
+    amountCollected?: boolean
     senderBranch?: boolean | BranchDefaultArgs<ExtArgs>
     receiverBranch?: boolean | BranchDefaultArgs<ExtArgs>
     currency?: boolean | Transaction$currencyArgs<ExtArgs>
@@ -11815,9 +13654,11 @@ export namespace Prisma {
     createdAt?: boolean
     completedAt?: boolean
     refundedAt?: boolean
+    parentTransactionId?: boolean
+    amountCollected?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "senderBranchId" | "receiverBranchId" | "senderName" | "senderIdNumber" | "receiverName" | "amountSent" | "commissionAmount" | "amountPayable" | "currencyId" | "commissionTierId" | "pickupCode" | "qrCodeData" | "status" | "createdById" | "completedById" | "refundedById" | "createdAt" | "completedAt" | "refundedAt", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "senderBranchId" | "receiverBranchId" | "senderName" | "senderIdNumber" | "receiverName" | "amountSent" | "commissionAmount" | "amountPayable" | "currencyId" | "commissionTierId" | "pickupCode" | "qrCodeData" | "status" | "createdById" | "completedById" | "refundedById" | "createdAt" | "completedAt" | "refundedAt" | "parentTransactionId" | "amountCollected", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     senderBranch?: boolean | BranchDefaultArgs<ExtArgs>
     receiverBranch?: boolean | BranchDefaultArgs<ExtArgs>
@@ -11828,6 +13669,7 @@ export namespace Prisma {
     refundedBy?: boolean | Transaction$refundedByArgs<ExtArgs>
     subLedgerEntries?: boolean | Transaction$subLedgerEntriesArgs<ExtArgs>
     generalLedgerEntries?: boolean | Transaction$generalLedgerEntriesArgs<ExtArgs>
+    pickupEvents?: boolean | Transaction$pickupEventsArgs<ExtArgs>
     _count?: boolean | TransactionCountOutputTypeDefaultArgs<ExtArgs>
   }
   export type TransactionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
@@ -11861,6 +13703,7 @@ export namespace Prisma {
       refundedBy: Prisma.$AppUserPayload<ExtArgs> | null
       subLedgerEntries: Prisma.$SubLedgerEntryPayload<ExtArgs>[]
       generalLedgerEntries: Prisma.$GeneralLedgerEntryPayload<ExtArgs>[]
+      pickupEvents: Prisma.$PickupEventPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
       id: string
@@ -11884,6 +13727,8 @@ export namespace Prisma {
       createdAt: Date
       completedAt: Date | null
       refundedAt: Date | null
+      parentTransactionId: string | null
+      amountCollected: Prisma.Decimal
     }, ExtArgs["result"]["transaction"]>
     composites: {}
   }
@@ -12287,6 +14132,7 @@ export namespace Prisma {
     refundedBy<T extends Transaction$refundedByArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$refundedByArgs<ExtArgs>>): Prisma__AppUserClient<$Result.GetResult<Prisma.$AppUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     subLedgerEntries<T extends Transaction$subLedgerEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$subLedgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$SubLedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     generalLedgerEntries<T extends Transaction$generalLedgerEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$generalLedgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralLedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    pickupEvents<T extends Transaction$pickupEventsArgs<ExtArgs> = {}>(args?: Subset<T, Transaction$pickupEventsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
      * @param onfulfilled The callback to execute when the Promise is resolved.
@@ -12337,6 +14183,8 @@ export namespace Prisma {
     readonly createdAt: FieldRef<"Transaction", 'DateTime'>
     readonly completedAt: FieldRef<"Transaction", 'DateTime'>
     readonly refundedAt: FieldRef<"Transaction", 'DateTime'>
+    readonly parentTransactionId: FieldRef<"Transaction", 'String'>
+    readonly amountCollected: FieldRef<"Transaction", 'Decimal'>
   }
     
 
@@ -12859,6 +14707,30 @@ export namespace Prisma {
     take?: number
     skip?: number
     distinct?: GeneralLedgerEntryScalarFieldEnum | GeneralLedgerEntryScalarFieldEnum[]
+  }
+
+  /**
+   * Transaction.pickupEvents
+   */
+  export type Transaction$pickupEventsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    where?: PickupEventWhereInput
+    orderBy?: PickupEventOrderByWithRelationInput | PickupEventOrderByWithRelationInput[]
+    cursor?: PickupEventWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PickupEventScalarFieldEnum | PickupEventScalarFieldEnum[]
   }
 
   /**
@@ -15425,6 +17297,7 @@ export namespace Prisma {
     currency?: boolean | Topup$currencyArgs<ExtArgs>
     initiatedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
     branchManager?: boolean | AppUserDefaultArgs<ExtArgs>
+    distribution?: boolean | Topup$distributionArgs<ExtArgs>
     generalLedgerEntries?: boolean | Topup$generalLedgerEntriesArgs<ExtArgs>
     _count?: boolean | TopupCountOutputTypeDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["topup"]>
@@ -15485,6 +17358,7 @@ export namespace Prisma {
     currency?: boolean | Topup$currencyArgs<ExtArgs>
     initiatedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
     branchManager?: boolean | AppUserDefaultArgs<ExtArgs>
+    distribution?: boolean | Topup$distributionArgs<ExtArgs>
     generalLedgerEntries?: boolean | Topup$generalLedgerEntriesArgs<ExtArgs>
     _count?: boolean | TopupCountOutputTypeDefaultArgs<ExtArgs>
   }
@@ -15508,6 +17382,7 @@ export namespace Prisma {
       currency: Prisma.$CurrencyPayload<ExtArgs> | null
       initiatedBy: Prisma.$SuperAdminPayload<ExtArgs>
       branchManager: Prisma.$AppUserPayload<ExtArgs>
+      distribution: Prisma.$PartnerDistributionPayload<ExtArgs> | null
       generalLedgerEntries: Prisma.$GeneralLedgerEntryPayload<ExtArgs>[]
     }
     scalars: $Extensions.GetPayloadResult<{
@@ -15920,6 +17795,7 @@ export namespace Prisma {
     currency<T extends Topup$currencyArgs<ExtArgs> = {}>(args?: Subset<T, Topup$currencyArgs<ExtArgs>>): Prisma__CurrencyClient<$Result.GetResult<Prisma.$CurrencyPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     initiatedBy<T extends SuperAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdminDefaultArgs<ExtArgs>>): Prisma__SuperAdminClient<$Result.GetResult<Prisma.$SuperAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     branchManager<T extends AppUserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AppUserDefaultArgs<ExtArgs>>): Prisma__AppUserClient<$Result.GetResult<Prisma.$AppUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    distribution<T extends Topup$distributionArgs<ExtArgs> = {}>(args?: Subset<T, Topup$distributionArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     generalLedgerEntries<T extends Topup$generalLedgerEntriesArgs<ExtArgs> = {}>(args?: Subset<T, Topup$generalLedgerEntriesArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$GeneralLedgerEntryPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
     /**
      * Attaches callbacks for the resolution and/or rejection of the Promise.
@@ -16378,6 +18254,25 @@ export namespace Prisma {
      */
     include?: CurrencyInclude<ExtArgs> | null
     where?: CurrencyWhereInput
+  }
+
+  /**
+   * Topup.distribution
+   */
+  export type Topup$distributionArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    where?: PartnerDistributionWhereInput
   }
 
   /**
@@ -19551,6 +21446,1124 @@ export namespace Prisma {
      * Omit specific fields from the Role
      */
     omit?: RoleOmit<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PickupEvent
+   */
+
+  export type AggregatePickupEvent = {
+    _count: PickupEventCountAggregateOutputType | null
+    _avg: PickupEventAvgAggregateOutputType | null
+    _sum: PickupEventSumAggregateOutputType | null
+    _min: PickupEventMinAggregateOutputType | null
+    _max: PickupEventMaxAggregateOutputType | null
+  }
+
+  export type PickupEventAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type PickupEventSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type PickupEventMinAggregateOutputType = {
+    id: string | null
+    transactionId: string | null
+    amount: Decimal | null
+    collectedById: string | null
+    receiptNumber: string | null
+    createdAt: Date | null
+  }
+
+  export type PickupEventMaxAggregateOutputType = {
+    id: string | null
+    transactionId: string | null
+    amount: Decimal | null
+    collectedById: string | null
+    receiptNumber: string | null
+    createdAt: Date | null
+  }
+
+  export type PickupEventCountAggregateOutputType = {
+    id: number
+    transactionId: number
+    amount: number
+    collectedById: number
+    receiptNumber: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PickupEventAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type PickupEventSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type PickupEventMinAggregateInputType = {
+    id?: true
+    transactionId?: true
+    amount?: true
+    collectedById?: true
+    receiptNumber?: true
+    createdAt?: true
+  }
+
+  export type PickupEventMaxAggregateInputType = {
+    id?: true
+    transactionId?: true
+    amount?: true
+    collectedById?: true
+    receiptNumber?: true
+    createdAt?: true
+  }
+
+  export type PickupEventCountAggregateInputType = {
+    id?: true
+    transactionId?: true
+    amount?: true
+    collectedById?: true
+    receiptNumber?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PickupEventAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PickupEvent to aggregate.
+     */
+    where?: PickupEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PickupEvents to fetch.
+     */
+    orderBy?: PickupEventOrderByWithRelationInput | PickupEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PickupEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PickupEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PickupEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PickupEvents
+    **/
+    _count?: true | PickupEventCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PickupEventAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PickupEventSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PickupEventMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PickupEventMaxAggregateInputType
+  }
+
+  export type GetPickupEventAggregateType<T extends PickupEventAggregateArgs> = {
+        [P in keyof T & keyof AggregatePickupEvent]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePickupEvent[P]>
+      : GetScalarType<T[P], AggregatePickupEvent[P]>
+  }
+
+
+
+
+  export type PickupEventGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PickupEventWhereInput
+    orderBy?: PickupEventOrderByWithAggregationInput | PickupEventOrderByWithAggregationInput[]
+    by: PickupEventScalarFieldEnum[] | PickupEventScalarFieldEnum
+    having?: PickupEventScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PickupEventCountAggregateInputType | true
+    _avg?: PickupEventAvgAggregateInputType
+    _sum?: PickupEventSumAggregateInputType
+    _min?: PickupEventMinAggregateInputType
+    _max?: PickupEventMaxAggregateInputType
+  }
+
+  export type PickupEventGroupByOutputType = {
+    id: string
+    transactionId: string
+    amount: Decimal
+    collectedById: string
+    receiptNumber: string
+    createdAt: Date
+    _count: PickupEventCountAggregateOutputType | null
+    _avg: PickupEventAvgAggregateOutputType | null
+    _sum: PickupEventSumAggregateOutputType | null
+    _min: PickupEventMinAggregateOutputType | null
+    _max: PickupEventMaxAggregateOutputType | null
+  }
+
+  type GetPickupEventGroupByPayload<T extends PickupEventGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PickupEventGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PickupEventGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PickupEventGroupByOutputType[P]>
+            : GetScalarType<T[P], PickupEventGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PickupEventSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transactionId?: boolean
+    amount?: boolean
+    collectedById?: boolean
+    receiptNumber?: boolean
+    createdAt?: boolean
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    collectedBy?: boolean | AppUserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pickupEvent"]>
+
+  export type PickupEventSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transactionId?: boolean
+    amount?: boolean
+    collectedById?: boolean
+    receiptNumber?: boolean
+    createdAt?: boolean
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    collectedBy?: boolean | AppUserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pickupEvent"]>
+
+  export type PickupEventSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    transactionId?: boolean
+    amount?: boolean
+    collectedById?: boolean
+    receiptNumber?: boolean
+    createdAt?: boolean
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    collectedBy?: boolean | AppUserDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["pickupEvent"]>
+
+  export type PickupEventSelectScalar = {
+    id?: boolean
+    transactionId?: boolean
+    amount?: boolean
+    collectedById?: boolean
+    receiptNumber?: boolean
+    createdAt?: boolean
+  }
+
+  export type PickupEventOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "transactionId" | "amount" | "collectedById" | "receiptNumber" | "createdAt", ExtArgs["result"]["pickupEvent"]>
+  export type PickupEventInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    collectedBy?: boolean | AppUserDefaultArgs<ExtArgs>
+  }
+  export type PickupEventIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    collectedBy?: boolean | AppUserDefaultArgs<ExtArgs>
+  }
+  export type PickupEventIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    transaction?: boolean | TransactionDefaultArgs<ExtArgs>
+    collectedBy?: boolean | AppUserDefaultArgs<ExtArgs>
+  }
+
+  export type $PickupEventPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PickupEvent"
+    objects: {
+      transaction: Prisma.$TransactionPayload<ExtArgs>
+      collectedBy: Prisma.$AppUserPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      transactionId: string
+      amount: Prisma.Decimal
+      collectedById: string
+      receiptNumber: string
+      createdAt: Date
+    }, ExtArgs["result"]["pickupEvent"]>
+    composites: {}
+  }
+
+  type PickupEventGetPayload<S extends boolean | null | undefined | PickupEventDefaultArgs> = $Result.GetResult<Prisma.$PickupEventPayload, S>
+
+  type PickupEventCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PickupEventFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PickupEventCountAggregateInputType | true
+    }
+
+  export interface PickupEventDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PickupEvent'], meta: { name: 'PickupEvent' } }
+    /**
+     * Find zero or one PickupEvent that matches the filter.
+     * @param {PickupEventFindUniqueArgs} args - Arguments to find a PickupEvent
+     * @example
+     * // Get one PickupEvent
+     * const pickupEvent = await prisma.pickupEvent.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PickupEventFindUniqueArgs>(args: SelectSubset<T, PickupEventFindUniqueArgs<ExtArgs>>): Prisma__PickupEventClient<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PickupEvent that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PickupEventFindUniqueOrThrowArgs} args - Arguments to find a PickupEvent
+     * @example
+     * // Get one PickupEvent
+     * const pickupEvent = await prisma.pickupEvent.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PickupEventFindUniqueOrThrowArgs>(args: SelectSubset<T, PickupEventFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PickupEventClient<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PickupEvent that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PickupEventFindFirstArgs} args - Arguments to find a PickupEvent
+     * @example
+     * // Get one PickupEvent
+     * const pickupEvent = await prisma.pickupEvent.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PickupEventFindFirstArgs>(args?: SelectSubset<T, PickupEventFindFirstArgs<ExtArgs>>): Prisma__PickupEventClient<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PickupEvent that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PickupEventFindFirstOrThrowArgs} args - Arguments to find a PickupEvent
+     * @example
+     * // Get one PickupEvent
+     * const pickupEvent = await prisma.pickupEvent.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PickupEventFindFirstOrThrowArgs>(args?: SelectSubset<T, PickupEventFindFirstOrThrowArgs<ExtArgs>>): Prisma__PickupEventClient<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PickupEvents that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PickupEventFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PickupEvents
+     * const pickupEvents = await prisma.pickupEvent.findMany()
+     * 
+     * // Get first 10 PickupEvents
+     * const pickupEvents = await prisma.pickupEvent.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const pickupEventWithIdOnly = await prisma.pickupEvent.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PickupEventFindManyArgs>(args?: SelectSubset<T, PickupEventFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PickupEvent.
+     * @param {PickupEventCreateArgs} args - Arguments to create a PickupEvent.
+     * @example
+     * // Create one PickupEvent
+     * const PickupEvent = await prisma.pickupEvent.create({
+     *   data: {
+     *     // ... data to create a PickupEvent
+     *   }
+     * })
+     * 
+     */
+    create<T extends PickupEventCreateArgs>(args: SelectSubset<T, PickupEventCreateArgs<ExtArgs>>): Prisma__PickupEventClient<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PickupEvents.
+     * @param {PickupEventCreateManyArgs} args - Arguments to create many PickupEvents.
+     * @example
+     * // Create many PickupEvents
+     * const pickupEvent = await prisma.pickupEvent.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PickupEventCreateManyArgs>(args?: SelectSubset<T, PickupEventCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PickupEvents and returns the data saved in the database.
+     * @param {PickupEventCreateManyAndReturnArgs} args - Arguments to create many PickupEvents.
+     * @example
+     * // Create many PickupEvents
+     * const pickupEvent = await prisma.pickupEvent.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PickupEvents and only return the `id`
+     * const pickupEventWithIdOnly = await prisma.pickupEvent.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PickupEventCreateManyAndReturnArgs>(args?: SelectSubset<T, PickupEventCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PickupEvent.
+     * @param {PickupEventDeleteArgs} args - Arguments to delete one PickupEvent.
+     * @example
+     * // Delete one PickupEvent
+     * const PickupEvent = await prisma.pickupEvent.delete({
+     *   where: {
+     *     // ... filter to delete one PickupEvent
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PickupEventDeleteArgs>(args: SelectSubset<T, PickupEventDeleteArgs<ExtArgs>>): Prisma__PickupEventClient<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PickupEvent.
+     * @param {PickupEventUpdateArgs} args - Arguments to update one PickupEvent.
+     * @example
+     * // Update one PickupEvent
+     * const pickupEvent = await prisma.pickupEvent.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PickupEventUpdateArgs>(args: SelectSubset<T, PickupEventUpdateArgs<ExtArgs>>): Prisma__PickupEventClient<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PickupEvents.
+     * @param {PickupEventDeleteManyArgs} args - Arguments to filter PickupEvents to delete.
+     * @example
+     * // Delete a few PickupEvents
+     * const { count } = await prisma.pickupEvent.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PickupEventDeleteManyArgs>(args?: SelectSubset<T, PickupEventDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PickupEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PickupEventUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PickupEvents
+     * const pickupEvent = await prisma.pickupEvent.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PickupEventUpdateManyArgs>(args: SelectSubset<T, PickupEventUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PickupEvents and returns the data updated in the database.
+     * @param {PickupEventUpdateManyAndReturnArgs} args - Arguments to update many PickupEvents.
+     * @example
+     * // Update many PickupEvents
+     * const pickupEvent = await prisma.pickupEvent.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PickupEvents and only return the `id`
+     * const pickupEventWithIdOnly = await prisma.pickupEvent.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PickupEventUpdateManyAndReturnArgs>(args: SelectSubset<T, PickupEventUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PickupEvent.
+     * @param {PickupEventUpsertArgs} args - Arguments to update or create a PickupEvent.
+     * @example
+     * // Update or create a PickupEvent
+     * const pickupEvent = await prisma.pickupEvent.upsert({
+     *   create: {
+     *     // ... data to create a PickupEvent
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PickupEvent we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PickupEventUpsertArgs>(args: SelectSubset<T, PickupEventUpsertArgs<ExtArgs>>): Prisma__PickupEventClient<$Result.GetResult<Prisma.$PickupEventPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PickupEvents.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PickupEventCountArgs} args - Arguments to filter PickupEvents to count.
+     * @example
+     * // Count the number of PickupEvents
+     * const count = await prisma.pickupEvent.count({
+     *   where: {
+     *     // ... the filter for the PickupEvents we want to count
+     *   }
+     * })
+    **/
+    count<T extends PickupEventCountArgs>(
+      args?: Subset<T, PickupEventCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PickupEventCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PickupEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PickupEventAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PickupEventAggregateArgs>(args: Subset<T, PickupEventAggregateArgs>): Prisma.PrismaPromise<GetPickupEventAggregateType<T>>
+
+    /**
+     * Group by PickupEvent.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PickupEventGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PickupEventGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PickupEventGroupByArgs['orderBy'] }
+        : { orderBy?: PickupEventGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PickupEventGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPickupEventGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PickupEvent model
+   */
+  readonly fields: PickupEventFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PickupEvent.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PickupEventClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    transaction<T extends TransactionDefaultArgs<ExtArgs> = {}>(args?: Subset<T, TransactionDefaultArgs<ExtArgs>>): Prisma__TransactionClient<$Result.GetResult<Prisma.$TransactionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    collectedBy<T extends AppUserDefaultArgs<ExtArgs> = {}>(args?: Subset<T, AppUserDefaultArgs<ExtArgs>>): Prisma__AppUserClient<$Result.GetResult<Prisma.$AppUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PickupEvent model
+   */
+  interface PickupEventFieldRefs {
+    readonly id: FieldRef<"PickupEvent", 'String'>
+    readonly transactionId: FieldRef<"PickupEvent", 'String'>
+    readonly amount: FieldRef<"PickupEvent", 'Decimal'>
+    readonly collectedById: FieldRef<"PickupEvent", 'String'>
+    readonly receiptNumber: FieldRef<"PickupEvent", 'String'>
+    readonly createdAt: FieldRef<"PickupEvent", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PickupEvent findUnique
+   */
+  export type PickupEventFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PickupEvent to fetch.
+     */
+    where: PickupEventWhereUniqueInput
+  }
+
+  /**
+   * PickupEvent findUniqueOrThrow
+   */
+  export type PickupEventFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PickupEvent to fetch.
+     */
+    where: PickupEventWhereUniqueInput
+  }
+
+  /**
+   * PickupEvent findFirst
+   */
+  export type PickupEventFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PickupEvent to fetch.
+     */
+    where?: PickupEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PickupEvents to fetch.
+     */
+    orderBy?: PickupEventOrderByWithRelationInput | PickupEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PickupEvents.
+     */
+    cursor?: PickupEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PickupEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PickupEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PickupEvents.
+     */
+    distinct?: PickupEventScalarFieldEnum | PickupEventScalarFieldEnum[]
+  }
+
+  /**
+   * PickupEvent findFirstOrThrow
+   */
+  export type PickupEventFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PickupEvent to fetch.
+     */
+    where?: PickupEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PickupEvents to fetch.
+     */
+    orderBy?: PickupEventOrderByWithRelationInput | PickupEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PickupEvents.
+     */
+    cursor?: PickupEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PickupEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PickupEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PickupEvents.
+     */
+    distinct?: PickupEventScalarFieldEnum | PickupEventScalarFieldEnum[]
+  }
+
+  /**
+   * PickupEvent findMany
+   */
+  export type PickupEventFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * Filter, which PickupEvents to fetch.
+     */
+    where?: PickupEventWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PickupEvents to fetch.
+     */
+    orderBy?: PickupEventOrderByWithRelationInput | PickupEventOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PickupEvents.
+     */
+    cursor?: PickupEventWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PickupEvents from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PickupEvents.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PickupEvents.
+     */
+    distinct?: PickupEventScalarFieldEnum | PickupEventScalarFieldEnum[]
+  }
+
+  /**
+   * PickupEvent create
+   */
+  export type PickupEventCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PickupEvent.
+     */
+    data: XOR<PickupEventCreateInput, PickupEventUncheckedCreateInput>
+  }
+
+  /**
+   * PickupEvent createMany
+   */
+  export type PickupEventCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PickupEvents.
+     */
+    data: PickupEventCreateManyInput | PickupEventCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PickupEvent createManyAndReturn
+   */
+  export type PickupEventCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * The data used to create many PickupEvents.
+     */
+    data: PickupEventCreateManyInput | PickupEventCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PickupEvent update
+   */
+  export type PickupEventUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PickupEvent.
+     */
+    data: XOR<PickupEventUpdateInput, PickupEventUncheckedUpdateInput>
+    /**
+     * Choose, which PickupEvent to update.
+     */
+    where: PickupEventWhereUniqueInput
+  }
+
+  /**
+   * PickupEvent updateMany
+   */
+  export type PickupEventUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PickupEvents.
+     */
+    data: XOR<PickupEventUpdateManyMutationInput, PickupEventUncheckedUpdateManyInput>
+    /**
+     * Filter which PickupEvents to update
+     */
+    where?: PickupEventWhereInput
+    /**
+     * Limit how many PickupEvents to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PickupEvent updateManyAndReturn
+   */
+  export type PickupEventUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * The data used to update PickupEvents.
+     */
+    data: XOR<PickupEventUpdateManyMutationInput, PickupEventUncheckedUpdateManyInput>
+    /**
+     * Filter which PickupEvents to update
+     */
+    where?: PickupEventWhereInput
+    /**
+     * Limit how many PickupEvents to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PickupEvent upsert
+   */
+  export type PickupEventUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PickupEvent to update in case it exists.
+     */
+    where: PickupEventWhereUniqueInput
+    /**
+     * In case the PickupEvent found by the `where` argument doesn't exist, create a new PickupEvent with this data.
+     */
+    create: XOR<PickupEventCreateInput, PickupEventUncheckedCreateInput>
+    /**
+     * In case the PickupEvent was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PickupEventUpdateInput, PickupEventUncheckedUpdateInput>
+  }
+
+  /**
+   * PickupEvent delete
+   */
+  export type PickupEventDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
+    /**
+     * Filter which PickupEvent to delete.
+     */
+    where: PickupEventWhereUniqueInput
+  }
+
+  /**
+   * PickupEvent deleteMany
+   */
+  export type PickupEventDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PickupEvents to delete
+     */
+    where?: PickupEventWhereInput
+    /**
+     * Limit how many PickupEvents to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PickupEvent without action
+   */
+  export type PickupEventDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PickupEvent
+     */
+    select?: PickupEventSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PickupEvent
+     */
+    omit?: PickupEventOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PickupEventInclude<ExtArgs> | null
   }
 
 
@@ -22855,6 +25868,2406 @@ export namespace Prisma {
 
 
   /**
+   * Model FundSource
+   */
+
+  export type AggregateFundSource = {
+    _count: FundSourceCountAggregateOutputType | null
+    _avg: FundSourceAvgAggregateOutputType | null
+    _sum: FundSourceSumAggregateOutputType | null
+    _min: FundSourceMinAggregateOutputType | null
+    _max: FundSourceMaxAggregateOutputType | null
+  }
+
+  export type FundSourceAvgAggregateOutputType = {
+    cashValue: Decimal | null
+  }
+
+  export type FundSourceSumAggregateOutputType = {
+    cashValue: Decimal | null
+  }
+
+  export type FundSourceMinAggregateOutputType = {
+    id: string | null
+    partnerId: string | null
+    commodityName: string | null
+    cashValue: Decimal | null
+    description: string | null
+    recordedById: string | null
+    code: string | null
+    recordedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type FundSourceMaxAggregateOutputType = {
+    id: string | null
+    partnerId: string | null
+    commodityName: string | null
+    cashValue: Decimal | null
+    description: string | null
+    recordedById: string | null
+    code: string | null
+    recordedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type FundSourceCountAggregateOutputType = {
+    id: number
+    partnerId: number
+    commodityName: number
+    cashValue: number
+    description: number
+    recordedById: number
+    code: number
+    recordedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type FundSourceAvgAggregateInputType = {
+    cashValue?: true
+  }
+
+  export type FundSourceSumAggregateInputType = {
+    cashValue?: true
+  }
+
+  export type FundSourceMinAggregateInputType = {
+    id?: true
+    partnerId?: true
+    commodityName?: true
+    cashValue?: true
+    description?: true
+    recordedById?: true
+    code?: true
+    recordedAt?: true
+    createdAt?: true
+  }
+
+  export type FundSourceMaxAggregateInputType = {
+    id?: true
+    partnerId?: true
+    commodityName?: true
+    cashValue?: true
+    description?: true
+    recordedById?: true
+    code?: true
+    recordedAt?: true
+    createdAt?: true
+  }
+
+  export type FundSourceCountAggregateInputType = {
+    id?: true
+    partnerId?: true
+    commodityName?: true
+    cashValue?: true
+    description?: true
+    recordedById?: true
+    code?: true
+    recordedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type FundSourceAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FundSource to aggregate.
+     */
+    where?: FundSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FundSources to fetch.
+     */
+    orderBy?: FundSourceOrderByWithRelationInput | FundSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: FundSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FundSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FundSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned FundSources
+    **/
+    _count?: true | FundSourceCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: FundSourceAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: FundSourceSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: FundSourceMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: FundSourceMaxAggregateInputType
+  }
+
+  export type GetFundSourceAggregateType<T extends FundSourceAggregateArgs> = {
+        [P in keyof T & keyof AggregateFundSource]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregateFundSource[P]>
+      : GetScalarType<T[P], AggregateFundSource[P]>
+  }
+
+
+
+
+  export type FundSourceGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: FundSourceWhereInput
+    orderBy?: FundSourceOrderByWithAggregationInput | FundSourceOrderByWithAggregationInput[]
+    by: FundSourceScalarFieldEnum[] | FundSourceScalarFieldEnum
+    having?: FundSourceScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: FundSourceCountAggregateInputType | true
+    _avg?: FundSourceAvgAggregateInputType
+    _sum?: FundSourceSumAggregateInputType
+    _min?: FundSourceMinAggregateInputType
+    _max?: FundSourceMaxAggregateInputType
+  }
+
+  export type FundSourceGroupByOutputType = {
+    id: string
+    partnerId: string
+    commodityName: string
+    cashValue: Decimal
+    description: string | null
+    recordedById: string
+    code: string
+    recordedAt: Date
+    createdAt: Date
+    _count: FundSourceCountAggregateOutputType | null
+    _avg: FundSourceAvgAggregateOutputType | null
+    _sum: FundSourceSumAggregateOutputType | null
+    _min: FundSourceMinAggregateOutputType | null
+    _max: FundSourceMaxAggregateOutputType | null
+  }
+
+  type GetFundSourceGroupByPayload<T extends FundSourceGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<FundSourceGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof FundSourceGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], FundSourceGroupByOutputType[P]>
+            : GetScalarType<T[P], FundSourceGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type FundSourceSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partnerId?: boolean
+    commodityName?: boolean
+    cashValue?: boolean
+    description?: boolean
+    recordedById?: boolean
+    code?: boolean
+    recordedAt?: boolean
+    createdAt?: boolean
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    distributions?: boolean | FundSource$distributionsArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+    _count?: boolean | FundSourceCountOutputTypeDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fundSource"]>
+
+  export type FundSourceSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partnerId?: boolean
+    commodityName?: boolean
+    cashValue?: boolean
+    description?: boolean
+    recordedById?: boolean
+    code?: boolean
+    recordedAt?: boolean
+    createdAt?: boolean
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fundSource"]>
+
+  export type FundSourceSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partnerId?: boolean
+    commodityName?: boolean
+    cashValue?: boolean
+    description?: boolean
+    recordedById?: boolean
+    code?: boolean
+    recordedAt?: boolean
+    createdAt?: boolean
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["fundSource"]>
+
+  export type FundSourceSelectScalar = {
+    id?: boolean
+    partnerId?: boolean
+    commodityName?: boolean
+    cashValue?: boolean
+    description?: boolean
+    recordedById?: boolean
+    code?: boolean
+    recordedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type FundSourceOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "partnerId" | "commodityName" | "cashValue" | "description" | "recordedById" | "code" | "recordedAt" | "createdAt", ExtArgs["result"]["fundSource"]>
+  export type FundSourceInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    distributions?: boolean | FundSource$distributionsArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+    _count?: boolean | FundSourceCountOutputTypeDefaultArgs<ExtArgs>
+  }
+  export type FundSourceIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }
+  export type FundSourceIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }
+
+  export type $FundSourcePayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "FundSource"
+    objects: {
+      partner: Prisma.$PartnerPayload<ExtArgs>
+      distributions: Prisma.$PartnerDistributionPayload<ExtArgs>[]
+      recordedBy: Prisma.$SuperAdminPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      partnerId: string
+      commodityName: string
+      cashValue: Prisma.Decimal
+      description: string | null
+      recordedById: string
+      code: string
+      recordedAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["fundSource"]>
+    composites: {}
+  }
+
+  type FundSourceGetPayload<S extends boolean | null | undefined | FundSourceDefaultArgs> = $Result.GetResult<Prisma.$FundSourcePayload, S>
+
+  type FundSourceCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<FundSourceFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: FundSourceCountAggregateInputType | true
+    }
+
+  export interface FundSourceDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['FundSource'], meta: { name: 'FundSource' } }
+    /**
+     * Find zero or one FundSource that matches the filter.
+     * @param {FundSourceFindUniqueArgs} args - Arguments to find a FundSource
+     * @example
+     * // Get one FundSource
+     * const fundSource = await prisma.fundSource.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends FundSourceFindUniqueArgs>(args: SelectSubset<T, FundSourceFindUniqueArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one FundSource that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {FundSourceFindUniqueOrThrowArgs} args - Arguments to find a FundSource
+     * @example
+     * // Get one FundSource
+     * const fundSource = await prisma.fundSource.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends FundSourceFindUniqueOrThrowArgs>(args: SelectSubset<T, FundSourceFindUniqueOrThrowArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FundSource that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FundSourceFindFirstArgs} args - Arguments to find a FundSource
+     * @example
+     * // Get one FundSource
+     * const fundSource = await prisma.fundSource.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends FundSourceFindFirstArgs>(args?: SelectSubset<T, FundSourceFindFirstArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first FundSource that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FundSourceFindFirstOrThrowArgs} args - Arguments to find a FundSource
+     * @example
+     * // Get one FundSource
+     * const fundSource = await prisma.fundSource.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends FundSourceFindFirstOrThrowArgs>(args?: SelectSubset<T, FundSourceFindFirstOrThrowArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more FundSources that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FundSourceFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all FundSources
+     * const fundSources = await prisma.fundSource.findMany()
+     * 
+     * // Get first 10 FundSources
+     * const fundSources = await prisma.fundSource.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const fundSourceWithIdOnly = await prisma.fundSource.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends FundSourceFindManyArgs>(args?: SelectSubset<T, FundSourceFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a FundSource.
+     * @param {FundSourceCreateArgs} args - Arguments to create a FundSource.
+     * @example
+     * // Create one FundSource
+     * const FundSource = await prisma.fundSource.create({
+     *   data: {
+     *     // ... data to create a FundSource
+     *   }
+     * })
+     * 
+     */
+    create<T extends FundSourceCreateArgs>(args: SelectSubset<T, FundSourceCreateArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many FundSources.
+     * @param {FundSourceCreateManyArgs} args - Arguments to create many FundSources.
+     * @example
+     * // Create many FundSources
+     * const fundSource = await prisma.fundSource.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends FundSourceCreateManyArgs>(args?: SelectSubset<T, FundSourceCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many FundSources and returns the data saved in the database.
+     * @param {FundSourceCreateManyAndReturnArgs} args - Arguments to create many FundSources.
+     * @example
+     * // Create many FundSources
+     * const fundSource = await prisma.fundSource.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many FundSources and only return the `id`
+     * const fundSourceWithIdOnly = await prisma.fundSource.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends FundSourceCreateManyAndReturnArgs>(args?: SelectSubset<T, FundSourceCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a FundSource.
+     * @param {FundSourceDeleteArgs} args - Arguments to delete one FundSource.
+     * @example
+     * // Delete one FundSource
+     * const FundSource = await prisma.fundSource.delete({
+     *   where: {
+     *     // ... filter to delete one FundSource
+     *   }
+     * })
+     * 
+     */
+    delete<T extends FundSourceDeleteArgs>(args: SelectSubset<T, FundSourceDeleteArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one FundSource.
+     * @param {FundSourceUpdateArgs} args - Arguments to update one FundSource.
+     * @example
+     * // Update one FundSource
+     * const fundSource = await prisma.fundSource.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends FundSourceUpdateArgs>(args: SelectSubset<T, FundSourceUpdateArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more FundSources.
+     * @param {FundSourceDeleteManyArgs} args - Arguments to filter FundSources to delete.
+     * @example
+     * // Delete a few FundSources
+     * const { count } = await prisma.fundSource.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends FundSourceDeleteManyArgs>(args?: SelectSubset<T, FundSourceDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FundSources.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FundSourceUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many FundSources
+     * const fundSource = await prisma.fundSource.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends FundSourceUpdateManyArgs>(args: SelectSubset<T, FundSourceUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more FundSources and returns the data updated in the database.
+     * @param {FundSourceUpdateManyAndReturnArgs} args - Arguments to update many FundSources.
+     * @example
+     * // Update many FundSources
+     * const fundSource = await prisma.fundSource.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more FundSources and only return the `id`
+     * const fundSourceWithIdOnly = await prisma.fundSource.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends FundSourceUpdateManyAndReturnArgs>(args: SelectSubset<T, FundSourceUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one FundSource.
+     * @param {FundSourceUpsertArgs} args - Arguments to update or create a FundSource.
+     * @example
+     * // Update or create a FundSource
+     * const fundSource = await prisma.fundSource.upsert({
+     *   create: {
+     *     // ... data to create a FundSource
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the FundSource we want to update
+     *   }
+     * })
+     */
+    upsert<T extends FundSourceUpsertArgs>(args: SelectSubset<T, FundSourceUpsertArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of FundSources.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FundSourceCountArgs} args - Arguments to filter FundSources to count.
+     * @example
+     * // Count the number of FundSources
+     * const count = await prisma.fundSource.count({
+     *   where: {
+     *     // ... the filter for the FundSources we want to count
+     *   }
+     * })
+    **/
+    count<T extends FundSourceCountArgs>(
+      args?: Subset<T, FundSourceCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], FundSourceCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a FundSource.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FundSourceAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends FundSourceAggregateArgs>(args: Subset<T, FundSourceAggregateArgs>): Prisma.PrismaPromise<GetFundSourceAggregateType<T>>
+
+    /**
+     * Group by FundSource.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {FundSourceGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends FundSourceGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: FundSourceGroupByArgs['orderBy'] }
+        : { orderBy?: FundSourceGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, FundSourceGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetFundSourceGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the FundSource model
+   */
+  readonly fields: FundSourceFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for FundSource.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__FundSourceClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    partner<T extends PartnerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PartnerDefaultArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    distributions<T extends FundSource$distributionsArgs<ExtArgs> = {}>(args?: Subset<T, FundSource$distributionsArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions> | Null>
+    recordedBy<T extends SuperAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdminDefaultArgs<ExtArgs>>): Prisma__SuperAdminClient<$Result.GetResult<Prisma.$SuperAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the FundSource model
+   */
+  interface FundSourceFieldRefs {
+    readonly id: FieldRef<"FundSource", 'String'>
+    readonly partnerId: FieldRef<"FundSource", 'String'>
+    readonly commodityName: FieldRef<"FundSource", 'String'>
+    readonly cashValue: FieldRef<"FundSource", 'Decimal'>
+    readonly description: FieldRef<"FundSource", 'String'>
+    readonly recordedById: FieldRef<"FundSource", 'String'>
+    readonly code: FieldRef<"FundSource", 'String'>
+    readonly recordedAt: FieldRef<"FundSource", 'DateTime'>
+    readonly createdAt: FieldRef<"FundSource", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * FundSource findUnique
+   */
+  export type FundSourceFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which FundSource to fetch.
+     */
+    where: FundSourceWhereUniqueInput
+  }
+
+  /**
+   * FundSource findUniqueOrThrow
+   */
+  export type FundSourceFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which FundSource to fetch.
+     */
+    where: FundSourceWhereUniqueInput
+  }
+
+  /**
+   * FundSource findFirst
+   */
+  export type FundSourceFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which FundSource to fetch.
+     */
+    where?: FundSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FundSources to fetch.
+     */
+    orderBy?: FundSourceOrderByWithRelationInput | FundSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FundSources.
+     */
+    cursor?: FundSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FundSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FundSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FundSources.
+     */
+    distinct?: FundSourceScalarFieldEnum | FundSourceScalarFieldEnum[]
+  }
+
+  /**
+   * FundSource findFirstOrThrow
+   */
+  export type FundSourceFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which FundSource to fetch.
+     */
+    where?: FundSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FundSources to fetch.
+     */
+    orderBy?: FundSourceOrderByWithRelationInput | FundSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for FundSources.
+     */
+    cursor?: FundSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FundSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FundSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FundSources.
+     */
+    distinct?: FundSourceScalarFieldEnum | FundSourceScalarFieldEnum[]
+  }
+
+  /**
+   * FundSource findMany
+   */
+  export type FundSourceFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * Filter, which FundSources to fetch.
+     */
+    where?: FundSourceWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of FundSources to fetch.
+     */
+    orderBy?: FundSourceOrderByWithRelationInput | FundSourceOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing FundSources.
+     */
+    cursor?: FundSourceWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` FundSources from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` FundSources.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of FundSources.
+     */
+    distinct?: FundSourceScalarFieldEnum | FundSourceScalarFieldEnum[]
+  }
+
+  /**
+   * FundSource create
+   */
+  export type FundSourceCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * The data needed to create a FundSource.
+     */
+    data: XOR<FundSourceCreateInput, FundSourceUncheckedCreateInput>
+  }
+
+  /**
+   * FundSource createMany
+   */
+  export type FundSourceCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many FundSources.
+     */
+    data: FundSourceCreateManyInput | FundSourceCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * FundSource createManyAndReturn
+   */
+  export type FundSourceCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * The data used to create many FundSources.
+     */
+    data: FundSourceCreateManyInput | FundSourceCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FundSource update
+   */
+  export type FundSourceUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * The data needed to update a FundSource.
+     */
+    data: XOR<FundSourceUpdateInput, FundSourceUncheckedUpdateInput>
+    /**
+     * Choose, which FundSource to update.
+     */
+    where: FundSourceWhereUniqueInput
+  }
+
+  /**
+   * FundSource updateMany
+   */
+  export type FundSourceUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update FundSources.
+     */
+    data: XOR<FundSourceUpdateManyMutationInput, FundSourceUncheckedUpdateManyInput>
+    /**
+     * Filter which FundSources to update
+     */
+    where?: FundSourceWhereInput
+    /**
+     * Limit how many FundSources to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * FundSource updateManyAndReturn
+   */
+  export type FundSourceUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * The data used to update FundSources.
+     */
+    data: XOR<FundSourceUpdateManyMutationInput, FundSourceUncheckedUpdateManyInput>
+    /**
+     * Filter which FundSources to update
+     */
+    where?: FundSourceWhereInput
+    /**
+     * Limit how many FundSources to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * FundSource upsert
+   */
+  export type FundSourceUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * The filter to search for the FundSource to update in case it exists.
+     */
+    where: FundSourceWhereUniqueInput
+    /**
+     * In case the FundSource found by the `where` argument doesn't exist, create a new FundSource with this data.
+     */
+    create: XOR<FundSourceCreateInput, FundSourceUncheckedCreateInput>
+    /**
+     * In case the FundSource was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<FundSourceUpdateInput, FundSourceUncheckedUpdateInput>
+  }
+
+  /**
+   * FundSource delete
+   */
+  export type FundSourceDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    /**
+     * Filter which FundSource to delete.
+     */
+    where: FundSourceWhereUniqueInput
+  }
+
+  /**
+   * FundSource deleteMany
+   */
+  export type FundSourceDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which FundSources to delete
+     */
+    where?: FundSourceWhereInput
+    /**
+     * Limit how many FundSources to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * FundSource.distributions
+   */
+  export type FundSource$distributionsArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    where?: PartnerDistributionWhereInput
+    orderBy?: PartnerDistributionOrderByWithRelationInput | PartnerDistributionOrderByWithRelationInput[]
+    cursor?: PartnerDistributionWhereUniqueInput
+    take?: number
+    skip?: number
+    distinct?: PartnerDistributionScalarFieldEnum | PartnerDistributionScalarFieldEnum[]
+  }
+
+  /**
+   * FundSource without action
+   */
+  export type FundSourceDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+  }
+
+
+  /**
+   * Model PartnerDistribution
+   */
+
+  export type AggregatePartnerDistribution = {
+    _count: PartnerDistributionCountAggregateOutputType | null
+    _avg: PartnerDistributionAvgAggregateOutputType | null
+    _sum: PartnerDistributionSumAggregateOutputType | null
+    _min: PartnerDistributionMinAggregateOutputType | null
+    _max: PartnerDistributionMaxAggregateOutputType | null
+  }
+
+  export type PartnerDistributionAvgAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type PartnerDistributionSumAggregateOutputType = {
+    amount: Decimal | null
+  }
+
+  export type PartnerDistributionMinAggregateOutputType = {
+    id: string | null
+    partnerId: string | null
+    branchId: string | null
+    amount: Decimal | null
+    note: string | null
+    topupId: string | null
+    fundSourceId: string | null
+    recordedById: string | null
+    distributedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type PartnerDistributionMaxAggregateOutputType = {
+    id: string | null
+    partnerId: string | null
+    branchId: string | null
+    amount: Decimal | null
+    note: string | null
+    topupId: string | null
+    fundSourceId: string | null
+    recordedById: string | null
+    distributedAt: Date | null
+    createdAt: Date | null
+  }
+
+  export type PartnerDistributionCountAggregateOutputType = {
+    id: number
+    partnerId: number
+    branchId: number
+    amount: number
+    note: number
+    topupId: number
+    fundSourceId: number
+    recordedById: number
+    distributedAt: number
+    createdAt: number
+    _all: number
+  }
+
+
+  export type PartnerDistributionAvgAggregateInputType = {
+    amount?: true
+  }
+
+  export type PartnerDistributionSumAggregateInputType = {
+    amount?: true
+  }
+
+  export type PartnerDistributionMinAggregateInputType = {
+    id?: true
+    partnerId?: true
+    branchId?: true
+    amount?: true
+    note?: true
+    topupId?: true
+    fundSourceId?: true
+    recordedById?: true
+    distributedAt?: true
+    createdAt?: true
+  }
+
+  export type PartnerDistributionMaxAggregateInputType = {
+    id?: true
+    partnerId?: true
+    branchId?: true
+    amount?: true
+    note?: true
+    topupId?: true
+    fundSourceId?: true
+    recordedById?: true
+    distributedAt?: true
+    createdAt?: true
+  }
+
+  export type PartnerDistributionCountAggregateInputType = {
+    id?: true
+    partnerId?: true
+    branchId?: true
+    amount?: true
+    note?: true
+    topupId?: true
+    fundSourceId?: true
+    recordedById?: true
+    distributedAt?: true
+    createdAt?: true
+    _all?: true
+  }
+
+  export type PartnerDistributionAggregateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PartnerDistribution to aggregate.
+     */
+    where?: PartnerDistributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PartnerDistributions to fetch.
+     */
+    orderBy?: PartnerDistributionOrderByWithRelationInput | PartnerDistributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the start position
+     */
+    cursor?: PartnerDistributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PartnerDistributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PartnerDistributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Count returned PartnerDistributions
+    **/
+    _count?: true | PartnerDistributionCountAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to average
+    **/
+    _avg?: PartnerDistributionAvgAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to sum
+    **/
+    _sum?: PartnerDistributionSumAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the minimum value
+    **/
+    _min?: PartnerDistributionMinAggregateInputType
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/aggregations Aggregation Docs}
+     * 
+     * Select which fields to find the maximum value
+    **/
+    _max?: PartnerDistributionMaxAggregateInputType
+  }
+
+  export type GetPartnerDistributionAggregateType<T extends PartnerDistributionAggregateArgs> = {
+        [P in keyof T & keyof AggregatePartnerDistribution]: P extends '_count' | 'count'
+      ? T[P] extends true
+        ? number
+        : GetScalarType<T[P], AggregatePartnerDistribution[P]>
+      : GetScalarType<T[P], AggregatePartnerDistribution[P]>
+  }
+
+
+
+
+  export type PartnerDistributionGroupByArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    where?: PartnerDistributionWhereInput
+    orderBy?: PartnerDistributionOrderByWithAggregationInput | PartnerDistributionOrderByWithAggregationInput[]
+    by: PartnerDistributionScalarFieldEnum[] | PartnerDistributionScalarFieldEnum
+    having?: PartnerDistributionScalarWhereWithAggregatesInput
+    take?: number
+    skip?: number
+    _count?: PartnerDistributionCountAggregateInputType | true
+    _avg?: PartnerDistributionAvgAggregateInputType
+    _sum?: PartnerDistributionSumAggregateInputType
+    _min?: PartnerDistributionMinAggregateInputType
+    _max?: PartnerDistributionMaxAggregateInputType
+  }
+
+  export type PartnerDistributionGroupByOutputType = {
+    id: string
+    partnerId: string
+    branchId: string
+    amount: Decimal
+    note: string | null
+    topupId: string | null
+    fundSourceId: string
+    recordedById: string
+    distributedAt: Date
+    createdAt: Date
+    _count: PartnerDistributionCountAggregateOutputType | null
+    _avg: PartnerDistributionAvgAggregateOutputType | null
+    _sum: PartnerDistributionSumAggregateOutputType | null
+    _min: PartnerDistributionMinAggregateOutputType | null
+    _max: PartnerDistributionMaxAggregateOutputType | null
+  }
+
+  type GetPartnerDistributionGroupByPayload<T extends PartnerDistributionGroupByArgs> = Prisma.PrismaPromise<
+    Array<
+      PickEnumerable<PartnerDistributionGroupByOutputType, T['by']> &
+        {
+          [P in ((keyof T) & (keyof PartnerDistributionGroupByOutputType))]: P extends '_count'
+            ? T[P] extends boolean
+              ? number
+              : GetScalarType<T[P], PartnerDistributionGroupByOutputType[P]>
+            : GetScalarType<T[P], PartnerDistributionGroupByOutputType[P]>
+        }
+      >
+    >
+
+
+  export type PartnerDistributionSelect<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partnerId?: boolean
+    branchId?: boolean
+    amount?: boolean
+    note?: boolean
+    topupId?: boolean
+    fundSourceId?: boolean
+    recordedById?: boolean
+    distributedAt?: boolean
+    createdAt?: boolean
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
+    topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
+    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["partnerDistribution"]>
+
+  export type PartnerDistributionSelectCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partnerId?: boolean
+    branchId?: boolean
+    amount?: boolean
+    note?: boolean
+    topupId?: boolean
+    fundSourceId?: boolean
+    recordedById?: boolean
+    distributedAt?: boolean
+    createdAt?: boolean
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
+    topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
+    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["partnerDistribution"]>
+
+  export type PartnerDistributionSelectUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetSelect<{
+    id?: boolean
+    partnerId?: boolean
+    branchId?: boolean
+    amount?: boolean
+    note?: boolean
+    topupId?: boolean
+    fundSourceId?: boolean
+    recordedById?: boolean
+    distributedAt?: boolean
+    createdAt?: boolean
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
+    topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
+    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }, ExtArgs["result"]["partnerDistribution"]>
+
+  export type PartnerDistributionSelectScalar = {
+    id?: boolean
+    partnerId?: boolean
+    branchId?: boolean
+    amount?: boolean
+    note?: boolean
+    topupId?: boolean
+    fundSourceId?: boolean
+    recordedById?: boolean
+    distributedAt?: boolean
+    createdAt?: boolean
+  }
+
+  export type PartnerDistributionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "partnerId" | "branchId" | "amount" | "note" | "topupId" | "fundSourceId" | "recordedById" | "distributedAt" | "createdAt", ExtArgs["result"]["partnerDistribution"]>
+  export type PartnerDistributionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
+    topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
+    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }
+  export type PartnerDistributionIncludeCreateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
+    topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
+    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }
+  export type PartnerDistributionIncludeUpdateManyAndReturn<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    partner?: boolean | PartnerDefaultArgs<ExtArgs>
+    branch?: boolean | BranchDefaultArgs<ExtArgs>
+    topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
+    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    recordedBy?: boolean | SuperAdminDefaultArgs<ExtArgs>
+  }
+
+  export type $PartnerDistributionPayload<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    name: "PartnerDistribution"
+    objects: {
+      partner: Prisma.$PartnerPayload<ExtArgs>
+      branch: Prisma.$BranchPayload<ExtArgs>
+      topup: Prisma.$TopupPayload<ExtArgs> | null
+      fundSource: Prisma.$FundSourcePayload<ExtArgs>
+      recordedBy: Prisma.$SuperAdminPayload<ExtArgs>
+    }
+    scalars: $Extensions.GetPayloadResult<{
+      id: string
+      partnerId: string
+      branchId: string
+      amount: Prisma.Decimal
+      note: string | null
+      topupId: string | null
+      fundSourceId: string
+      recordedById: string
+      distributedAt: Date
+      createdAt: Date
+    }, ExtArgs["result"]["partnerDistribution"]>
+    composites: {}
+  }
+
+  type PartnerDistributionGetPayload<S extends boolean | null | undefined | PartnerDistributionDefaultArgs> = $Result.GetResult<Prisma.$PartnerDistributionPayload, S>
+
+  type PartnerDistributionCountArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> =
+    Omit<PartnerDistributionFindManyArgs, 'select' | 'include' | 'distinct' | 'omit'> & {
+      select?: PartnerDistributionCountAggregateInputType | true
+    }
+
+  export interface PartnerDistributionDelegate<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> {
+    [K: symbol]: { types: Prisma.TypeMap<ExtArgs>['model']['PartnerDistribution'], meta: { name: 'PartnerDistribution' } }
+    /**
+     * Find zero or one PartnerDistribution that matches the filter.
+     * @param {PartnerDistributionFindUniqueArgs} args - Arguments to find a PartnerDistribution
+     * @example
+     * // Get one PartnerDistribution
+     * const partnerDistribution = await prisma.partnerDistribution.findUnique({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUnique<T extends PartnerDistributionFindUniqueArgs>(args: SelectSubset<T, PartnerDistributionFindUniqueArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findUnique", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find one PartnerDistribution that matches the filter or throw an error with `error.code='P2025'`
+     * if no matches were found.
+     * @param {PartnerDistributionFindUniqueOrThrowArgs} args - Arguments to find a PartnerDistribution
+     * @example
+     * // Get one PartnerDistribution
+     * const partnerDistribution = await prisma.partnerDistribution.findUniqueOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findUniqueOrThrow<T extends PartnerDistributionFindUniqueOrThrowArgs>(args: SelectSubset<T, PartnerDistributionFindUniqueOrThrowArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PartnerDistribution that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerDistributionFindFirstArgs} args - Arguments to find a PartnerDistribution
+     * @example
+     * // Get one PartnerDistribution
+     * const partnerDistribution = await prisma.partnerDistribution.findFirst({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirst<T extends PartnerDistributionFindFirstArgs>(args?: SelectSubset<T, PartnerDistributionFindFirstArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findFirst", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find the first PartnerDistribution that matches the filter or
+     * throw `PrismaKnownClientError` with `P2025` code if no matches were found.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerDistributionFindFirstOrThrowArgs} args - Arguments to find a PartnerDistribution
+     * @example
+     * // Get one PartnerDistribution
+     * const partnerDistribution = await prisma.partnerDistribution.findFirstOrThrow({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     */
+    findFirstOrThrow<T extends PartnerDistributionFindFirstOrThrowArgs>(args?: SelectSubset<T, PartnerDistributionFindFirstOrThrowArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findFirstOrThrow", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Find zero or more PartnerDistributions that matches the filter.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerDistributionFindManyArgs} args - Arguments to filter and select certain fields only.
+     * @example
+     * // Get all PartnerDistributions
+     * const partnerDistributions = await prisma.partnerDistribution.findMany()
+     * 
+     * // Get first 10 PartnerDistributions
+     * const partnerDistributions = await prisma.partnerDistribution.findMany({ take: 10 })
+     * 
+     * // Only select the `id`
+     * const partnerDistributionWithIdOnly = await prisma.partnerDistribution.findMany({ select: { id: true } })
+     * 
+     */
+    findMany<T extends PartnerDistributionFindManyArgs>(args?: SelectSubset<T, PartnerDistributionFindManyArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "findMany", GlobalOmitOptions>>
+
+    /**
+     * Create a PartnerDistribution.
+     * @param {PartnerDistributionCreateArgs} args - Arguments to create a PartnerDistribution.
+     * @example
+     * // Create one PartnerDistribution
+     * const PartnerDistribution = await prisma.partnerDistribution.create({
+     *   data: {
+     *     // ... data to create a PartnerDistribution
+     *   }
+     * })
+     * 
+     */
+    create<T extends PartnerDistributionCreateArgs>(args: SelectSubset<T, PartnerDistributionCreateArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "create", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Create many PartnerDistributions.
+     * @param {PartnerDistributionCreateManyArgs} args - Arguments to create many PartnerDistributions.
+     * @example
+     * // Create many PartnerDistributions
+     * const partnerDistribution = await prisma.partnerDistribution.createMany({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     *     
+     */
+    createMany<T extends PartnerDistributionCreateManyArgs>(args?: SelectSubset<T, PartnerDistributionCreateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Create many PartnerDistributions and returns the data saved in the database.
+     * @param {PartnerDistributionCreateManyAndReturnArgs} args - Arguments to create many PartnerDistributions.
+     * @example
+     * // Create many PartnerDistributions
+     * const partnerDistribution = await prisma.partnerDistribution.createManyAndReturn({
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Create many PartnerDistributions and only return the `id`
+     * const partnerDistributionWithIdOnly = await prisma.partnerDistribution.createManyAndReturn({
+     *   select: { id: true },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    createManyAndReturn<T extends PartnerDistributionCreateManyAndReturnArgs>(args?: SelectSubset<T, PartnerDistributionCreateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "createManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Delete a PartnerDistribution.
+     * @param {PartnerDistributionDeleteArgs} args - Arguments to delete one PartnerDistribution.
+     * @example
+     * // Delete one PartnerDistribution
+     * const PartnerDistribution = await prisma.partnerDistribution.delete({
+     *   where: {
+     *     // ... filter to delete one PartnerDistribution
+     *   }
+     * })
+     * 
+     */
+    delete<T extends PartnerDistributionDeleteArgs>(args: SelectSubset<T, PartnerDistributionDeleteArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "delete", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Update one PartnerDistribution.
+     * @param {PartnerDistributionUpdateArgs} args - Arguments to update one PartnerDistribution.
+     * @example
+     * // Update one PartnerDistribution
+     * const partnerDistribution = await prisma.partnerDistribution.update({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    update<T extends PartnerDistributionUpdateArgs>(args: SelectSubset<T, PartnerDistributionUpdateArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "update", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+    /**
+     * Delete zero or more PartnerDistributions.
+     * @param {PartnerDistributionDeleteManyArgs} args - Arguments to filter PartnerDistributions to delete.
+     * @example
+     * // Delete a few PartnerDistributions
+     * const { count } = await prisma.partnerDistribution.deleteMany({
+     *   where: {
+     *     // ... provide filter here
+     *   }
+     * })
+     * 
+     */
+    deleteMany<T extends PartnerDistributionDeleteManyArgs>(args?: SelectSubset<T, PartnerDistributionDeleteManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PartnerDistributions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerDistributionUpdateManyArgs} args - Arguments to update one or more rows.
+     * @example
+     * // Update many PartnerDistributions
+     * const partnerDistribution = await prisma.partnerDistribution.updateMany({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: {
+     *     // ... provide data here
+     *   }
+     * })
+     * 
+     */
+    updateMany<T extends PartnerDistributionUpdateManyArgs>(args: SelectSubset<T, PartnerDistributionUpdateManyArgs<ExtArgs>>): Prisma.PrismaPromise<BatchPayload>
+
+    /**
+     * Update zero or more PartnerDistributions and returns the data updated in the database.
+     * @param {PartnerDistributionUpdateManyAndReturnArgs} args - Arguments to update many PartnerDistributions.
+     * @example
+     * // Update many PartnerDistributions
+     * const partnerDistribution = await prisma.partnerDistribution.updateManyAndReturn({
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * 
+     * // Update zero or more PartnerDistributions and only return the `id`
+     * const partnerDistributionWithIdOnly = await prisma.partnerDistribution.updateManyAndReturn({
+     *   select: { id: true },
+     *   where: {
+     *     // ... provide filter here
+     *   },
+     *   data: [
+     *     // ... provide data here
+     *   ]
+     * })
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * 
+     */
+    updateManyAndReturn<T extends PartnerDistributionUpdateManyAndReturnArgs>(args: SelectSubset<T, PartnerDistributionUpdateManyAndReturnArgs<ExtArgs>>): Prisma.PrismaPromise<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "updateManyAndReturn", GlobalOmitOptions>>
+
+    /**
+     * Create or update one PartnerDistribution.
+     * @param {PartnerDistributionUpsertArgs} args - Arguments to update or create a PartnerDistribution.
+     * @example
+     * // Update or create a PartnerDistribution
+     * const partnerDistribution = await prisma.partnerDistribution.upsert({
+     *   create: {
+     *     // ... data to create a PartnerDistribution
+     *   },
+     *   update: {
+     *     // ... in case it already exists, update
+     *   },
+     *   where: {
+     *     // ... the filter for the PartnerDistribution we want to update
+     *   }
+     * })
+     */
+    upsert<T extends PartnerDistributionUpsertArgs>(args: SelectSubset<T, PartnerDistributionUpsertArgs<ExtArgs>>): Prisma__PartnerDistributionClient<$Result.GetResult<Prisma.$PartnerDistributionPayload<ExtArgs>, T, "upsert", GlobalOmitOptions>, never, ExtArgs, GlobalOmitOptions>
+
+
+    /**
+     * Count the number of PartnerDistributions.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerDistributionCountArgs} args - Arguments to filter PartnerDistributions to count.
+     * @example
+     * // Count the number of PartnerDistributions
+     * const count = await prisma.partnerDistribution.count({
+     *   where: {
+     *     // ... the filter for the PartnerDistributions we want to count
+     *   }
+     * })
+    **/
+    count<T extends PartnerDistributionCountArgs>(
+      args?: Subset<T, PartnerDistributionCountArgs>,
+    ): Prisma.PrismaPromise<
+      T extends $Utils.Record<'select', any>
+        ? T['select'] extends true
+          ? number
+          : GetScalarType<T['select'], PartnerDistributionCountAggregateOutputType>
+        : number
+    >
+
+    /**
+     * Allows you to perform aggregations operations on a PartnerDistribution.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerDistributionAggregateArgs} args - Select which aggregations you would like to apply and on what fields.
+     * @example
+     * // Ordered by age ascending
+     * // Where email contains prisma.io
+     * // Limited to the 10 users
+     * const aggregations = await prisma.user.aggregate({
+     *   _avg: {
+     *     age: true,
+     *   },
+     *   where: {
+     *     email: {
+     *       contains: "prisma.io",
+     *     },
+     *   },
+     *   orderBy: {
+     *     age: "asc",
+     *   },
+     *   take: 10,
+     * })
+    **/
+    aggregate<T extends PartnerDistributionAggregateArgs>(args: Subset<T, PartnerDistributionAggregateArgs>): Prisma.PrismaPromise<GetPartnerDistributionAggregateType<T>>
+
+    /**
+     * Group by PartnerDistribution.
+     * Note, that providing `undefined` is treated as the value not being there.
+     * Read more here: https://pris.ly/d/null-undefined
+     * @param {PartnerDistributionGroupByArgs} args - Group by arguments.
+     * @example
+     * // Group by city, order by createdAt, get count
+     * const result = await prisma.user.groupBy({
+     *   by: ['city', 'createdAt'],
+     *   orderBy: {
+     *     createdAt: true
+     *   },
+     *   _count: {
+     *     _all: true
+     *   },
+     * })
+     * 
+    **/
+    groupBy<
+      T extends PartnerDistributionGroupByArgs,
+      HasSelectOrTake extends Or<
+        Extends<'skip', Keys<T>>,
+        Extends<'take', Keys<T>>
+      >,
+      OrderByArg extends True extends HasSelectOrTake
+        ? { orderBy: PartnerDistributionGroupByArgs['orderBy'] }
+        : { orderBy?: PartnerDistributionGroupByArgs['orderBy'] },
+      OrderFields extends ExcludeUnderscoreKeys<Keys<MaybeTupleToUnion<T['orderBy']>>>,
+      ByFields extends MaybeTupleToUnion<T['by']>,
+      ByValid extends Has<ByFields, OrderFields>,
+      HavingFields extends GetHavingFields<T['having']>,
+      HavingValid extends Has<ByFields, HavingFields>,
+      ByEmpty extends T['by'] extends never[] ? True : False,
+      InputErrors extends ByEmpty extends True
+      ? `Error: "by" must not be empty.`
+      : HavingValid extends False
+      ? {
+          [P in HavingFields]: P extends ByFields
+            ? never
+            : P extends string
+            ? `Error: Field "${P}" used in "having" needs to be provided in "by".`
+            : [
+                Error,
+                'Field ',
+                P,
+                ` in "having" needs to be provided in "by"`,
+              ]
+        }[HavingFields]
+      : 'take' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "take", you also need to provide "orderBy"'
+      : 'skip' extends Keys<T>
+      ? 'orderBy' extends Keys<T>
+        ? ByValid extends True
+          ? {}
+          : {
+              [P in OrderFields]: P extends ByFields
+                ? never
+                : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+            }[OrderFields]
+        : 'Error: If you provide "skip", you also need to provide "orderBy"'
+      : ByValid extends True
+      ? {}
+      : {
+          [P in OrderFields]: P extends ByFields
+            ? never
+            : `Error: Field "${P}" in "orderBy" needs to be provided in "by"`
+        }[OrderFields]
+    >(args: SubsetIntersection<T, PartnerDistributionGroupByArgs, OrderByArg> & InputErrors): {} extends InputErrors ? GetPartnerDistributionGroupByPayload<T> : Prisma.PrismaPromise<InputErrors>
+  /**
+   * Fields of the PartnerDistribution model
+   */
+  readonly fields: PartnerDistributionFieldRefs;
+  }
+
+  /**
+   * The delegate class that acts as a "Promise-like" for PartnerDistribution.
+   * Why is this prefixed with `Prisma__`?
+   * Because we want to prevent naming conflicts as mentioned in
+   * https://github.com/prisma/prisma-client-js/issues/707
+   */
+  export interface Prisma__PartnerDistributionClient<T, Null = never, ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs, GlobalOmitOptions = {}> extends Prisma.PrismaPromise<T> {
+    readonly [Symbol.toStringTag]: "PrismaPromise"
+    partner<T extends PartnerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PartnerDefaultArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    branch<T extends BranchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BranchDefaultArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    topup<T extends PartnerDistribution$topupArgs<ExtArgs> = {}>(args?: Subset<T, PartnerDistribution$topupArgs<ExtArgs>>): Prisma__TopupClient<$Result.GetResult<Prisma.$TopupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
+    fundSource<T extends FundSourceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FundSourceDefaultArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    recordedBy<T extends SuperAdminDefaultArgs<ExtArgs> = {}>(args?: Subset<T, SuperAdminDefaultArgs<ExtArgs>>): Prisma__SuperAdminClient<$Result.GetResult<Prisma.$SuperAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    /**
+     * Attaches callbacks for the resolution and/or rejection of the Promise.
+     * @param onfulfilled The callback to execute when the Promise is resolved.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of which ever callback is executed.
+     */
+    then<TResult1 = T, TResult2 = never>(onfulfilled?: ((value: T) => TResult1 | PromiseLike<TResult1>) | undefined | null, onrejected?: ((reason: any) => TResult2 | PromiseLike<TResult2>) | undefined | null): $Utils.JsPromise<TResult1 | TResult2>
+    /**
+     * Attaches a callback for only the rejection of the Promise.
+     * @param onrejected The callback to execute when the Promise is rejected.
+     * @returns A Promise for the completion of the callback.
+     */
+    catch<TResult = never>(onrejected?: ((reason: any) => TResult | PromiseLike<TResult>) | undefined | null): $Utils.JsPromise<T | TResult>
+    /**
+     * Attaches a callback that is invoked when the Promise is settled (fulfilled or rejected). The
+     * resolved value cannot be modified from the callback.
+     * @param onfinally The callback to execute when the Promise is settled (fulfilled or rejected).
+     * @returns A Promise for the completion of the callback.
+     */
+    finally(onfinally?: (() => void) | undefined | null): $Utils.JsPromise<T>
+  }
+
+
+
+
+  /**
+   * Fields of the PartnerDistribution model
+   */
+  interface PartnerDistributionFieldRefs {
+    readonly id: FieldRef<"PartnerDistribution", 'String'>
+    readonly partnerId: FieldRef<"PartnerDistribution", 'String'>
+    readonly branchId: FieldRef<"PartnerDistribution", 'String'>
+    readonly amount: FieldRef<"PartnerDistribution", 'Decimal'>
+    readonly note: FieldRef<"PartnerDistribution", 'String'>
+    readonly topupId: FieldRef<"PartnerDistribution", 'String'>
+    readonly fundSourceId: FieldRef<"PartnerDistribution", 'String'>
+    readonly recordedById: FieldRef<"PartnerDistribution", 'String'>
+    readonly distributedAt: FieldRef<"PartnerDistribution", 'DateTime'>
+    readonly createdAt: FieldRef<"PartnerDistribution", 'DateTime'>
+  }
+    
+
+  // Custom InputTypes
+  /**
+   * PartnerDistribution findUnique
+   */
+  export type PartnerDistributionFindUniqueArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which PartnerDistribution to fetch.
+     */
+    where: PartnerDistributionWhereUniqueInput
+  }
+
+  /**
+   * PartnerDistribution findUniqueOrThrow
+   */
+  export type PartnerDistributionFindUniqueOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which PartnerDistribution to fetch.
+     */
+    where: PartnerDistributionWhereUniqueInput
+  }
+
+  /**
+   * PartnerDistribution findFirst
+   */
+  export type PartnerDistributionFindFirstArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which PartnerDistribution to fetch.
+     */
+    where?: PartnerDistributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PartnerDistributions to fetch.
+     */
+    orderBy?: PartnerDistributionOrderByWithRelationInput | PartnerDistributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PartnerDistributions.
+     */
+    cursor?: PartnerDistributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PartnerDistributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PartnerDistributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PartnerDistributions.
+     */
+    distinct?: PartnerDistributionScalarFieldEnum | PartnerDistributionScalarFieldEnum[]
+  }
+
+  /**
+   * PartnerDistribution findFirstOrThrow
+   */
+  export type PartnerDistributionFindFirstOrThrowArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which PartnerDistribution to fetch.
+     */
+    where?: PartnerDistributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PartnerDistributions to fetch.
+     */
+    orderBy?: PartnerDistributionOrderByWithRelationInput | PartnerDistributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for searching for PartnerDistributions.
+     */
+    cursor?: PartnerDistributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PartnerDistributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PartnerDistributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PartnerDistributions.
+     */
+    distinct?: PartnerDistributionScalarFieldEnum | PartnerDistributionScalarFieldEnum[]
+  }
+
+  /**
+   * PartnerDistribution findMany
+   */
+  export type PartnerDistributionFindManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * Filter, which PartnerDistributions to fetch.
+     */
+    where?: PartnerDistributionWhereInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/sorting Sorting Docs}
+     * 
+     * Determine the order of PartnerDistributions to fetch.
+     */
+    orderBy?: PartnerDistributionOrderByWithRelationInput | PartnerDistributionOrderByWithRelationInput[]
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination#cursor-based-pagination Cursor Docs}
+     * 
+     * Sets the position for listing PartnerDistributions.
+     */
+    cursor?: PartnerDistributionWhereUniqueInput
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Take `±n` PartnerDistributions from the position of the cursor.
+     */
+    take?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/pagination Pagination Docs}
+     * 
+     * Skip the first `n` PartnerDistributions.
+     */
+    skip?: number
+    /**
+     * {@link https://www.prisma.io/docs/concepts/components/prisma-client/distinct Distinct Docs}
+     * 
+     * Filter by unique combinations of PartnerDistributions.
+     */
+    distinct?: PartnerDistributionScalarFieldEnum | PartnerDistributionScalarFieldEnum[]
+  }
+
+  /**
+   * PartnerDistribution create
+   */
+  export type PartnerDistributionCreateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * The data needed to create a PartnerDistribution.
+     */
+    data: XOR<PartnerDistributionCreateInput, PartnerDistributionUncheckedCreateInput>
+  }
+
+  /**
+   * PartnerDistribution createMany
+   */
+  export type PartnerDistributionCreateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to create many PartnerDistributions.
+     */
+    data: PartnerDistributionCreateManyInput | PartnerDistributionCreateManyInput[]
+    skipDuplicates?: boolean
+  }
+
+  /**
+   * PartnerDistribution createManyAndReturn
+   */
+  export type PartnerDistributionCreateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelectCreateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * The data used to create many PartnerDistributions.
+     */
+    data: PartnerDistributionCreateManyInput | PartnerDistributionCreateManyInput[]
+    skipDuplicates?: boolean
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionIncludeCreateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PartnerDistribution update
+   */
+  export type PartnerDistributionUpdateArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * The data needed to update a PartnerDistribution.
+     */
+    data: XOR<PartnerDistributionUpdateInput, PartnerDistributionUncheckedUpdateInput>
+    /**
+     * Choose, which PartnerDistribution to update.
+     */
+    where: PartnerDistributionWhereUniqueInput
+  }
+
+  /**
+   * PartnerDistribution updateMany
+   */
+  export type PartnerDistributionUpdateManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * The data used to update PartnerDistributions.
+     */
+    data: XOR<PartnerDistributionUpdateManyMutationInput, PartnerDistributionUncheckedUpdateManyInput>
+    /**
+     * Filter which PartnerDistributions to update
+     */
+    where?: PartnerDistributionWhereInput
+    /**
+     * Limit how many PartnerDistributions to update.
+     */
+    limit?: number
+  }
+
+  /**
+   * PartnerDistribution updateManyAndReturn
+   */
+  export type PartnerDistributionUpdateManyAndReturnArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelectUpdateManyAndReturn<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * The data used to update PartnerDistributions.
+     */
+    data: XOR<PartnerDistributionUpdateManyMutationInput, PartnerDistributionUncheckedUpdateManyInput>
+    /**
+     * Filter which PartnerDistributions to update
+     */
+    where?: PartnerDistributionWhereInput
+    /**
+     * Limit how many PartnerDistributions to update.
+     */
+    limit?: number
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionIncludeUpdateManyAndReturn<ExtArgs> | null
+  }
+
+  /**
+   * PartnerDistribution upsert
+   */
+  export type PartnerDistributionUpsertArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * The filter to search for the PartnerDistribution to update in case it exists.
+     */
+    where: PartnerDistributionWhereUniqueInput
+    /**
+     * In case the PartnerDistribution found by the `where` argument doesn't exist, create a new PartnerDistribution with this data.
+     */
+    create: XOR<PartnerDistributionCreateInput, PartnerDistributionUncheckedCreateInput>
+    /**
+     * In case the PartnerDistribution was found with the provided `where` argument, update it with this data.
+     */
+    update: XOR<PartnerDistributionUpdateInput, PartnerDistributionUncheckedUpdateInput>
+  }
+
+  /**
+   * PartnerDistribution delete
+   */
+  export type PartnerDistributionDeleteArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+    /**
+     * Filter which PartnerDistribution to delete.
+     */
+    where: PartnerDistributionWhereUniqueInput
+  }
+
+  /**
+   * PartnerDistribution deleteMany
+   */
+  export type PartnerDistributionDeleteManyArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Filter which PartnerDistributions to delete
+     */
+    where?: PartnerDistributionWhereInput
+    /**
+     * Limit how many PartnerDistributions to delete.
+     */
+    limit?: number
+  }
+
+  /**
+   * PartnerDistribution.topup
+   */
+  export type PartnerDistribution$topupArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the Topup
+     */
+    select?: TopupSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the Topup
+     */
+    omit?: TopupOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: TopupInclude<ExtArgs> | null
+    where?: TopupWhereInput
+  }
+
+  /**
+   * PartnerDistribution without action
+   */
+  export type PartnerDistributionDefaultArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the PartnerDistribution
+     */
+    select?: PartnerDistributionSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the PartnerDistribution
+     */
+    omit?: PartnerDistributionOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: PartnerDistributionInclude<ExtArgs> | null
+  }
+
+
+  /**
    * Enums
    */
 
@@ -22937,6 +28350,7 @@ export namespace Prisma {
   export const AppUserScalarFieldEnum: {
     id: 'id',
     name: 'name',
+    phone: 'phone',
     email: 'email',
     passwordHash: 'passwordHash',
     role: 'role',
@@ -22947,6 +28361,18 @@ export namespace Prisma {
   };
 
   export type AppUserScalarFieldEnum = (typeof AppUserScalarFieldEnum)[keyof typeof AppUserScalarFieldEnum]
+
+
+  export const PartnerScalarFieldEnum: {
+    id: 'id',
+    name: 'name',
+    email: 'email',
+    phone: 'phone',
+    createdById: 'createdById',
+    createdAt: 'createdAt'
+  };
+
+  export type PartnerScalarFieldEnum = (typeof PartnerScalarFieldEnum)[keyof typeof PartnerScalarFieldEnum]
 
 
   export const CommissionTierScalarFieldEnum: {
@@ -22986,7 +28412,9 @@ export namespace Prisma {
     refundedById: 'refundedById',
     createdAt: 'createdAt',
     completedAt: 'completedAt',
-    refundedAt: 'refundedAt'
+    refundedAt: 'refundedAt',
+    parentTransactionId: 'parentTransactionId',
+    amountCollected: 'amountCollected'
   };
 
   export type TransactionScalarFieldEnum = (typeof TransactionScalarFieldEnum)[keyof typeof TransactionScalarFieldEnum]
@@ -23069,6 +28497,18 @@ export namespace Prisma {
   export type RoleScalarFieldEnum = (typeof RoleScalarFieldEnum)[keyof typeof RoleScalarFieldEnum]
 
 
+  export const PickupEventScalarFieldEnum: {
+    id: 'id',
+    transactionId: 'transactionId',
+    amount: 'amount',
+    collectedById: 'collectedById',
+    receiptNumber: 'receiptNumber',
+    createdAt: 'createdAt'
+  };
+
+  export type PickupEventScalarFieldEnum = (typeof PickupEventScalarFieldEnum)[keyof typeof PickupEventScalarFieldEnum]
+
+
   export const ExpenseScalarFieldEnum: {
     id: 'id',
     branchId: 'branchId',
@@ -23104,6 +28544,37 @@ export namespace Prisma {
   };
 
   export type ExpenseCategoryScalarFieldEnum = (typeof ExpenseCategoryScalarFieldEnum)[keyof typeof ExpenseCategoryScalarFieldEnum]
+
+
+  export const FundSourceScalarFieldEnum: {
+    id: 'id',
+    partnerId: 'partnerId',
+    commodityName: 'commodityName',
+    cashValue: 'cashValue',
+    description: 'description',
+    recordedById: 'recordedById',
+    code: 'code',
+    recordedAt: 'recordedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type FundSourceScalarFieldEnum = (typeof FundSourceScalarFieldEnum)[keyof typeof FundSourceScalarFieldEnum]
+
+
+  export const PartnerDistributionScalarFieldEnum: {
+    id: 'id',
+    partnerId: 'partnerId',
+    branchId: 'branchId',
+    amount: 'amount',
+    note: 'note',
+    topupId: 'topupId',
+    fundSourceId: 'fundSourceId',
+    recordedById: 'recordedById',
+    distributedAt: 'distributedAt',
+    createdAt: 'createdAt'
+  };
+
+  export type PartnerDistributionScalarFieldEnum = (typeof PartnerDistributionScalarFieldEnum)[keyof typeof PartnerDistributionScalarFieldEnum]
 
 
   export const SortOrder: {
@@ -23450,6 +28921,9 @@ export namespace Prisma {
     preferredLanguage?: StringFilter<"SuperAdmin"> | string
     isActive?: BoolFilter<"SuperAdmin"> | boolean
     createdAt?: DateTimeFilter<"SuperAdmin"> | Date | string
+    partnersCreated?: PartnerListRelationFilter
+    fundSourcesRecorded?: FundSourceListRelationFilter
+    distributionsRecorded?: PartnerDistributionListRelationFilter
     branchesCreated?: BranchListRelationFilter
     topupsInitiated?: TopupListRelationFilter
     auditLogs?: AuditLogListRelationFilter
@@ -23465,6 +28939,9 @@ export namespace Prisma {
     preferredLanguage?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    partnersCreated?: PartnerOrderByRelationAggregateInput
+    fundSourcesRecorded?: FundSourceOrderByRelationAggregateInput
+    distributionsRecorded?: PartnerDistributionOrderByRelationAggregateInput
     branchesCreated?: BranchOrderByRelationAggregateInput
     topupsInitiated?: TopupOrderByRelationAggregateInput
     auditLogs?: AuditLogOrderByRelationAggregateInput
@@ -23483,6 +28960,9 @@ export namespace Prisma {
     preferredLanguage?: StringFilter<"SuperAdmin"> | string
     isActive?: BoolFilter<"SuperAdmin"> | boolean
     createdAt?: DateTimeFilter<"SuperAdmin"> | Date | string
+    partnersCreated?: PartnerListRelationFilter
+    fundSourcesRecorded?: FundSourceListRelationFilter
+    distributionsRecorded?: PartnerDistributionListRelationFilter
     branchesCreated?: BranchListRelationFilter
     topupsInitiated?: TopupListRelationFilter
     auditLogs?: AuditLogListRelationFilter
@@ -23536,6 +29016,7 @@ export namespace Prisma {
     manager?: XOR<AppUserNullableScalarRelationFilter, AppUserWhereInput> | null
     currency?: XOR<CurrencyNullableScalarRelationFilter, CurrencyWhereInput> | null
     createdBySuperAdmin?: XOR<SuperAdminScalarRelationFilter, SuperAdminWhereInput>
+    distributions?: PartnerDistributionListRelationFilter
     users?: AppUserListRelationFilter
     commissionTiers?: CommissionTierListRelationFilter
     sentTransactions?: TransactionListRelationFilter
@@ -23563,6 +29044,7 @@ export namespace Prisma {
     manager?: AppUserOrderByWithRelationInput
     currency?: CurrencyOrderByWithRelationInput
     createdBySuperAdmin?: SuperAdminOrderByWithRelationInput
+    distributions?: PartnerDistributionOrderByRelationAggregateInput
     users?: AppUserOrderByRelationAggregateInput
     commissionTiers?: CommissionTierOrderByRelationAggregateInput
     sentTransactions?: TransactionOrderByRelationAggregateInput
@@ -23593,6 +29075,7 @@ export namespace Prisma {
     manager?: XOR<AppUserNullableScalarRelationFilter, AppUserWhereInput> | null
     currency?: XOR<CurrencyNullableScalarRelationFilter, CurrencyWhereInput> | null
     createdBySuperAdmin?: XOR<SuperAdminScalarRelationFilter, SuperAdminWhereInput>
+    distributions?: PartnerDistributionListRelationFilter
     users?: AppUserListRelationFilter
     commissionTiers?: CommissionTierListRelationFilter
     sentTransactions?: TransactionListRelationFilter
@@ -23647,6 +29130,7 @@ export namespace Prisma {
     NOT?: AppUserWhereInput | AppUserWhereInput[]
     id?: StringFilter<"AppUser"> | string
     name?: StringFilter<"AppUser"> | string
+    phone?: StringNullableFilter<"AppUser"> | string | null
     email?: StringFilter<"AppUser"> | string
     passwordHash?: StringFilter<"AppUser"> | string
     role?: StringFilter<"AppUser"> | string
@@ -23662,11 +29146,13 @@ export namespace Prisma {
     topupsReceived?: TopupListRelationFilter
     auditLogs?: AuditLogListRelationFilter
     salaryPayments?: SalaryPaymentListRelationFilter
+    pickupEvents?: PickupEventListRelationFilter
   }
 
   export type AppUserOrderByWithRelationInput = {
     id?: SortOrder
     name?: SortOrder
+    phone?: SortOrderInput | SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
@@ -23682,6 +29168,7 @@ export namespace Prisma {
     topupsReceived?: TopupOrderByRelationAggregateInput
     auditLogs?: AuditLogOrderByRelationAggregateInput
     salaryPayments?: SalaryPaymentOrderByRelationAggregateInput
+    pickupEvents?: PickupEventOrderByRelationAggregateInput
   }
 
   export type AppUserWhereUniqueInput = Prisma.AtLeast<{
@@ -23691,6 +29178,7 @@ export namespace Prisma {
     OR?: AppUserWhereInput[]
     NOT?: AppUserWhereInput | AppUserWhereInput[]
     name?: StringFilter<"AppUser"> | string
+    phone?: StringNullableFilter<"AppUser"> | string | null
     passwordHash?: StringFilter<"AppUser"> | string
     role?: StringFilter<"AppUser"> | string
     branchId?: StringFilter<"AppUser"> | string
@@ -23705,11 +29193,13 @@ export namespace Prisma {
     topupsReceived?: TopupListRelationFilter
     auditLogs?: AuditLogListRelationFilter
     salaryPayments?: SalaryPaymentListRelationFilter
+    pickupEvents?: PickupEventListRelationFilter
   }, "id" | "email">
 
   export type AppUserOrderByWithAggregationInput = {
     id?: SortOrder
     name?: SortOrder
+    phone?: SortOrderInput | SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
@@ -23728,6 +29218,7 @@ export namespace Prisma {
     NOT?: AppUserScalarWhereWithAggregatesInput | AppUserScalarWhereWithAggregatesInput[]
     id?: StringWithAggregatesFilter<"AppUser"> | string
     name?: StringWithAggregatesFilter<"AppUser"> | string
+    phone?: StringNullableWithAggregatesFilter<"AppUser"> | string | null
     email?: StringWithAggregatesFilter<"AppUser"> | string
     passwordHash?: StringWithAggregatesFilter<"AppUser"> | string
     role?: StringWithAggregatesFilter<"AppUser"> | string
@@ -23735,6 +29226,72 @@ export namespace Prisma {
     preferredLanguage?: StringWithAggregatesFilter<"AppUser"> | string
     isActive?: BoolWithAggregatesFilter<"AppUser"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"AppUser"> | Date | string
+  }
+
+  export type PartnerWhereInput = {
+    AND?: PartnerWhereInput | PartnerWhereInput[]
+    OR?: PartnerWhereInput[]
+    NOT?: PartnerWhereInput | PartnerWhereInput[]
+    id?: StringFilter<"Partner"> | string
+    name?: StringFilter<"Partner"> | string
+    email?: StringNullableFilter<"Partner"> | string | null
+    phone?: StringNullableFilter<"Partner"> | string | null
+    createdById?: StringNullableFilter<"Partner"> | string | null
+    createdAt?: DateTimeFilter<"Partner"> | Date | string
+    createdBy?: XOR<SuperAdminNullableScalarRelationFilter, SuperAdminWhereInput> | null
+    fundSources?: FundSourceListRelationFilter
+    distributions?: PartnerDistributionListRelationFilter
+  }
+
+  export type PartnerOrderByWithRelationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    createdBy?: SuperAdminOrderByWithRelationInput
+    fundSources?: FundSourceOrderByRelationAggregateInput
+    distributions?: PartnerDistributionOrderByRelationAggregateInput
+  }
+
+  export type PartnerWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    AND?: PartnerWhereInput | PartnerWhereInput[]
+    OR?: PartnerWhereInput[]
+    NOT?: PartnerWhereInput | PartnerWhereInput[]
+    name?: StringFilter<"Partner"> | string
+    email?: StringNullableFilter<"Partner"> | string | null
+    phone?: StringNullableFilter<"Partner"> | string | null
+    createdById?: StringNullableFilter<"Partner"> | string | null
+    createdAt?: DateTimeFilter<"Partner"> | Date | string
+    createdBy?: XOR<SuperAdminNullableScalarRelationFilter, SuperAdminWhereInput> | null
+    fundSources?: FundSourceListRelationFilter
+    distributions?: PartnerDistributionListRelationFilter
+  }, "id">
+
+  export type PartnerOrderByWithAggregationInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrderInput | SortOrder
+    phone?: SortOrderInput | SortOrder
+    createdById?: SortOrderInput | SortOrder
+    createdAt?: SortOrder
+    _count?: PartnerCountOrderByAggregateInput
+    _max?: PartnerMaxOrderByAggregateInput
+    _min?: PartnerMinOrderByAggregateInput
+  }
+
+  export type PartnerScalarWhereWithAggregatesInput = {
+    AND?: PartnerScalarWhereWithAggregatesInput | PartnerScalarWhereWithAggregatesInput[]
+    OR?: PartnerScalarWhereWithAggregatesInput[]
+    NOT?: PartnerScalarWhereWithAggregatesInput | PartnerScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"Partner"> | string
+    name?: StringWithAggregatesFilter<"Partner"> | string
+    email?: StringNullableWithAggregatesFilter<"Partner"> | string | null
+    phone?: StringNullableWithAggregatesFilter<"Partner"> | string | null
+    createdById?: StringNullableWithAggregatesFilter<"Partner"> | string | null
+    createdAt?: DateTimeWithAggregatesFilter<"Partner"> | Date | string
   }
 
   export type CommissionTierWhereInput = {
@@ -23847,6 +29404,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     completedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
     refundedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    parentTransactionId?: StringNullableFilter<"Transaction"> | string | null
+    amountCollected?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     senderBranch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     receiverBranch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     currency?: XOR<CurrencyNullableScalarRelationFilter, CurrencyWhereInput> | null
@@ -23856,6 +29415,7 @@ export namespace Prisma {
     refundedBy?: XOR<AppUserNullableScalarRelationFilter, AppUserWhereInput> | null
     subLedgerEntries?: SubLedgerEntryListRelationFilter
     generalLedgerEntries?: GeneralLedgerEntryListRelationFilter
+    pickupEvents?: PickupEventListRelationFilter
   }
 
   export type TransactionOrderByWithRelationInput = {
@@ -23880,6 +29440,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     completedAt?: SortOrderInput | SortOrder
     refundedAt?: SortOrderInput | SortOrder
+    parentTransactionId?: SortOrderInput | SortOrder
+    amountCollected?: SortOrder
     senderBranch?: BranchOrderByWithRelationInput
     receiverBranch?: BranchOrderByWithRelationInput
     currency?: CurrencyOrderByWithRelationInput
@@ -23889,6 +29451,7 @@ export namespace Prisma {
     refundedBy?: AppUserOrderByWithRelationInput
     subLedgerEntries?: SubLedgerEntryOrderByRelationAggregateInput
     generalLedgerEntries?: GeneralLedgerEntryOrderByRelationAggregateInput
+    pickupEvents?: PickupEventOrderByRelationAggregateInput
   }
 
   export type TransactionWhereUniqueInput = Prisma.AtLeast<{
@@ -23916,6 +29479,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     completedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
     refundedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    parentTransactionId?: StringNullableFilter<"Transaction"> | string | null
+    amountCollected?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     senderBranch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     receiverBranch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     currency?: XOR<CurrencyNullableScalarRelationFilter, CurrencyWhereInput> | null
@@ -23925,6 +29490,7 @@ export namespace Prisma {
     refundedBy?: XOR<AppUserNullableScalarRelationFilter, AppUserWhereInput> | null
     subLedgerEntries?: SubLedgerEntryListRelationFilter
     generalLedgerEntries?: GeneralLedgerEntryListRelationFilter
+    pickupEvents?: PickupEventListRelationFilter
   }, "id" | "pickupCode">
 
   export type TransactionOrderByWithAggregationInput = {
@@ -23949,6 +29515,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     completedAt?: SortOrderInput | SortOrder
     refundedAt?: SortOrderInput | SortOrder
+    parentTransactionId?: SortOrderInput | SortOrder
+    amountCollected?: SortOrder
     _count?: TransactionCountOrderByAggregateInput
     _avg?: TransactionAvgOrderByAggregateInput
     _max?: TransactionMaxOrderByAggregateInput
@@ -23981,6 +29549,8 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Transaction"> | Date | string
     completedAt?: DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
     refundedAt?: DateTimeNullableWithAggregatesFilter<"Transaction"> | Date | string | null
+    parentTransactionId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    amountCollected?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
   }
 
   export type SubLedgerEntryWhereInput = {
@@ -24140,6 +29710,7 @@ export namespace Prisma {
     currency?: XOR<CurrencyNullableScalarRelationFilter, CurrencyWhereInput> | null
     initiatedBy?: XOR<SuperAdminScalarRelationFilter, SuperAdminWhereInput>
     branchManager?: XOR<AppUserScalarRelationFilter, AppUserWhereInput>
+    distribution?: XOR<PartnerDistributionNullableScalarRelationFilter, PartnerDistributionWhereInput> | null
     generalLedgerEntries?: GeneralLedgerEntryListRelationFilter
   }
 
@@ -24159,6 +29730,7 @@ export namespace Prisma {
     currency?: CurrencyOrderByWithRelationInput
     initiatedBy?: SuperAdminOrderByWithRelationInput
     branchManager?: AppUserOrderByWithRelationInput
+    distribution?: PartnerDistributionOrderByWithRelationInput
     generalLedgerEntries?: GeneralLedgerEntryOrderByRelationAggregateInput
   }
 
@@ -24181,6 +29753,7 @@ export namespace Prisma {
     currency?: XOR<CurrencyNullableScalarRelationFilter, CurrencyWhereInput> | null
     initiatedBy?: XOR<SuperAdminScalarRelationFilter, SuperAdminWhereInput>
     branchManager?: XOR<AppUserScalarRelationFilter, AppUserWhereInput>
+    distribution?: XOR<PartnerDistributionNullableScalarRelationFilter, PartnerDistributionWhereInput> | null
     generalLedgerEntries?: GeneralLedgerEntryListRelationFilter
   }, "id" | "receiptNumber">
 
@@ -24393,6 +29966,71 @@ export namespace Prisma {
     createdAt?: DateTimeWithAggregatesFilter<"Role"> | Date | string
   }
 
+  export type PickupEventWhereInput = {
+    AND?: PickupEventWhereInput | PickupEventWhereInput[]
+    OR?: PickupEventWhereInput[]
+    NOT?: PickupEventWhereInput | PickupEventWhereInput[]
+    id?: StringFilter<"PickupEvent"> | string
+    transactionId?: StringFilter<"PickupEvent"> | string
+    amount?: DecimalFilter<"PickupEvent"> | Decimal | DecimalJsLike | number | string
+    collectedById?: StringFilter<"PickupEvent"> | string
+    receiptNumber?: StringFilter<"PickupEvent"> | string
+    createdAt?: DateTimeFilter<"PickupEvent"> | Date | string
+    transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
+    collectedBy?: XOR<AppUserScalarRelationFilter, AppUserWhereInput>
+  }
+
+  export type PickupEventOrderByWithRelationInput = {
+    id?: SortOrder
+    transactionId?: SortOrder
+    amount?: SortOrder
+    collectedById?: SortOrder
+    receiptNumber?: SortOrder
+    createdAt?: SortOrder
+    transaction?: TransactionOrderByWithRelationInput
+    collectedBy?: AppUserOrderByWithRelationInput
+  }
+
+  export type PickupEventWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    receiptNumber?: string
+    AND?: PickupEventWhereInput | PickupEventWhereInput[]
+    OR?: PickupEventWhereInput[]
+    NOT?: PickupEventWhereInput | PickupEventWhereInput[]
+    transactionId?: StringFilter<"PickupEvent"> | string
+    amount?: DecimalFilter<"PickupEvent"> | Decimal | DecimalJsLike | number | string
+    collectedById?: StringFilter<"PickupEvent"> | string
+    createdAt?: DateTimeFilter<"PickupEvent"> | Date | string
+    transaction?: XOR<TransactionScalarRelationFilter, TransactionWhereInput>
+    collectedBy?: XOR<AppUserScalarRelationFilter, AppUserWhereInput>
+  }, "id" | "receiptNumber">
+
+  export type PickupEventOrderByWithAggregationInput = {
+    id?: SortOrder
+    transactionId?: SortOrder
+    amount?: SortOrder
+    collectedById?: SortOrder
+    receiptNumber?: SortOrder
+    createdAt?: SortOrder
+    _count?: PickupEventCountOrderByAggregateInput
+    _avg?: PickupEventAvgOrderByAggregateInput
+    _max?: PickupEventMaxOrderByAggregateInput
+    _min?: PickupEventMinOrderByAggregateInput
+    _sum?: PickupEventSumOrderByAggregateInput
+  }
+
+  export type PickupEventScalarWhereWithAggregatesInput = {
+    AND?: PickupEventScalarWhereWithAggregatesInput | PickupEventScalarWhereWithAggregatesInput[]
+    OR?: PickupEventScalarWhereWithAggregatesInput[]
+    NOT?: PickupEventScalarWhereWithAggregatesInput | PickupEventScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PickupEvent"> | string
+    transactionId?: StringWithAggregatesFilter<"PickupEvent"> | string
+    amount?: DecimalWithAggregatesFilter<"PickupEvent"> | Decimal | DecimalJsLike | number | string
+    collectedById?: StringWithAggregatesFilter<"PickupEvent"> | string
+    receiptNumber?: StringWithAggregatesFilter<"PickupEvent"> | string
+    createdAt?: DateTimeWithAggregatesFilter<"PickupEvent"> | Date | string
+  }
+
   export type ExpenseWhereInput = {
     AND?: ExpenseWhereInput | ExpenseWhereInput[]
     OR?: ExpenseWhereInput[]
@@ -24583,6 +30221,183 @@ export namespace Prisma {
     id?: StringWithAggregatesFilter<"ExpenseCategory"> | string
     name?: StringWithAggregatesFilter<"ExpenseCategory"> | string
     createdAt?: DateTimeWithAggregatesFilter<"ExpenseCategory"> | Date | string
+  }
+
+  export type FundSourceWhereInput = {
+    AND?: FundSourceWhereInput | FundSourceWhereInput[]
+    OR?: FundSourceWhereInput[]
+    NOT?: FundSourceWhereInput | FundSourceWhereInput[]
+    id?: StringFilter<"FundSource"> | string
+    partnerId?: StringFilter<"FundSource"> | string
+    commodityName?: StringFilter<"FundSource"> | string
+    cashValue?: DecimalFilter<"FundSource"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableFilter<"FundSource"> | string | null
+    recordedById?: StringFilter<"FundSource"> | string
+    code?: StringFilter<"FundSource"> | string
+    recordedAt?: DateTimeFilter<"FundSource"> | Date | string
+    createdAt?: DateTimeFilter<"FundSource"> | Date | string
+    partner?: XOR<PartnerScalarRelationFilter, PartnerWhereInput>
+    distributions?: PartnerDistributionListRelationFilter
+    recordedBy?: XOR<SuperAdminScalarRelationFilter, SuperAdminWhereInput>
+  }
+
+  export type FundSourceOrderByWithRelationInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    commodityName?: SortOrder
+    cashValue?: SortOrder
+    description?: SortOrderInput | SortOrder
+    recordedById?: SortOrder
+    code?: SortOrder
+    recordedAt?: SortOrder
+    createdAt?: SortOrder
+    partner?: PartnerOrderByWithRelationInput
+    distributions?: PartnerDistributionOrderByRelationAggregateInput
+    recordedBy?: SuperAdminOrderByWithRelationInput
+  }
+
+  export type FundSourceWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    code?: string
+    AND?: FundSourceWhereInput | FundSourceWhereInput[]
+    OR?: FundSourceWhereInput[]
+    NOT?: FundSourceWhereInput | FundSourceWhereInput[]
+    partnerId?: StringFilter<"FundSource"> | string
+    commodityName?: StringFilter<"FundSource"> | string
+    cashValue?: DecimalFilter<"FundSource"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableFilter<"FundSource"> | string | null
+    recordedById?: StringFilter<"FundSource"> | string
+    recordedAt?: DateTimeFilter<"FundSource"> | Date | string
+    createdAt?: DateTimeFilter<"FundSource"> | Date | string
+    partner?: XOR<PartnerScalarRelationFilter, PartnerWhereInput>
+    distributions?: PartnerDistributionListRelationFilter
+    recordedBy?: XOR<SuperAdminScalarRelationFilter, SuperAdminWhereInput>
+  }, "id" | "code">
+
+  export type FundSourceOrderByWithAggregationInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    commodityName?: SortOrder
+    cashValue?: SortOrder
+    description?: SortOrderInput | SortOrder
+    recordedById?: SortOrder
+    code?: SortOrder
+    recordedAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: FundSourceCountOrderByAggregateInput
+    _avg?: FundSourceAvgOrderByAggregateInput
+    _max?: FundSourceMaxOrderByAggregateInput
+    _min?: FundSourceMinOrderByAggregateInput
+    _sum?: FundSourceSumOrderByAggregateInput
+  }
+
+  export type FundSourceScalarWhereWithAggregatesInput = {
+    AND?: FundSourceScalarWhereWithAggregatesInput | FundSourceScalarWhereWithAggregatesInput[]
+    OR?: FundSourceScalarWhereWithAggregatesInput[]
+    NOT?: FundSourceScalarWhereWithAggregatesInput | FundSourceScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"FundSource"> | string
+    partnerId?: StringWithAggregatesFilter<"FundSource"> | string
+    commodityName?: StringWithAggregatesFilter<"FundSource"> | string
+    cashValue?: DecimalWithAggregatesFilter<"FundSource"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableWithAggregatesFilter<"FundSource"> | string | null
+    recordedById?: StringWithAggregatesFilter<"FundSource"> | string
+    code?: StringWithAggregatesFilter<"FundSource"> | string
+    recordedAt?: DateTimeWithAggregatesFilter<"FundSource"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"FundSource"> | Date | string
+  }
+
+  export type PartnerDistributionWhereInput = {
+    AND?: PartnerDistributionWhereInput | PartnerDistributionWhereInput[]
+    OR?: PartnerDistributionWhereInput[]
+    NOT?: PartnerDistributionWhereInput | PartnerDistributionWhereInput[]
+    id?: StringFilter<"PartnerDistribution"> | string
+    partnerId?: StringFilter<"PartnerDistribution"> | string
+    branchId?: StringFilter<"PartnerDistribution"> | string
+    amount?: DecimalFilter<"PartnerDistribution"> | Decimal | DecimalJsLike | number | string
+    note?: StringNullableFilter<"PartnerDistribution"> | string | null
+    topupId?: StringNullableFilter<"PartnerDistribution"> | string | null
+    fundSourceId?: StringFilter<"PartnerDistribution"> | string
+    recordedById?: StringFilter<"PartnerDistribution"> | string
+    distributedAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
+    createdAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
+    partner?: XOR<PartnerScalarRelationFilter, PartnerWhereInput>
+    branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
+    topup?: XOR<TopupNullableScalarRelationFilter, TopupWhereInput> | null
+    fundSource?: XOR<FundSourceScalarRelationFilter, FundSourceWhereInput>
+    recordedBy?: XOR<SuperAdminScalarRelationFilter, SuperAdminWhereInput>
+  }
+
+  export type PartnerDistributionOrderByWithRelationInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    branchId?: SortOrder
+    amount?: SortOrder
+    note?: SortOrderInput | SortOrder
+    topupId?: SortOrderInput | SortOrder
+    fundSourceId?: SortOrder
+    recordedById?: SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+    partner?: PartnerOrderByWithRelationInput
+    branch?: BranchOrderByWithRelationInput
+    topup?: TopupOrderByWithRelationInput
+    fundSource?: FundSourceOrderByWithRelationInput
+    recordedBy?: SuperAdminOrderByWithRelationInput
+  }
+
+  export type PartnerDistributionWhereUniqueInput = Prisma.AtLeast<{
+    id?: string
+    topupId?: string
+    AND?: PartnerDistributionWhereInput | PartnerDistributionWhereInput[]
+    OR?: PartnerDistributionWhereInput[]
+    NOT?: PartnerDistributionWhereInput | PartnerDistributionWhereInput[]
+    partnerId?: StringFilter<"PartnerDistribution"> | string
+    branchId?: StringFilter<"PartnerDistribution"> | string
+    amount?: DecimalFilter<"PartnerDistribution"> | Decimal | DecimalJsLike | number | string
+    note?: StringNullableFilter<"PartnerDistribution"> | string | null
+    fundSourceId?: StringFilter<"PartnerDistribution"> | string
+    recordedById?: StringFilter<"PartnerDistribution"> | string
+    distributedAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
+    createdAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
+    partner?: XOR<PartnerScalarRelationFilter, PartnerWhereInput>
+    branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
+    topup?: XOR<TopupNullableScalarRelationFilter, TopupWhereInput> | null
+    fundSource?: XOR<FundSourceScalarRelationFilter, FundSourceWhereInput>
+    recordedBy?: XOR<SuperAdminScalarRelationFilter, SuperAdminWhereInput>
+  }, "id" | "topupId">
+
+  export type PartnerDistributionOrderByWithAggregationInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    branchId?: SortOrder
+    amount?: SortOrder
+    note?: SortOrderInput | SortOrder
+    topupId?: SortOrderInput | SortOrder
+    fundSourceId?: SortOrder
+    recordedById?: SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+    _count?: PartnerDistributionCountOrderByAggregateInput
+    _avg?: PartnerDistributionAvgOrderByAggregateInput
+    _max?: PartnerDistributionMaxOrderByAggregateInput
+    _min?: PartnerDistributionMinOrderByAggregateInput
+    _sum?: PartnerDistributionSumOrderByAggregateInput
+  }
+
+  export type PartnerDistributionScalarWhereWithAggregatesInput = {
+    AND?: PartnerDistributionScalarWhereWithAggregatesInput | PartnerDistributionScalarWhereWithAggregatesInput[]
+    OR?: PartnerDistributionScalarWhereWithAggregatesInput[]
+    NOT?: PartnerDistributionScalarWhereWithAggregatesInput | PartnerDistributionScalarWhereWithAggregatesInput[]
+    id?: StringWithAggregatesFilter<"PartnerDistribution"> | string
+    partnerId?: StringWithAggregatesFilter<"PartnerDistribution"> | string
+    branchId?: StringWithAggregatesFilter<"PartnerDistribution"> | string
+    amount?: DecimalWithAggregatesFilter<"PartnerDistribution"> | Decimal | DecimalJsLike | number | string
+    note?: StringNullableWithAggregatesFilter<"PartnerDistribution"> | string | null
+    topupId?: StringNullableWithAggregatesFilter<"PartnerDistribution"> | string | null
+    fundSourceId?: StringWithAggregatesFilter<"PartnerDistribution"> | string
+    recordedById?: StringWithAggregatesFilter<"PartnerDistribution"> | string
+    distributedAt?: DateTimeWithAggregatesFilter<"PartnerDistribution"> | Date | string
+    createdAt?: DateTimeWithAggregatesFilter<"PartnerDistribution"> | Date | string
   }
 
   export type SystemConfigCreateInput = {
@@ -24789,6 +30604,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchCreateNestedManyWithoutCreatedBySuperAdminInput
     topupsInitiated?: TopupCreateNestedManyWithoutInitiatedByInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByAdminInput
@@ -24804,6 +30622,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerUncheckedCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceUncheckedCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput
     topupsInitiated?: TopupUncheckedCreateNestedManyWithoutInitiatedByInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByAdminInput
@@ -24819,6 +30640,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUpdateManyWithoutCreatedBySuperAdminNestedInput
     topupsInitiated?: TopupUpdateManyWithoutInitiatedByNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByAdminNestedInput
@@ -24834,6 +30658,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUncheckedUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput
     topupsInitiated?: TopupUncheckedUpdateManyWithoutInitiatedByNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByAdminNestedInput
@@ -24885,6 +30712,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -24909,6 +30737,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -24933,6 +30762,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -24957,6 +30787,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -25015,6 +30846,7 @@ export namespace Prisma {
   export type AppUserCreateInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -25029,11 +30861,13 @@ export namespace Prisma {
     topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -25048,11 +30882,13 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -25067,11 +30903,13 @@ export namespace Prisma {
     topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -25086,11 +30924,13 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserCreateManyInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -25103,6 +30943,7 @@ export namespace Prisma {
   export type AppUserUpdateManyMutationInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -25114,12 +30955,83 @@ export namespace Prisma {
   export type AppUserUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
     branchId?: StringFieldUpdateOperationsInput | string
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerCreateInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    createdBy?: SuperAdminCreateNestedOneWithoutPartnersCreatedInput
+    fundSources?: FundSourceCreateNestedManyWithoutPartnerInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutPartnerInput
+  }
+
+  export type PartnerUncheckedCreateInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    fundSources?: FundSourceUncheckedCreateNestedManyWithoutPartnerInput
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutPartnerInput
+  }
+
+  export type PartnerUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: SuperAdminUpdateOneWithoutPartnersCreatedNestedInput
+    fundSources?: FundSourceUpdateManyWithoutPartnerNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutPartnerNestedInput
+  }
+
+  export type PartnerUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fundSources?: FundSourceUncheckedUpdateManyWithoutPartnerNestedInput
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutPartnerNestedInput
+  }
+
+  export type PartnerCreateManyInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+  }
+
+  export type PartnerUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -25232,6 +31144,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
@@ -25241,6 +31155,7 @@ export namespace Prisma {
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateInput = {
@@ -25265,8 +31180,11 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUpdateInput = {
@@ -25284,6 +31202,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
@@ -25293,6 +31213,7 @@ export namespace Prisma {
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateInput = {
@@ -25317,8 +31238,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionCreateManyInput = {
@@ -25343,6 +31267,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionUpdateManyMutationInput = {
@@ -25360,6 +31286,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionUncheckedUpdateManyInput = {
@@ -25384,6 +31312,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type SubLedgerEntryCreateInput = {
@@ -25526,6 +31456,7 @@ export namespace Prisma {
     currency?: CurrencyCreateNestedOneWithoutTopupsInput
     initiatedBy: SuperAdminCreateNestedOneWithoutTopupsInitiatedInput
     branchManager: AppUserCreateNestedOneWithoutTopupsReceivedInput
+    distribution?: PartnerDistributionCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTopupInput
   }
 
@@ -25541,6 +31472,7 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     acknowledgedAt?: Date | string | null
+    distribution?: PartnerDistributionUncheckedCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTopupInput
   }
 
@@ -25556,6 +31488,7 @@ export namespace Prisma {
     currency?: CurrencyUpdateOneWithoutTopupsNestedInput
     initiatedBy?: SuperAdminUpdateOneRequiredWithoutTopupsInitiatedNestedInput
     branchManager?: AppUserUpdateOneRequiredWithoutTopupsReceivedNestedInput
+    distribution?: PartnerDistributionUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTopupNestedInput
   }
 
@@ -25571,6 +31504,7 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    distribution?: PartnerDistributionUncheckedUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTopupNestedInput
   }
 
@@ -25792,6 +31726,67 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PickupEventCreateInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    receiptNumber: string
+    createdAt?: Date | string
+    transaction: TransactionCreateNestedOneWithoutPickupEventsInput
+    collectedBy: AppUserCreateNestedOneWithoutPickupEventsInput
+  }
+
+  export type PickupEventUncheckedCreateInput = {
+    id?: string
+    transactionId: string
+    amount: Decimal | DecimalJsLike | number | string
+    collectedById: string
+    receiptNumber: string
+    createdAt?: Date | string
+  }
+
+  export type PickupEventUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transaction?: TransactionUpdateOneRequiredWithoutPickupEventsNestedInput
+    collectedBy?: AppUserUpdateOneRequiredWithoutPickupEventsNestedInput
+  }
+
+  export type PickupEventUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    collectedById?: StringFieldUpdateOperationsInput | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PickupEventCreateManyInput = {
+    id?: string
+    transactionId: string
+    amount: Decimal | DecimalJsLike | number | string
+    collectedById: string
+    receiptNumber: string
+    createdAt?: Date | string
+  }
+
+  export type PickupEventUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PickupEventUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    collectedById?: StringFieldUpdateOperationsInput | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type ExpenseCreateInput = {
     id?: string
     category: string
@@ -25981,6 +31976,178 @@ export namespace Prisma {
   export type ExpenseCategoryUncheckedUpdateManyInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundSourceCreateInput = {
+    id?: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+    partner: PartnerCreateNestedOneWithoutFundSourcesInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutFundSourceInput
+    recordedBy: SuperAdminCreateNestedOneWithoutFundSourcesRecordedInput
+  }
+
+  export type FundSourceUncheckedCreateInput = {
+    id?: string
+    partnerId: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    recordedById: string
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutFundSourceInput
+  }
+
+  export type FundSourceUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partner?: PartnerUpdateOneRequiredWithoutFundSourcesNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutFundSourceNestedInput
+    recordedBy?: SuperAdminUpdateOneRequiredWithoutFundSourcesRecordedNestedInput
+  }
+
+  export type FundSourceUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedById?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutFundSourceNestedInput
+  }
+
+  export type FundSourceCreateManyInput = {
+    id?: string
+    partnerId: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    recordedById: string
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type FundSourceUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundSourceUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedById?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionCreateInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    partner: PartnerCreateNestedOneWithoutDistributionsInput
+    branch: BranchCreateNestedOneWithoutDistributionsInput
+    topup?: TopupCreateNestedOneWithoutDistributionInput
+    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    recordedBy: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
+  }
+
+  export type PartnerDistributionUncheckedCreateInput = {
+    id?: string
+    partnerId: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    fundSourceId: string
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
+    branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
+    topup?: TopupUpdateOneWithoutDistributionNestedInput
+    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    recordedBy?: SuperAdminUpdateOneRequiredWithoutDistributionsRecordedNestedInput
+  }
+
+  export type PartnerDistributionUncheckedUpdateInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionCreateManyInput = {
+    id?: string
+    partnerId: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    fundSourceId: string
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionUpdateManyMutationInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
@@ -26304,6 +32471,24 @@ export namespace Prisma {
     _max?: NestedDecimalFilter<$PrismaModel>
   }
 
+  export type PartnerListRelationFilter = {
+    every?: PartnerWhereInput
+    some?: PartnerWhereInput
+    none?: PartnerWhereInput
+  }
+
+  export type FundSourceListRelationFilter = {
+    every?: FundSourceWhereInput
+    some?: FundSourceWhereInput
+    none?: FundSourceWhereInput
+  }
+
+  export type PartnerDistributionListRelationFilter = {
+    every?: PartnerDistributionWhereInput
+    some?: PartnerDistributionWhereInput
+    none?: PartnerDistributionWhereInput
+  }
+
   export type AuditLogListRelationFilter = {
     every?: AuditLogWhereInput
     some?: AuditLogWhereInput
@@ -26320,6 +32505,18 @@ export namespace Prisma {
     every?: SalaryPaymentWhereInput
     some?: SalaryPaymentWhereInput
     none?: SalaryPaymentWhereInput
+  }
+
+  export type PartnerOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type FundSourceOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
+  export type PartnerDistributionOrderByRelationAggregateInput = {
+    _count?: SortOrder
   }
 
   export type AuditLogOrderByRelationAggregateInput = {
@@ -26472,9 +32669,20 @@ export namespace Prisma {
     isNot?: BranchWhereInput | null
   }
 
+  export type PickupEventListRelationFilter = {
+    every?: PickupEventWhereInput
+    some?: PickupEventWhereInput
+    none?: PickupEventWhereInput
+  }
+
+  export type PickupEventOrderByRelationAggregateInput = {
+    _count?: SortOrder
+  }
+
   export type AppUserCountOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    phone?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
@@ -26487,6 +32695,7 @@ export namespace Prisma {
   export type AppUserMaxOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    phone?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
@@ -26499,12 +32708,45 @@ export namespace Prisma {
   export type AppUserMinOrderByAggregateInput = {
     id?: SortOrder
     name?: SortOrder
+    phone?: SortOrder
     email?: SortOrder
     passwordHash?: SortOrder
     role?: SortOrder
     branchId?: SortOrder
     preferredLanguage?: SortOrder
     isActive?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type SuperAdminNullableScalarRelationFilter = {
+    is?: SuperAdminWhereInput | null
+    isNot?: SuperAdminWhereInput | null
+  }
+
+  export type PartnerCountOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PartnerMaxOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    createdById?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PartnerMinOrderByAggregateInput = {
+    id?: SortOrder
+    name?: SortOrder
+    email?: SortOrder
+    phone?: SortOrder
+    createdById?: SortOrder
     createdAt?: SortOrder
   }
 
@@ -26645,12 +32887,15 @@ export namespace Prisma {
     createdAt?: SortOrder
     completedAt?: SortOrder
     refundedAt?: SortOrder
+    parentTransactionId?: SortOrder
+    amountCollected?: SortOrder
   }
 
   export type TransactionAvgOrderByAggregateInput = {
     amountSent?: SortOrder
     commissionAmount?: SortOrder
     amountPayable?: SortOrder
+    amountCollected?: SortOrder
   }
 
   export type TransactionMaxOrderByAggregateInput = {
@@ -26675,6 +32920,8 @@ export namespace Prisma {
     createdAt?: SortOrder
     completedAt?: SortOrder
     refundedAt?: SortOrder
+    parentTransactionId?: SortOrder
+    amountCollected?: SortOrder
   }
 
   export type TransactionMinOrderByAggregateInput = {
@@ -26699,12 +32946,15 @@ export namespace Prisma {
     createdAt?: SortOrder
     completedAt?: SortOrder
     refundedAt?: SortOrder
+    parentTransactionId?: SortOrder
+    amountCollected?: SortOrder
   }
 
   export type TransactionSumOrderByAggregateInput = {
     amountSent?: SortOrder
     commissionAmount?: SortOrder
     amountPayable?: SortOrder
+    amountCollected?: SortOrder
   }
 
   export type TransactionScalarRelationFilter = {
@@ -26795,6 +33045,11 @@ export namespace Prisma {
     amount?: SortOrder
   }
 
+  export type PartnerDistributionNullableScalarRelationFilter = {
+    is?: PartnerDistributionWhereInput | null
+    isNot?: PartnerDistributionWhereInput | null
+  }
+
   export type TopupCountOrderByAggregateInput = {
     id?: SortOrder
     branchId?: SortOrder
@@ -26866,11 +33121,6 @@ export namespace Prisma {
     gt?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     gte?: InputJsonValue | JsonFieldRefInput<$PrismaModel>
     not?: InputJsonValue | JsonFieldRefInput<$PrismaModel> | JsonNullValueFilter
-  }
-
-  export type SuperAdminNullableScalarRelationFilter = {
-    is?: SuperAdminWhereInput | null
-    isNot?: SuperAdminWhereInput | null
   }
 
   export type AuditLogCountOrderByAggregateInput = {
@@ -26980,6 +33230,41 @@ export namespace Prisma {
     createdAt?: SortOrder
   }
 
+  export type PickupEventCountOrderByAggregateInput = {
+    id?: SortOrder
+    transactionId?: SortOrder
+    amount?: SortOrder
+    collectedById?: SortOrder
+    receiptNumber?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PickupEventAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type PickupEventMaxOrderByAggregateInput = {
+    id?: SortOrder
+    transactionId?: SortOrder
+    amount?: SortOrder
+    collectedById?: SortOrder
+    receiptNumber?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PickupEventMinOrderByAggregateInput = {
+    id?: SortOrder
+    transactionId?: SortOrder
+    amount?: SortOrder
+    collectedById?: SortOrder
+    receiptNumber?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PickupEventSumOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
   export type ExpenseCountOrderByAggregateInput = {
     id?: SortOrder
     branchId?: SortOrder
@@ -27078,6 +33363,107 @@ export namespace Prisma {
     id?: SortOrder
     name?: SortOrder
     createdAt?: SortOrder
+  }
+
+  export type PartnerScalarRelationFilter = {
+    is?: PartnerWhereInput
+    isNot?: PartnerWhereInput
+  }
+
+  export type FundSourceCountOrderByAggregateInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    commodityName?: SortOrder
+    cashValue?: SortOrder
+    description?: SortOrder
+    recordedById?: SortOrder
+    code?: SortOrder
+    recordedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FundSourceAvgOrderByAggregateInput = {
+    cashValue?: SortOrder
+  }
+
+  export type FundSourceMaxOrderByAggregateInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    commodityName?: SortOrder
+    cashValue?: SortOrder
+    description?: SortOrder
+    recordedById?: SortOrder
+    code?: SortOrder
+    recordedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FundSourceMinOrderByAggregateInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    commodityName?: SortOrder
+    cashValue?: SortOrder
+    description?: SortOrder
+    recordedById?: SortOrder
+    code?: SortOrder
+    recordedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type FundSourceSumOrderByAggregateInput = {
+    cashValue?: SortOrder
+  }
+
+  export type FundSourceScalarRelationFilter = {
+    is?: FundSourceWhereInput
+    isNot?: FundSourceWhereInput
+  }
+
+  export type PartnerDistributionCountOrderByAggregateInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    branchId?: SortOrder
+    amount?: SortOrder
+    note?: SortOrder
+    topupId?: SortOrder
+    fundSourceId?: SortOrder
+    recordedById?: SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PartnerDistributionAvgOrderByAggregateInput = {
+    amount?: SortOrder
+  }
+
+  export type PartnerDistributionMaxOrderByAggregateInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    branchId?: SortOrder
+    amount?: SortOrder
+    note?: SortOrder
+    topupId?: SortOrder
+    fundSourceId?: SortOrder
+    recordedById?: SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PartnerDistributionMinOrderByAggregateInput = {
+    id?: SortOrder
+    partnerId?: SortOrder
+    branchId?: SortOrder
+    amount?: SortOrder
+    note?: SortOrder
+    topupId?: SortOrder
+    fundSourceId?: SortOrder
+    recordedById?: SortOrder
+    distributedAt?: SortOrder
+    createdAt?: SortOrder
+  }
+
+  export type PartnerDistributionSumOrderByAggregateInput = {
+    amount?: SortOrder
   }
 
   export type CurrencyCreateNestedOneWithoutSystemConfigsInput = {
@@ -27408,6 +33794,27 @@ export namespace Prisma {
     update?: XOR<XOR<CurrencyUpdateToOneWithWhereWithoutRatesToInput, CurrencyUpdateWithoutRatesToInput>, CurrencyUncheckedUpdateWithoutRatesToInput>
   }
 
+  export type PartnerCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<PartnerCreateWithoutCreatedByInput, PartnerUncheckedCreateWithoutCreatedByInput> | PartnerCreateWithoutCreatedByInput[] | PartnerUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: PartnerCreateOrConnectWithoutCreatedByInput | PartnerCreateOrConnectWithoutCreatedByInput[]
+    createMany?: PartnerCreateManyCreatedByInputEnvelope
+    connect?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+  }
+
+  export type FundSourceCreateNestedManyWithoutRecordedByInput = {
+    create?: XOR<FundSourceCreateWithoutRecordedByInput, FundSourceUncheckedCreateWithoutRecordedByInput> | FundSourceCreateWithoutRecordedByInput[] | FundSourceUncheckedCreateWithoutRecordedByInput[]
+    connectOrCreate?: FundSourceCreateOrConnectWithoutRecordedByInput | FundSourceCreateOrConnectWithoutRecordedByInput[]
+    createMany?: FundSourceCreateManyRecordedByInputEnvelope
+    connect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+  }
+
+  export type PartnerDistributionCreateNestedManyWithoutRecordedByInput = {
+    create?: XOR<PartnerDistributionCreateWithoutRecordedByInput, PartnerDistributionUncheckedCreateWithoutRecordedByInput> | PartnerDistributionCreateWithoutRecordedByInput[] | PartnerDistributionUncheckedCreateWithoutRecordedByInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutRecordedByInput | PartnerDistributionCreateOrConnectWithoutRecordedByInput[]
+    createMany?: PartnerDistributionCreateManyRecordedByInputEnvelope
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+  }
+
   export type BranchCreateNestedManyWithoutCreatedBySuperAdminInput = {
     create?: XOR<BranchCreateWithoutCreatedBySuperAdminInput, BranchUncheckedCreateWithoutCreatedBySuperAdminInput> | BranchCreateWithoutCreatedBySuperAdminInput[] | BranchUncheckedCreateWithoutCreatedBySuperAdminInput[]
     connectOrCreate?: BranchCreateOrConnectWithoutCreatedBySuperAdminInput | BranchCreateOrConnectWithoutCreatedBySuperAdminInput[]
@@ -27443,6 +33850,27 @@ export namespace Prisma {
     connect?: SalaryPaymentWhereUniqueInput | SalaryPaymentWhereUniqueInput[]
   }
 
+  export type PartnerUncheckedCreateNestedManyWithoutCreatedByInput = {
+    create?: XOR<PartnerCreateWithoutCreatedByInput, PartnerUncheckedCreateWithoutCreatedByInput> | PartnerCreateWithoutCreatedByInput[] | PartnerUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: PartnerCreateOrConnectWithoutCreatedByInput | PartnerCreateOrConnectWithoutCreatedByInput[]
+    createMany?: PartnerCreateManyCreatedByInputEnvelope
+    connect?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+  }
+
+  export type FundSourceUncheckedCreateNestedManyWithoutRecordedByInput = {
+    create?: XOR<FundSourceCreateWithoutRecordedByInput, FundSourceUncheckedCreateWithoutRecordedByInput> | FundSourceCreateWithoutRecordedByInput[] | FundSourceUncheckedCreateWithoutRecordedByInput[]
+    connectOrCreate?: FundSourceCreateOrConnectWithoutRecordedByInput | FundSourceCreateOrConnectWithoutRecordedByInput[]
+    createMany?: FundSourceCreateManyRecordedByInputEnvelope
+    connect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+  }
+
+  export type PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput = {
+    create?: XOR<PartnerDistributionCreateWithoutRecordedByInput, PartnerDistributionUncheckedCreateWithoutRecordedByInput> | PartnerDistributionCreateWithoutRecordedByInput[] | PartnerDistributionUncheckedCreateWithoutRecordedByInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutRecordedByInput | PartnerDistributionCreateOrConnectWithoutRecordedByInput[]
+    createMany?: PartnerDistributionCreateManyRecordedByInputEnvelope
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+  }
+
   export type BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput = {
     create?: XOR<BranchCreateWithoutCreatedBySuperAdminInput, BranchUncheckedCreateWithoutCreatedBySuperAdminInput> | BranchCreateWithoutCreatedBySuperAdminInput[] | BranchUncheckedCreateWithoutCreatedBySuperAdminInput[]
     connectOrCreate?: BranchCreateOrConnectWithoutCreatedBySuperAdminInput | BranchCreateOrConnectWithoutCreatedBySuperAdminInput[]
@@ -27476,6 +33904,48 @@ export namespace Prisma {
     connectOrCreate?: SalaryPaymentCreateOrConnectWithoutPaidByInput | SalaryPaymentCreateOrConnectWithoutPaidByInput[]
     createMany?: SalaryPaymentCreateManyPaidByInputEnvelope
     connect?: SalaryPaymentWhereUniqueInput | SalaryPaymentWhereUniqueInput[]
+  }
+
+  export type PartnerUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<PartnerCreateWithoutCreatedByInput, PartnerUncheckedCreateWithoutCreatedByInput> | PartnerCreateWithoutCreatedByInput[] | PartnerUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: PartnerCreateOrConnectWithoutCreatedByInput | PartnerCreateOrConnectWithoutCreatedByInput[]
+    upsert?: PartnerUpsertWithWhereUniqueWithoutCreatedByInput | PartnerUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: PartnerCreateManyCreatedByInputEnvelope
+    set?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+    disconnect?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+    delete?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+    connect?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+    update?: PartnerUpdateWithWhereUniqueWithoutCreatedByInput | PartnerUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: PartnerUpdateManyWithWhereWithoutCreatedByInput | PartnerUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: PartnerScalarWhereInput | PartnerScalarWhereInput[]
+  }
+
+  export type FundSourceUpdateManyWithoutRecordedByNestedInput = {
+    create?: XOR<FundSourceCreateWithoutRecordedByInput, FundSourceUncheckedCreateWithoutRecordedByInput> | FundSourceCreateWithoutRecordedByInput[] | FundSourceUncheckedCreateWithoutRecordedByInput[]
+    connectOrCreate?: FundSourceCreateOrConnectWithoutRecordedByInput | FundSourceCreateOrConnectWithoutRecordedByInput[]
+    upsert?: FundSourceUpsertWithWhereUniqueWithoutRecordedByInput | FundSourceUpsertWithWhereUniqueWithoutRecordedByInput[]
+    createMany?: FundSourceCreateManyRecordedByInputEnvelope
+    set?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    disconnect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    delete?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    connect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    update?: FundSourceUpdateWithWhereUniqueWithoutRecordedByInput | FundSourceUpdateWithWhereUniqueWithoutRecordedByInput[]
+    updateMany?: FundSourceUpdateManyWithWhereWithoutRecordedByInput | FundSourceUpdateManyWithWhereWithoutRecordedByInput[]
+    deleteMany?: FundSourceScalarWhereInput | FundSourceScalarWhereInput[]
+  }
+
+  export type PartnerDistributionUpdateManyWithoutRecordedByNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutRecordedByInput, PartnerDistributionUncheckedCreateWithoutRecordedByInput> | PartnerDistributionCreateWithoutRecordedByInput[] | PartnerDistributionUncheckedCreateWithoutRecordedByInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutRecordedByInput | PartnerDistributionCreateOrConnectWithoutRecordedByInput[]
+    upsert?: PartnerDistributionUpsertWithWhereUniqueWithoutRecordedByInput | PartnerDistributionUpsertWithWhereUniqueWithoutRecordedByInput[]
+    createMany?: PartnerDistributionCreateManyRecordedByInputEnvelope
+    set?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    disconnect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    delete?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    update?: PartnerDistributionUpdateWithWhereUniqueWithoutRecordedByInput | PartnerDistributionUpdateWithWhereUniqueWithoutRecordedByInput[]
+    updateMany?: PartnerDistributionUpdateManyWithWhereWithoutRecordedByInput | PartnerDistributionUpdateManyWithWhereWithoutRecordedByInput[]
+    deleteMany?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
   }
 
   export type BranchUpdateManyWithoutCreatedBySuperAdminNestedInput = {
@@ -27546,6 +34016,48 @@ export namespace Prisma {
     update?: SalaryPaymentUpdateWithWhereUniqueWithoutPaidByInput | SalaryPaymentUpdateWithWhereUniqueWithoutPaidByInput[]
     updateMany?: SalaryPaymentUpdateManyWithWhereWithoutPaidByInput | SalaryPaymentUpdateManyWithWhereWithoutPaidByInput[]
     deleteMany?: SalaryPaymentScalarWhereInput | SalaryPaymentScalarWhereInput[]
+  }
+
+  export type PartnerUncheckedUpdateManyWithoutCreatedByNestedInput = {
+    create?: XOR<PartnerCreateWithoutCreatedByInput, PartnerUncheckedCreateWithoutCreatedByInput> | PartnerCreateWithoutCreatedByInput[] | PartnerUncheckedCreateWithoutCreatedByInput[]
+    connectOrCreate?: PartnerCreateOrConnectWithoutCreatedByInput | PartnerCreateOrConnectWithoutCreatedByInput[]
+    upsert?: PartnerUpsertWithWhereUniqueWithoutCreatedByInput | PartnerUpsertWithWhereUniqueWithoutCreatedByInput[]
+    createMany?: PartnerCreateManyCreatedByInputEnvelope
+    set?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+    disconnect?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+    delete?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+    connect?: PartnerWhereUniqueInput | PartnerWhereUniqueInput[]
+    update?: PartnerUpdateWithWhereUniqueWithoutCreatedByInput | PartnerUpdateWithWhereUniqueWithoutCreatedByInput[]
+    updateMany?: PartnerUpdateManyWithWhereWithoutCreatedByInput | PartnerUpdateManyWithWhereWithoutCreatedByInput[]
+    deleteMany?: PartnerScalarWhereInput | PartnerScalarWhereInput[]
+  }
+
+  export type FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput = {
+    create?: XOR<FundSourceCreateWithoutRecordedByInput, FundSourceUncheckedCreateWithoutRecordedByInput> | FundSourceCreateWithoutRecordedByInput[] | FundSourceUncheckedCreateWithoutRecordedByInput[]
+    connectOrCreate?: FundSourceCreateOrConnectWithoutRecordedByInput | FundSourceCreateOrConnectWithoutRecordedByInput[]
+    upsert?: FundSourceUpsertWithWhereUniqueWithoutRecordedByInput | FundSourceUpsertWithWhereUniqueWithoutRecordedByInput[]
+    createMany?: FundSourceCreateManyRecordedByInputEnvelope
+    set?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    disconnect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    delete?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    connect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    update?: FundSourceUpdateWithWhereUniqueWithoutRecordedByInput | FundSourceUpdateWithWhereUniqueWithoutRecordedByInput[]
+    updateMany?: FundSourceUpdateManyWithWhereWithoutRecordedByInput | FundSourceUpdateManyWithWhereWithoutRecordedByInput[]
+    deleteMany?: FundSourceScalarWhereInput | FundSourceScalarWhereInput[]
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutRecordedByInput, PartnerDistributionUncheckedCreateWithoutRecordedByInput> | PartnerDistributionCreateWithoutRecordedByInput[] | PartnerDistributionUncheckedCreateWithoutRecordedByInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutRecordedByInput | PartnerDistributionCreateOrConnectWithoutRecordedByInput[]
+    upsert?: PartnerDistributionUpsertWithWhereUniqueWithoutRecordedByInput | PartnerDistributionUpsertWithWhereUniqueWithoutRecordedByInput[]
+    createMany?: PartnerDistributionCreateManyRecordedByInputEnvelope
+    set?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    disconnect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    delete?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    update?: PartnerDistributionUpdateWithWhereUniqueWithoutRecordedByInput | PartnerDistributionUpdateWithWhereUniqueWithoutRecordedByInput[]
+    updateMany?: PartnerDistributionUpdateManyWithWhereWithoutRecordedByInput | PartnerDistributionUpdateManyWithWhereWithoutRecordedByInput[]
+    deleteMany?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
   }
 
   export type BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput = {
@@ -27636,6 +34148,13 @@ export namespace Prisma {
     connect?: SuperAdminWhereUniqueInput
   }
 
+  export type PartnerDistributionCreateNestedManyWithoutBranchInput = {
+    create?: XOR<PartnerDistributionCreateWithoutBranchInput, PartnerDistributionUncheckedCreateWithoutBranchInput> | PartnerDistributionCreateWithoutBranchInput[] | PartnerDistributionUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutBranchInput | PartnerDistributionCreateOrConnectWithoutBranchInput[]
+    createMany?: PartnerDistributionCreateManyBranchInputEnvelope
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+  }
+
   export type AppUserCreateNestedManyWithoutBranchInput = {
     create?: XOR<AppUserCreateWithoutBranchInput, AppUserUncheckedCreateWithoutBranchInput> | AppUserCreateWithoutBranchInput[] | AppUserUncheckedCreateWithoutBranchInput[]
     connectOrCreate?: AppUserCreateOrConnectWithoutBranchInput | AppUserCreateOrConnectWithoutBranchInput[]
@@ -27690,6 +34209,13 @@ export namespace Prisma {
     connectOrCreate?: ExpenseCreateOrConnectWithoutBranchInput | ExpenseCreateOrConnectWithoutBranchInput[]
     createMany?: ExpenseCreateManyBranchInputEnvelope
     connect?: ExpenseWhereUniqueInput | ExpenseWhereUniqueInput[]
+  }
+
+  export type PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput = {
+    create?: XOR<PartnerDistributionCreateWithoutBranchInput, PartnerDistributionUncheckedCreateWithoutBranchInput> | PartnerDistributionCreateWithoutBranchInput[] | PartnerDistributionUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutBranchInput | PartnerDistributionCreateOrConnectWithoutBranchInput[]
+    createMany?: PartnerDistributionCreateManyBranchInputEnvelope
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
   }
 
   export type AppUserUncheckedCreateNestedManyWithoutBranchInput = {
@@ -27774,6 +34300,20 @@ export namespace Prisma {
     upsert?: SuperAdminUpsertWithoutBranchesCreatedInput
     connect?: SuperAdminWhereUniqueInput
     update?: XOR<XOR<SuperAdminUpdateToOneWithWhereWithoutBranchesCreatedInput, SuperAdminUpdateWithoutBranchesCreatedInput>, SuperAdminUncheckedUpdateWithoutBranchesCreatedInput>
+  }
+
+  export type PartnerDistributionUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutBranchInput, PartnerDistributionUncheckedCreateWithoutBranchInput> | PartnerDistributionCreateWithoutBranchInput[] | PartnerDistributionUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutBranchInput | PartnerDistributionCreateOrConnectWithoutBranchInput[]
+    upsert?: PartnerDistributionUpsertWithWhereUniqueWithoutBranchInput | PartnerDistributionUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: PartnerDistributionCreateManyBranchInputEnvelope
+    set?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    disconnect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    delete?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    update?: PartnerDistributionUpdateWithWhereUniqueWithoutBranchInput | PartnerDistributionUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: PartnerDistributionUpdateManyWithWhereWithoutBranchInput | PartnerDistributionUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
   }
 
   export type AppUserUpdateManyWithoutBranchNestedInput = {
@@ -27886,6 +34426,20 @@ export namespace Prisma {
     update?: ExpenseUpdateWithWhereUniqueWithoutBranchInput | ExpenseUpdateWithWhereUniqueWithoutBranchInput[]
     updateMany?: ExpenseUpdateManyWithWhereWithoutBranchInput | ExpenseUpdateManyWithWhereWithoutBranchInput[]
     deleteMany?: ExpenseScalarWhereInput | ExpenseScalarWhereInput[]
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutBranchInput, PartnerDistributionUncheckedCreateWithoutBranchInput> | PartnerDistributionCreateWithoutBranchInput[] | PartnerDistributionUncheckedCreateWithoutBranchInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutBranchInput | PartnerDistributionCreateOrConnectWithoutBranchInput[]
+    upsert?: PartnerDistributionUpsertWithWhereUniqueWithoutBranchInput | PartnerDistributionUpsertWithWhereUniqueWithoutBranchInput[]
+    createMany?: PartnerDistributionCreateManyBranchInputEnvelope
+    set?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    disconnect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    delete?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    update?: PartnerDistributionUpdateWithWhereUniqueWithoutBranchInput | PartnerDistributionUpdateWithWhereUniqueWithoutBranchInput[]
+    updateMany?: PartnerDistributionUpdateManyWithWhereWithoutBranchInput | PartnerDistributionUpdateManyWithWhereWithoutBranchInput[]
+    deleteMany?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
   }
 
   export type AppUserUncheckedUpdateManyWithoutBranchNestedInput = {
@@ -28054,6 +34608,13 @@ export namespace Prisma {
     connect?: SalaryPaymentWhereUniqueInput | SalaryPaymentWhereUniqueInput[]
   }
 
+  export type PickupEventCreateNestedManyWithoutCollectedByInput = {
+    create?: XOR<PickupEventCreateWithoutCollectedByInput, PickupEventUncheckedCreateWithoutCollectedByInput> | PickupEventCreateWithoutCollectedByInput[] | PickupEventUncheckedCreateWithoutCollectedByInput[]
+    connectOrCreate?: PickupEventCreateOrConnectWithoutCollectedByInput | PickupEventCreateOrConnectWithoutCollectedByInput[]
+    createMany?: PickupEventCreateManyCollectedByInputEnvelope
+    connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+  }
+
   export type BranchUncheckedCreateNestedOneWithoutManagerInput = {
     create?: XOR<BranchCreateWithoutManagerInput, BranchUncheckedCreateWithoutManagerInput>
     connectOrCreate?: BranchCreateOrConnectWithoutManagerInput
@@ -28100,6 +34661,13 @@ export namespace Prisma {
     connectOrCreate?: SalaryPaymentCreateOrConnectWithoutStaffInput | SalaryPaymentCreateOrConnectWithoutStaffInput[]
     createMany?: SalaryPaymentCreateManyStaffInputEnvelope
     connect?: SalaryPaymentWhereUniqueInput | SalaryPaymentWhereUniqueInput[]
+  }
+
+  export type PickupEventUncheckedCreateNestedManyWithoutCollectedByInput = {
+    create?: XOR<PickupEventCreateWithoutCollectedByInput, PickupEventUncheckedCreateWithoutCollectedByInput> | PickupEventCreateWithoutCollectedByInput[] | PickupEventUncheckedCreateWithoutCollectedByInput[]
+    connectOrCreate?: PickupEventCreateOrConnectWithoutCollectedByInput | PickupEventCreateOrConnectWithoutCollectedByInput[]
+    createMany?: PickupEventCreateManyCollectedByInputEnvelope
+    connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
   }
 
   export type BranchUpdateOneRequiredWithoutUsersNestedInput = {
@@ -28204,6 +34772,20 @@ export namespace Prisma {
     deleteMany?: SalaryPaymentScalarWhereInput | SalaryPaymentScalarWhereInput[]
   }
 
+  export type PickupEventUpdateManyWithoutCollectedByNestedInput = {
+    create?: XOR<PickupEventCreateWithoutCollectedByInput, PickupEventUncheckedCreateWithoutCollectedByInput> | PickupEventCreateWithoutCollectedByInput[] | PickupEventUncheckedCreateWithoutCollectedByInput[]
+    connectOrCreate?: PickupEventCreateOrConnectWithoutCollectedByInput | PickupEventCreateOrConnectWithoutCollectedByInput[]
+    upsert?: PickupEventUpsertWithWhereUniqueWithoutCollectedByInput | PickupEventUpsertWithWhereUniqueWithoutCollectedByInput[]
+    createMany?: PickupEventCreateManyCollectedByInputEnvelope
+    set?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    disconnect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    delete?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    update?: PickupEventUpdateWithWhereUniqueWithoutCollectedByInput | PickupEventUpdateWithWhereUniqueWithoutCollectedByInput[]
+    updateMany?: PickupEventUpdateManyWithWhereWithoutCollectedByInput | PickupEventUpdateManyWithWhereWithoutCollectedByInput[]
+    deleteMany?: PickupEventScalarWhereInput | PickupEventScalarWhereInput[]
+  }
+
   export type BranchUncheckedUpdateOneWithoutManagerNestedInput = {
     create?: XOR<BranchCreateWithoutManagerInput, BranchUncheckedCreateWithoutManagerInput>
     connectOrCreate?: BranchCreateOrConnectWithoutManagerInput
@@ -28296,6 +34878,120 @@ export namespace Prisma {
     update?: SalaryPaymentUpdateWithWhereUniqueWithoutStaffInput | SalaryPaymentUpdateWithWhereUniqueWithoutStaffInput[]
     updateMany?: SalaryPaymentUpdateManyWithWhereWithoutStaffInput | SalaryPaymentUpdateManyWithWhereWithoutStaffInput[]
     deleteMany?: SalaryPaymentScalarWhereInput | SalaryPaymentScalarWhereInput[]
+  }
+
+  export type PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput = {
+    create?: XOR<PickupEventCreateWithoutCollectedByInput, PickupEventUncheckedCreateWithoutCollectedByInput> | PickupEventCreateWithoutCollectedByInput[] | PickupEventUncheckedCreateWithoutCollectedByInput[]
+    connectOrCreate?: PickupEventCreateOrConnectWithoutCollectedByInput | PickupEventCreateOrConnectWithoutCollectedByInput[]
+    upsert?: PickupEventUpsertWithWhereUniqueWithoutCollectedByInput | PickupEventUpsertWithWhereUniqueWithoutCollectedByInput[]
+    createMany?: PickupEventCreateManyCollectedByInputEnvelope
+    set?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    disconnect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    delete?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    update?: PickupEventUpdateWithWhereUniqueWithoutCollectedByInput | PickupEventUpdateWithWhereUniqueWithoutCollectedByInput[]
+    updateMany?: PickupEventUpdateManyWithWhereWithoutCollectedByInput | PickupEventUpdateManyWithWhereWithoutCollectedByInput[]
+    deleteMany?: PickupEventScalarWhereInput | PickupEventScalarWhereInput[]
+  }
+
+  export type SuperAdminCreateNestedOneWithoutPartnersCreatedInput = {
+    create?: XOR<SuperAdminCreateWithoutPartnersCreatedInput, SuperAdminUncheckedCreateWithoutPartnersCreatedInput>
+    connectOrCreate?: SuperAdminCreateOrConnectWithoutPartnersCreatedInput
+    connect?: SuperAdminWhereUniqueInput
+  }
+
+  export type FundSourceCreateNestedManyWithoutPartnerInput = {
+    create?: XOR<FundSourceCreateWithoutPartnerInput, FundSourceUncheckedCreateWithoutPartnerInput> | FundSourceCreateWithoutPartnerInput[] | FundSourceUncheckedCreateWithoutPartnerInput[]
+    connectOrCreate?: FundSourceCreateOrConnectWithoutPartnerInput | FundSourceCreateOrConnectWithoutPartnerInput[]
+    createMany?: FundSourceCreateManyPartnerInputEnvelope
+    connect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+  }
+
+  export type PartnerDistributionCreateNestedManyWithoutPartnerInput = {
+    create?: XOR<PartnerDistributionCreateWithoutPartnerInput, PartnerDistributionUncheckedCreateWithoutPartnerInput> | PartnerDistributionCreateWithoutPartnerInput[] | PartnerDistributionUncheckedCreateWithoutPartnerInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutPartnerInput | PartnerDistributionCreateOrConnectWithoutPartnerInput[]
+    createMany?: PartnerDistributionCreateManyPartnerInputEnvelope
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+  }
+
+  export type FundSourceUncheckedCreateNestedManyWithoutPartnerInput = {
+    create?: XOR<FundSourceCreateWithoutPartnerInput, FundSourceUncheckedCreateWithoutPartnerInput> | FundSourceCreateWithoutPartnerInput[] | FundSourceUncheckedCreateWithoutPartnerInput[]
+    connectOrCreate?: FundSourceCreateOrConnectWithoutPartnerInput | FundSourceCreateOrConnectWithoutPartnerInput[]
+    createMany?: FundSourceCreateManyPartnerInputEnvelope
+    connect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+  }
+
+  export type PartnerDistributionUncheckedCreateNestedManyWithoutPartnerInput = {
+    create?: XOR<PartnerDistributionCreateWithoutPartnerInput, PartnerDistributionUncheckedCreateWithoutPartnerInput> | PartnerDistributionCreateWithoutPartnerInput[] | PartnerDistributionUncheckedCreateWithoutPartnerInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutPartnerInput | PartnerDistributionCreateOrConnectWithoutPartnerInput[]
+    createMany?: PartnerDistributionCreateManyPartnerInputEnvelope
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+  }
+
+  export type SuperAdminUpdateOneWithoutPartnersCreatedNestedInput = {
+    create?: XOR<SuperAdminCreateWithoutPartnersCreatedInput, SuperAdminUncheckedCreateWithoutPartnersCreatedInput>
+    connectOrCreate?: SuperAdminCreateOrConnectWithoutPartnersCreatedInput
+    upsert?: SuperAdminUpsertWithoutPartnersCreatedInput
+    disconnect?: SuperAdminWhereInput | boolean
+    delete?: SuperAdminWhereInput | boolean
+    connect?: SuperAdminWhereUniqueInput
+    update?: XOR<XOR<SuperAdminUpdateToOneWithWhereWithoutPartnersCreatedInput, SuperAdminUpdateWithoutPartnersCreatedInput>, SuperAdminUncheckedUpdateWithoutPartnersCreatedInput>
+  }
+
+  export type FundSourceUpdateManyWithoutPartnerNestedInput = {
+    create?: XOR<FundSourceCreateWithoutPartnerInput, FundSourceUncheckedCreateWithoutPartnerInput> | FundSourceCreateWithoutPartnerInput[] | FundSourceUncheckedCreateWithoutPartnerInput[]
+    connectOrCreate?: FundSourceCreateOrConnectWithoutPartnerInput | FundSourceCreateOrConnectWithoutPartnerInput[]
+    upsert?: FundSourceUpsertWithWhereUniqueWithoutPartnerInput | FundSourceUpsertWithWhereUniqueWithoutPartnerInput[]
+    createMany?: FundSourceCreateManyPartnerInputEnvelope
+    set?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    disconnect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    delete?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    connect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    update?: FundSourceUpdateWithWhereUniqueWithoutPartnerInput | FundSourceUpdateWithWhereUniqueWithoutPartnerInput[]
+    updateMany?: FundSourceUpdateManyWithWhereWithoutPartnerInput | FundSourceUpdateManyWithWhereWithoutPartnerInput[]
+    deleteMany?: FundSourceScalarWhereInput | FundSourceScalarWhereInput[]
+  }
+
+  export type PartnerDistributionUpdateManyWithoutPartnerNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutPartnerInput, PartnerDistributionUncheckedCreateWithoutPartnerInput> | PartnerDistributionCreateWithoutPartnerInput[] | PartnerDistributionUncheckedCreateWithoutPartnerInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutPartnerInput | PartnerDistributionCreateOrConnectWithoutPartnerInput[]
+    upsert?: PartnerDistributionUpsertWithWhereUniqueWithoutPartnerInput | PartnerDistributionUpsertWithWhereUniqueWithoutPartnerInput[]
+    createMany?: PartnerDistributionCreateManyPartnerInputEnvelope
+    set?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    disconnect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    delete?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    update?: PartnerDistributionUpdateWithWhereUniqueWithoutPartnerInput | PartnerDistributionUpdateWithWhereUniqueWithoutPartnerInput[]
+    updateMany?: PartnerDistributionUpdateManyWithWhereWithoutPartnerInput | PartnerDistributionUpdateManyWithWhereWithoutPartnerInput[]
+    deleteMany?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
+  }
+
+  export type FundSourceUncheckedUpdateManyWithoutPartnerNestedInput = {
+    create?: XOR<FundSourceCreateWithoutPartnerInput, FundSourceUncheckedCreateWithoutPartnerInput> | FundSourceCreateWithoutPartnerInput[] | FundSourceUncheckedCreateWithoutPartnerInput[]
+    connectOrCreate?: FundSourceCreateOrConnectWithoutPartnerInput | FundSourceCreateOrConnectWithoutPartnerInput[]
+    upsert?: FundSourceUpsertWithWhereUniqueWithoutPartnerInput | FundSourceUpsertWithWhereUniqueWithoutPartnerInput[]
+    createMany?: FundSourceCreateManyPartnerInputEnvelope
+    set?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    disconnect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    delete?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    connect?: FundSourceWhereUniqueInput | FundSourceWhereUniqueInput[]
+    update?: FundSourceUpdateWithWhereUniqueWithoutPartnerInput | FundSourceUpdateWithWhereUniqueWithoutPartnerInput[]
+    updateMany?: FundSourceUpdateManyWithWhereWithoutPartnerInput | FundSourceUpdateManyWithWhereWithoutPartnerInput[]
+    deleteMany?: FundSourceScalarWhereInput | FundSourceScalarWhereInput[]
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyWithoutPartnerNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutPartnerInput, PartnerDistributionUncheckedCreateWithoutPartnerInput> | PartnerDistributionCreateWithoutPartnerInput[] | PartnerDistributionUncheckedCreateWithoutPartnerInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutPartnerInput | PartnerDistributionCreateOrConnectWithoutPartnerInput[]
+    upsert?: PartnerDistributionUpsertWithWhereUniqueWithoutPartnerInput | PartnerDistributionUpsertWithWhereUniqueWithoutPartnerInput[]
+    createMany?: PartnerDistributionCreateManyPartnerInputEnvelope
+    set?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    disconnect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    delete?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    update?: PartnerDistributionUpdateWithWhereUniqueWithoutPartnerInput | PartnerDistributionUpdateWithWhereUniqueWithoutPartnerInput[]
+    updateMany?: PartnerDistributionUpdateManyWithWhereWithoutPartnerInput | PartnerDistributionUpdateManyWithWhereWithoutPartnerInput[]
+    deleteMany?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
   }
 
   export type BranchCreateNestedOneWithoutCommissionTiersInput = {
@@ -28422,6 +35118,13 @@ export namespace Prisma {
     connect?: GeneralLedgerEntryWhereUniqueInput | GeneralLedgerEntryWhereUniqueInput[]
   }
 
+  export type PickupEventCreateNestedManyWithoutTransactionInput = {
+    create?: XOR<PickupEventCreateWithoutTransactionInput, PickupEventUncheckedCreateWithoutTransactionInput> | PickupEventCreateWithoutTransactionInput[] | PickupEventUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: PickupEventCreateOrConnectWithoutTransactionInput | PickupEventCreateOrConnectWithoutTransactionInput[]
+    createMany?: PickupEventCreateManyTransactionInputEnvelope
+    connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+  }
+
   export type SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput = {
     create?: XOR<SubLedgerEntryCreateWithoutTransactionInput, SubLedgerEntryUncheckedCreateWithoutTransactionInput> | SubLedgerEntryCreateWithoutTransactionInput[] | SubLedgerEntryUncheckedCreateWithoutTransactionInput[]
     connectOrCreate?: SubLedgerEntryCreateOrConnectWithoutTransactionInput | SubLedgerEntryCreateOrConnectWithoutTransactionInput[]
@@ -28434,6 +35137,13 @@ export namespace Prisma {
     connectOrCreate?: GeneralLedgerEntryCreateOrConnectWithoutTransactionInput | GeneralLedgerEntryCreateOrConnectWithoutTransactionInput[]
     createMany?: GeneralLedgerEntryCreateManyTransactionInputEnvelope
     connect?: GeneralLedgerEntryWhereUniqueInput | GeneralLedgerEntryWhereUniqueInput[]
+  }
+
+  export type PickupEventUncheckedCreateNestedManyWithoutTransactionInput = {
+    create?: XOR<PickupEventCreateWithoutTransactionInput, PickupEventUncheckedCreateWithoutTransactionInput> | PickupEventCreateWithoutTransactionInput[] | PickupEventUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: PickupEventCreateOrConnectWithoutTransactionInput | PickupEventCreateOrConnectWithoutTransactionInput[]
+    createMany?: PickupEventCreateManyTransactionInputEnvelope
+    connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
   }
 
   export type BranchUpdateOneRequiredWithoutSentTransactionsNestedInput = {
@@ -28528,6 +35238,20 @@ export namespace Prisma {
     deleteMany?: GeneralLedgerEntryScalarWhereInput | GeneralLedgerEntryScalarWhereInput[]
   }
 
+  export type PickupEventUpdateManyWithoutTransactionNestedInput = {
+    create?: XOR<PickupEventCreateWithoutTransactionInput, PickupEventUncheckedCreateWithoutTransactionInput> | PickupEventCreateWithoutTransactionInput[] | PickupEventUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: PickupEventCreateOrConnectWithoutTransactionInput | PickupEventCreateOrConnectWithoutTransactionInput[]
+    upsert?: PickupEventUpsertWithWhereUniqueWithoutTransactionInput | PickupEventUpsertWithWhereUniqueWithoutTransactionInput[]
+    createMany?: PickupEventCreateManyTransactionInputEnvelope
+    set?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    disconnect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    delete?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    update?: PickupEventUpdateWithWhereUniqueWithoutTransactionInput | PickupEventUpdateWithWhereUniqueWithoutTransactionInput[]
+    updateMany?: PickupEventUpdateManyWithWhereWithoutTransactionInput | PickupEventUpdateManyWithWhereWithoutTransactionInput[]
+    deleteMany?: PickupEventScalarWhereInput | PickupEventScalarWhereInput[]
+  }
+
   export type SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput = {
     create?: XOR<SubLedgerEntryCreateWithoutTransactionInput, SubLedgerEntryUncheckedCreateWithoutTransactionInput> | SubLedgerEntryCreateWithoutTransactionInput[] | SubLedgerEntryUncheckedCreateWithoutTransactionInput[]
     connectOrCreate?: SubLedgerEntryCreateOrConnectWithoutTransactionInput | SubLedgerEntryCreateOrConnectWithoutTransactionInput[]
@@ -28554,6 +35278,20 @@ export namespace Prisma {
     update?: GeneralLedgerEntryUpdateWithWhereUniqueWithoutTransactionInput | GeneralLedgerEntryUpdateWithWhereUniqueWithoutTransactionInput[]
     updateMany?: GeneralLedgerEntryUpdateManyWithWhereWithoutTransactionInput | GeneralLedgerEntryUpdateManyWithWhereWithoutTransactionInput[]
     deleteMany?: GeneralLedgerEntryScalarWhereInput | GeneralLedgerEntryScalarWhereInput[]
+  }
+
+  export type PickupEventUncheckedUpdateManyWithoutTransactionNestedInput = {
+    create?: XOR<PickupEventCreateWithoutTransactionInput, PickupEventUncheckedCreateWithoutTransactionInput> | PickupEventCreateWithoutTransactionInput[] | PickupEventUncheckedCreateWithoutTransactionInput[]
+    connectOrCreate?: PickupEventCreateOrConnectWithoutTransactionInput | PickupEventCreateOrConnectWithoutTransactionInput[]
+    upsert?: PickupEventUpsertWithWhereUniqueWithoutTransactionInput | PickupEventUpsertWithWhereUniqueWithoutTransactionInput[]
+    createMany?: PickupEventCreateManyTransactionInputEnvelope
+    set?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    disconnect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    delete?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
+    update?: PickupEventUpdateWithWhereUniqueWithoutTransactionInput | PickupEventUpdateWithWhereUniqueWithoutTransactionInput[]
+    updateMany?: PickupEventUpdateManyWithWhereWithoutTransactionInput | PickupEventUpdateManyWithWhereWithoutTransactionInput[]
+    deleteMany?: PickupEventScalarWhereInput | PickupEventScalarWhereInput[]
   }
 
   export type BranchCreateNestedOneWithoutSubLedgerEntriesInput = {
@@ -28654,11 +35392,23 @@ export namespace Prisma {
     connect?: AppUserWhereUniqueInput
   }
 
+  export type PartnerDistributionCreateNestedOneWithoutTopupInput = {
+    create?: XOR<PartnerDistributionCreateWithoutTopupInput, PartnerDistributionUncheckedCreateWithoutTopupInput>
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutTopupInput
+    connect?: PartnerDistributionWhereUniqueInput
+  }
+
   export type GeneralLedgerEntryCreateNestedManyWithoutTopupInput = {
     create?: XOR<GeneralLedgerEntryCreateWithoutTopupInput, GeneralLedgerEntryUncheckedCreateWithoutTopupInput> | GeneralLedgerEntryCreateWithoutTopupInput[] | GeneralLedgerEntryUncheckedCreateWithoutTopupInput[]
     connectOrCreate?: GeneralLedgerEntryCreateOrConnectWithoutTopupInput | GeneralLedgerEntryCreateOrConnectWithoutTopupInput[]
     createMany?: GeneralLedgerEntryCreateManyTopupInputEnvelope
     connect?: GeneralLedgerEntryWhereUniqueInput | GeneralLedgerEntryWhereUniqueInput[]
+  }
+
+  export type PartnerDistributionUncheckedCreateNestedOneWithoutTopupInput = {
+    create?: XOR<PartnerDistributionCreateWithoutTopupInput, PartnerDistributionUncheckedCreateWithoutTopupInput>
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutTopupInput
+    connect?: PartnerDistributionWhereUniqueInput
   }
 
   export type GeneralLedgerEntryUncheckedCreateNestedManyWithoutTopupInput = {
@@ -28702,6 +35452,16 @@ export namespace Prisma {
     update?: XOR<XOR<AppUserUpdateToOneWithWhereWithoutTopupsReceivedInput, AppUserUpdateWithoutTopupsReceivedInput>, AppUserUncheckedUpdateWithoutTopupsReceivedInput>
   }
 
+  export type PartnerDistributionUpdateOneWithoutTopupNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutTopupInput, PartnerDistributionUncheckedCreateWithoutTopupInput>
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutTopupInput
+    upsert?: PartnerDistributionUpsertWithoutTopupInput
+    disconnect?: PartnerDistributionWhereInput | boolean
+    delete?: PartnerDistributionWhereInput | boolean
+    connect?: PartnerDistributionWhereUniqueInput
+    update?: XOR<XOR<PartnerDistributionUpdateToOneWithWhereWithoutTopupInput, PartnerDistributionUpdateWithoutTopupInput>, PartnerDistributionUncheckedUpdateWithoutTopupInput>
+  }
+
   export type GeneralLedgerEntryUpdateManyWithoutTopupNestedInput = {
     create?: XOR<GeneralLedgerEntryCreateWithoutTopupInput, GeneralLedgerEntryUncheckedCreateWithoutTopupInput> | GeneralLedgerEntryCreateWithoutTopupInput[] | GeneralLedgerEntryUncheckedCreateWithoutTopupInput[]
     connectOrCreate?: GeneralLedgerEntryCreateOrConnectWithoutTopupInput | GeneralLedgerEntryCreateOrConnectWithoutTopupInput[]
@@ -28714,6 +35474,16 @@ export namespace Prisma {
     update?: GeneralLedgerEntryUpdateWithWhereUniqueWithoutTopupInput | GeneralLedgerEntryUpdateWithWhereUniqueWithoutTopupInput[]
     updateMany?: GeneralLedgerEntryUpdateManyWithWhereWithoutTopupInput | GeneralLedgerEntryUpdateManyWithWhereWithoutTopupInput[]
     deleteMany?: GeneralLedgerEntryScalarWhereInput | GeneralLedgerEntryScalarWhereInput[]
+  }
+
+  export type PartnerDistributionUncheckedUpdateOneWithoutTopupNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutTopupInput, PartnerDistributionUncheckedCreateWithoutTopupInput>
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutTopupInput
+    upsert?: PartnerDistributionUpsertWithoutTopupInput
+    disconnect?: PartnerDistributionWhereInput | boolean
+    delete?: PartnerDistributionWhereInput | boolean
+    connect?: PartnerDistributionWhereUniqueInput
+    update?: XOR<XOR<PartnerDistributionUpdateToOneWithWhereWithoutTopupInput, PartnerDistributionUpdateWithoutTopupInput>, PartnerDistributionUncheckedUpdateWithoutTopupInput>
   }
 
   export type GeneralLedgerEntryUncheckedUpdateManyWithoutTopupNestedInput = {
@@ -28760,6 +35530,34 @@ export namespace Prisma {
     delete?: SuperAdminWhereInput | boolean
     connect?: SuperAdminWhereUniqueInput
     update?: XOR<XOR<SuperAdminUpdateToOneWithWhereWithoutAuditLogsInput, SuperAdminUpdateWithoutAuditLogsInput>, SuperAdminUncheckedUpdateWithoutAuditLogsInput>
+  }
+
+  export type TransactionCreateNestedOneWithoutPickupEventsInput = {
+    create?: XOR<TransactionCreateWithoutPickupEventsInput, TransactionUncheckedCreateWithoutPickupEventsInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutPickupEventsInput
+    connect?: TransactionWhereUniqueInput
+  }
+
+  export type AppUserCreateNestedOneWithoutPickupEventsInput = {
+    create?: XOR<AppUserCreateWithoutPickupEventsInput, AppUserUncheckedCreateWithoutPickupEventsInput>
+    connectOrCreate?: AppUserCreateOrConnectWithoutPickupEventsInput
+    connect?: AppUserWhereUniqueInput
+  }
+
+  export type TransactionUpdateOneRequiredWithoutPickupEventsNestedInput = {
+    create?: XOR<TransactionCreateWithoutPickupEventsInput, TransactionUncheckedCreateWithoutPickupEventsInput>
+    connectOrCreate?: TransactionCreateOrConnectWithoutPickupEventsInput
+    upsert?: TransactionUpsertWithoutPickupEventsInput
+    connect?: TransactionWhereUniqueInput
+    update?: XOR<XOR<TransactionUpdateToOneWithWhereWithoutPickupEventsInput, TransactionUpdateWithoutPickupEventsInput>, TransactionUncheckedUpdateWithoutPickupEventsInput>
+  }
+
+  export type AppUserUpdateOneRequiredWithoutPickupEventsNestedInput = {
+    create?: XOR<AppUserCreateWithoutPickupEventsInput, AppUserUncheckedCreateWithoutPickupEventsInput>
+    connectOrCreate?: AppUserCreateOrConnectWithoutPickupEventsInput
+    upsert?: AppUserUpsertWithoutPickupEventsInput
+    connect?: AppUserWhereUniqueInput
+    update?: XOR<XOR<AppUserUpdateToOneWithWhereWithoutPickupEventsInput, AppUserUpdateWithoutPickupEventsInput>, AppUserUncheckedUpdateWithoutPickupEventsInput>
   }
 
   export type BranchCreateNestedOneWithoutExpensesInput = {
@@ -28820,6 +35618,148 @@ export namespace Prisma {
     upsert?: SuperAdminUpsertWithoutSalariesPaidInput
     connect?: SuperAdminWhereUniqueInput
     update?: XOR<XOR<SuperAdminUpdateToOneWithWhereWithoutSalariesPaidInput, SuperAdminUpdateWithoutSalariesPaidInput>, SuperAdminUncheckedUpdateWithoutSalariesPaidInput>
+  }
+
+  export type PartnerCreateNestedOneWithoutFundSourcesInput = {
+    create?: XOR<PartnerCreateWithoutFundSourcesInput, PartnerUncheckedCreateWithoutFundSourcesInput>
+    connectOrCreate?: PartnerCreateOrConnectWithoutFundSourcesInput
+    connect?: PartnerWhereUniqueInput
+  }
+
+  export type PartnerDistributionCreateNestedManyWithoutFundSourceInput = {
+    create?: XOR<PartnerDistributionCreateWithoutFundSourceInput, PartnerDistributionUncheckedCreateWithoutFundSourceInput> | PartnerDistributionCreateWithoutFundSourceInput[] | PartnerDistributionUncheckedCreateWithoutFundSourceInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutFundSourceInput | PartnerDistributionCreateOrConnectWithoutFundSourceInput[]
+    createMany?: PartnerDistributionCreateManyFundSourceInputEnvelope
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+  }
+
+  export type SuperAdminCreateNestedOneWithoutFundSourcesRecordedInput = {
+    create?: XOR<SuperAdminCreateWithoutFundSourcesRecordedInput, SuperAdminUncheckedCreateWithoutFundSourcesRecordedInput>
+    connectOrCreate?: SuperAdminCreateOrConnectWithoutFundSourcesRecordedInput
+    connect?: SuperAdminWhereUniqueInput
+  }
+
+  export type PartnerDistributionUncheckedCreateNestedManyWithoutFundSourceInput = {
+    create?: XOR<PartnerDistributionCreateWithoutFundSourceInput, PartnerDistributionUncheckedCreateWithoutFundSourceInput> | PartnerDistributionCreateWithoutFundSourceInput[] | PartnerDistributionUncheckedCreateWithoutFundSourceInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutFundSourceInput | PartnerDistributionCreateOrConnectWithoutFundSourceInput[]
+    createMany?: PartnerDistributionCreateManyFundSourceInputEnvelope
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+  }
+
+  export type PartnerUpdateOneRequiredWithoutFundSourcesNestedInput = {
+    create?: XOR<PartnerCreateWithoutFundSourcesInput, PartnerUncheckedCreateWithoutFundSourcesInput>
+    connectOrCreate?: PartnerCreateOrConnectWithoutFundSourcesInput
+    upsert?: PartnerUpsertWithoutFundSourcesInput
+    connect?: PartnerWhereUniqueInput
+    update?: XOR<XOR<PartnerUpdateToOneWithWhereWithoutFundSourcesInput, PartnerUpdateWithoutFundSourcesInput>, PartnerUncheckedUpdateWithoutFundSourcesInput>
+  }
+
+  export type PartnerDistributionUpdateManyWithoutFundSourceNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutFundSourceInput, PartnerDistributionUncheckedCreateWithoutFundSourceInput> | PartnerDistributionCreateWithoutFundSourceInput[] | PartnerDistributionUncheckedCreateWithoutFundSourceInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutFundSourceInput | PartnerDistributionCreateOrConnectWithoutFundSourceInput[]
+    upsert?: PartnerDistributionUpsertWithWhereUniqueWithoutFundSourceInput | PartnerDistributionUpsertWithWhereUniqueWithoutFundSourceInput[]
+    createMany?: PartnerDistributionCreateManyFundSourceInputEnvelope
+    set?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    disconnect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    delete?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    update?: PartnerDistributionUpdateWithWhereUniqueWithoutFundSourceInput | PartnerDistributionUpdateWithWhereUniqueWithoutFundSourceInput[]
+    updateMany?: PartnerDistributionUpdateManyWithWhereWithoutFundSourceInput | PartnerDistributionUpdateManyWithWhereWithoutFundSourceInput[]
+    deleteMany?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
+  }
+
+  export type SuperAdminUpdateOneRequiredWithoutFundSourcesRecordedNestedInput = {
+    create?: XOR<SuperAdminCreateWithoutFundSourcesRecordedInput, SuperAdminUncheckedCreateWithoutFundSourcesRecordedInput>
+    connectOrCreate?: SuperAdminCreateOrConnectWithoutFundSourcesRecordedInput
+    upsert?: SuperAdminUpsertWithoutFundSourcesRecordedInput
+    connect?: SuperAdminWhereUniqueInput
+    update?: XOR<XOR<SuperAdminUpdateToOneWithWhereWithoutFundSourcesRecordedInput, SuperAdminUpdateWithoutFundSourcesRecordedInput>, SuperAdminUncheckedUpdateWithoutFundSourcesRecordedInput>
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyWithoutFundSourceNestedInput = {
+    create?: XOR<PartnerDistributionCreateWithoutFundSourceInput, PartnerDistributionUncheckedCreateWithoutFundSourceInput> | PartnerDistributionCreateWithoutFundSourceInput[] | PartnerDistributionUncheckedCreateWithoutFundSourceInput[]
+    connectOrCreate?: PartnerDistributionCreateOrConnectWithoutFundSourceInput | PartnerDistributionCreateOrConnectWithoutFundSourceInput[]
+    upsert?: PartnerDistributionUpsertWithWhereUniqueWithoutFundSourceInput | PartnerDistributionUpsertWithWhereUniqueWithoutFundSourceInput[]
+    createMany?: PartnerDistributionCreateManyFundSourceInputEnvelope
+    set?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    disconnect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    delete?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    connect?: PartnerDistributionWhereUniqueInput | PartnerDistributionWhereUniqueInput[]
+    update?: PartnerDistributionUpdateWithWhereUniqueWithoutFundSourceInput | PartnerDistributionUpdateWithWhereUniqueWithoutFundSourceInput[]
+    updateMany?: PartnerDistributionUpdateManyWithWhereWithoutFundSourceInput | PartnerDistributionUpdateManyWithWhereWithoutFundSourceInput[]
+    deleteMany?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
+  }
+
+  export type PartnerCreateNestedOneWithoutDistributionsInput = {
+    create?: XOR<PartnerCreateWithoutDistributionsInput, PartnerUncheckedCreateWithoutDistributionsInput>
+    connectOrCreate?: PartnerCreateOrConnectWithoutDistributionsInput
+    connect?: PartnerWhereUniqueInput
+  }
+
+  export type BranchCreateNestedOneWithoutDistributionsInput = {
+    create?: XOR<BranchCreateWithoutDistributionsInput, BranchUncheckedCreateWithoutDistributionsInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutDistributionsInput
+    connect?: BranchWhereUniqueInput
+  }
+
+  export type TopupCreateNestedOneWithoutDistributionInput = {
+    create?: XOR<TopupCreateWithoutDistributionInput, TopupUncheckedCreateWithoutDistributionInput>
+    connectOrCreate?: TopupCreateOrConnectWithoutDistributionInput
+    connect?: TopupWhereUniqueInput
+  }
+
+  export type FundSourceCreateNestedOneWithoutDistributionsInput = {
+    create?: XOR<FundSourceCreateWithoutDistributionsInput, FundSourceUncheckedCreateWithoutDistributionsInput>
+    connectOrCreate?: FundSourceCreateOrConnectWithoutDistributionsInput
+    connect?: FundSourceWhereUniqueInput
+  }
+
+  export type SuperAdminCreateNestedOneWithoutDistributionsRecordedInput = {
+    create?: XOR<SuperAdminCreateWithoutDistributionsRecordedInput, SuperAdminUncheckedCreateWithoutDistributionsRecordedInput>
+    connectOrCreate?: SuperAdminCreateOrConnectWithoutDistributionsRecordedInput
+    connect?: SuperAdminWhereUniqueInput
+  }
+
+  export type PartnerUpdateOneRequiredWithoutDistributionsNestedInput = {
+    create?: XOR<PartnerCreateWithoutDistributionsInput, PartnerUncheckedCreateWithoutDistributionsInput>
+    connectOrCreate?: PartnerCreateOrConnectWithoutDistributionsInput
+    upsert?: PartnerUpsertWithoutDistributionsInput
+    connect?: PartnerWhereUniqueInput
+    update?: XOR<XOR<PartnerUpdateToOneWithWhereWithoutDistributionsInput, PartnerUpdateWithoutDistributionsInput>, PartnerUncheckedUpdateWithoutDistributionsInput>
+  }
+
+  export type BranchUpdateOneRequiredWithoutDistributionsNestedInput = {
+    create?: XOR<BranchCreateWithoutDistributionsInput, BranchUncheckedCreateWithoutDistributionsInput>
+    connectOrCreate?: BranchCreateOrConnectWithoutDistributionsInput
+    upsert?: BranchUpsertWithoutDistributionsInput
+    connect?: BranchWhereUniqueInput
+    update?: XOR<XOR<BranchUpdateToOneWithWhereWithoutDistributionsInput, BranchUpdateWithoutDistributionsInput>, BranchUncheckedUpdateWithoutDistributionsInput>
+  }
+
+  export type TopupUpdateOneWithoutDistributionNestedInput = {
+    create?: XOR<TopupCreateWithoutDistributionInput, TopupUncheckedCreateWithoutDistributionInput>
+    connectOrCreate?: TopupCreateOrConnectWithoutDistributionInput
+    upsert?: TopupUpsertWithoutDistributionInput
+    disconnect?: TopupWhereInput | boolean
+    delete?: TopupWhereInput | boolean
+    connect?: TopupWhereUniqueInput
+    update?: XOR<XOR<TopupUpdateToOneWithWhereWithoutDistributionInput, TopupUpdateWithoutDistributionInput>, TopupUncheckedUpdateWithoutDistributionInput>
+  }
+
+  export type FundSourceUpdateOneRequiredWithoutDistributionsNestedInput = {
+    create?: XOR<FundSourceCreateWithoutDistributionsInput, FundSourceUncheckedCreateWithoutDistributionsInput>
+    connectOrCreate?: FundSourceCreateOrConnectWithoutDistributionsInput
+    upsert?: FundSourceUpsertWithoutDistributionsInput
+    connect?: FundSourceWhereUniqueInput
+    update?: XOR<XOR<FundSourceUpdateToOneWithWhereWithoutDistributionsInput, FundSourceUpdateWithoutDistributionsInput>, FundSourceUncheckedUpdateWithoutDistributionsInput>
+  }
+
+  export type SuperAdminUpdateOneRequiredWithoutDistributionsRecordedNestedInput = {
+    create?: XOR<SuperAdminCreateWithoutDistributionsRecordedInput, SuperAdminUncheckedCreateWithoutDistributionsRecordedInput>
+    connectOrCreate?: SuperAdminCreateOrConnectWithoutDistributionsRecordedInput
+    upsert?: SuperAdminUpsertWithoutDistributionsRecordedInput
+    connect?: SuperAdminWhereUniqueInput
+    update?: XOR<XOR<SuperAdminUpdateToOneWithWhereWithoutDistributionsRecordedInput, SuperAdminUpdateWithoutDistributionsRecordedInput>, SuperAdminUncheckedUpdateWithoutDistributionsRecordedInput>
   }
 
   export type NestedIntFilter<$PrismaModel = never> = {
@@ -29154,6 +36094,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -29177,6 +36118,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -29212,6 +36154,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     commissionTier?: CommissionTierCreateNestedOneWithoutTransactionsInput
@@ -29220,6 +36164,7 @@ export namespace Prisma {
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutCurrencyInput = {
@@ -29243,8 +36188,11 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutCurrencyInput = {
@@ -29268,6 +36216,7 @@ export namespace Prisma {
     branch: BranchCreateNestedOneWithoutTopupsInput
     initiatedBy: SuperAdminCreateNestedOneWithoutTopupsInitiatedInput
     branchManager: AppUserCreateNestedOneWithoutTopupsReceivedInput
+    distribution?: PartnerDistributionCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTopupInput
   }
 
@@ -29282,6 +36231,7 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     acknowledgedAt?: Date | string | null
+    distribution?: PartnerDistributionUncheckedCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTopupInput
   }
 
@@ -29447,6 +36397,8 @@ export namespace Prisma {
     createdAt?: DateTimeFilter<"Transaction"> | Date | string
     completedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
     refundedAt?: DateTimeNullableFilter<"Transaction"> | Date | string | null
+    parentTransactionId?: StringNullableFilter<"Transaction"> | string | null
+    amountCollected?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
   }
 
   export type TopupUpsertWithWhereUniqueWithoutCurrencyInput = {
@@ -29689,6 +36641,104 @@ export namespace Prisma {
     ratesFrom?: ExchangeRateUncheckedUpdateManyWithoutFromCurrencyNestedInput
   }
 
+  export type PartnerCreateWithoutCreatedByInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    fundSources?: FundSourceCreateNestedManyWithoutPartnerInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutPartnerInput
+  }
+
+  export type PartnerUncheckedCreateWithoutCreatedByInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    fundSources?: FundSourceUncheckedCreateNestedManyWithoutPartnerInput
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutPartnerInput
+  }
+
+  export type PartnerCreateOrConnectWithoutCreatedByInput = {
+    where: PartnerWhereUniqueInput
+    create: XOR<PartnerCreateWithoutCreatedByInput, PartnerUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type PartnerCreateManyCreatedByInputEnvelope = {
+    data: PartnerCreateManyCreatedByInput | PartnerCreateManyCreatedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type FundSourceCreateWithoutRecordedByInput = {
+    id?: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+    partner: PartnerCreateNestedOneWithoutFundSourcesInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutFundSourceInput
+  }
+
+  export type FundSourceUncheckedCreateWithoutRecordedByInput = {
+    id?: string
+    partnerId: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutFundSourceInput
+  }
+
+  export type FundSourceCreateOrConnectWithoutRecordedByInput = {
+    where: FundSourceWhereUniqueInput
+    create: XOR<FundSourceCreateWithoutRecordedByInput, FundSourceUncheckedCreateWithoutRecordedByInput>
+  }
+
+  export type FundSourceCreateManyRecordedByInputEnvelope = {
+    data: FundSourceCreateManyRecordedByInput | FundSourceCreateManyRecordedByInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PartnerDistributionCreateWithoutRecordedByInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    partner: PartnerCreateNestedOneWithoutDistributionsInput
+    branch: BranchCreateNestedOneWithoutDistributionsInput
+    topup?: TopupCreateNestedOneWithoutDistributionInput
+    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+  }
+
+  export type PartnerDistributionUncheckedCreateWithoutRecordedByInput = {
+    id?: string
+    partnerId: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    fundSourceId: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionCreateOrConnectWithoutRecordedByInput = {
+    where: PartnerDistributionWhereUniqueInput
+    create: XOR<PartnerDistributionCreateWithoutRecordedByInput, PartnerDistributionUncheckedCreateWithoutRecordedByInput>
+  }
+
+  export type PartnerDistributionCreateManyRecordedByInputEnvelope = {
+    data: PartnerDistributionCreateManyRecordedByInput | PartnerDistributionCreateManyRecordedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BranchCreateWithoutCreatedBySuperAdminInput = {
     id?: string
     name: string
@@ -29702,6 +36752,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -29725,6 +36776,7 @@ export namespace Prisma {
     defaultLanguage?: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -29756,6 +36808,7 @@ export namespace Prisma {
     branch: BranchCreateNestedOneWithoutTopupsInput
     currency?: CurrencyCreateNestedOneWithoutTopupsInput
     branchManager: AppUserCreateNestedOneWithoutTopupsReceivedInput
+    distribution?: PartnerDistributionCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTopupInput
   }
 
@@ -29770,6 +36823,7 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     acknowledgedAt?: Date | string | null
+    distribution?: PartnerDistributionUncheckedCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTopupInput
   }
 
@@ -29871,6 +36925,97 @@ export namespace Prisma {
   export type SalaryPaymentCreateManyPaidByInputEnvelope = {
     data: SalaryPaymentCreateManyPaidByInput | SalaryPaymentCreateManyPaidByInput[]
     skipDuplicates?: boolean
+  }
+
+  export type PartnerUpsertWithWhereUniqueWithoutCreatedByInput = {
+    where: PartnerWhereUniqueInput
+    update: XOR<PartnerUpdateWithoutCreatedByInput, PartnerUncheckedUpdateWithoutCreatedByInput>
+    create: XOR<PartnerCreateWithoutCreatedByInput, PartnerUncheckedCreateWithoutCreatedByInput>
+  }
+
+  export type PartnerUpdateWithWhereUniqueWithoutCreatedByInput = {
+    where: PartnerWhereUniqueInput
+    data: XOR<PartnerUpdateWithoutCreatedByInput, PartnerUncheckedUpdateWithoutCreatedByInput>
+  }
+
+  export type PartnerUpdateManyWithWhereWithoutCreatedByInput = {
+    where: PartnerScalarWhereInput
+    data: XOR<PartnerUpdateManyMutationInput, PartnerUncheckedUpdateManyWithoutCreatedByInput>
+  }
+
+  export type PartnerScalarWhereInput = {
+    AND?: PartnerScalarWhereInput | PartnerScalarWhereInput[]
+    OR?: PartnerScalarWhereInput[]
+    NOT?: PartnerScalarWhereInput | PartnerScalarWhereInput[]
+    id?: StringFilter<"Partner"> | string
+    name?: StringFilter<"Partner"> | string
+    email?: StringNullableFilter<"Partner"> | string | null
+    phone?: StringNullableFilter<"Partner"> | string | null
+    createdById?: StringNullableFilter<"Partner"> | string | null
+    createdAt?: DateTimeFilter<"Partner"> | Date | string
+  }
+
+  export type FundSourceUpsertWithWhereUniqueWithoutRecordedByInput = {
+    where: FundSourceWhereUniqueInput
+    update: XOR<FundSourceUpdateWithoutRecordedByInput, FundSourceUncheckedUpdateWithoutRecordedByInput>
+    create: XOR<FundSourceCreateWithoutRecordedByInput, FundSourceUncheckedCreateWithoutRecordedByInput>
+  }
+
+  export type FundSourceUpdateWithWhereUniqueWithoutRecordedByInput = {
+    where: FundSourceWhereUniqueInput
+    data: XOR<FundSourceUpdateWithoutRecordedByInput, FundSourceUncheckedUpdateWithoutRecordedByInput>
+  }
+
+  export type FundSourceUpdateManyWithWhereWithoutRecordedByInput = {
+    where: FundSourceScalarWhereInput
+    data: XOR<FundSourceUpdateManyMutationInput, FundSourceUncheckedUpdateManyWithoutRecordedByInput>
+  }
+
+  export type FundSourceScalarWhereInput = {
+    AND?: FundSourceScalarWhereInput | FundSourceScalarWhereInput[]
+    OR?: FundSourceScalarWhereInput[]
+    NOT?: FundSourceScalarWhereInput | FundSourceScalarWhereInput[]
+    id?: StringFilter<"FundSource"> | string
+    partnerId?: StringFilter<"FundSource"> | string
+    commodityName?: StringFilter<"FundSource"> | string
+    cashValue?: DecimalFilter<"FundSource"> | Decimal | DecimalJsLike | number | string
+    description?: StringNullableFilter<"FundSource"> | string | null
+    recordedById?: StringFilter<"FundSource"> | string
+    code?: StringFilter<"FundSource"> | string
+    recordedAt?: DateTimeFilter<"FundSource"> | Date | string
+    createdAt?: DateTimeFilter<"FundSource"> | Date | string
+  }
+
+  export type PartnerDistributionUpsertWithWhereUniqueWithoutRecordedByInput = {
+    where: PartnerDistributionWhereUniqueInput
+    update: XOR<PartnerDistributionUpdateWithoutRecordedByInput, PartnerDistributionUncheckedUpdateWithoutRecordedByInput>
+    create: XOR<PartnerDistributionCreateWithoutRecordedByInput, PartnerDistributionUncheckedCreateWithoutRecordedByInput>
+  }
+
+  export type PartnerDistributionUpdateWithWhereUniqueWithoutRecordedByInput = {
+    where: PartnerDistributionWhereUniqueInput
+    data: XOR<PartnerDistributionUpdateWithoutRecordedByInput, PartnerDistributionUncheckedUpdateWithoutRecordedByInput>
+  }
+
+  export type PartnerDistributionUpdateManyWithWhereWithoutRecordedByInput = {
+    where: PartnerDistributionScalarWhereInput
+    data: XOR<PartnerDistributionUpdateManyMutationInput, PartnerDistributionUncheckedUpdateManyWithoutRecordedByInput>
+  }
+
+  export type PartnerDistributionScalarWhereInput = {
+    AND?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
+    OR?: PartnerDistributionScalarWhereInput[]
+    NOT?: PartnerDistributionScalarWhereInput | PartnerDistributionScalarWhereInput[]
+    id?: StringFilter<"PartnerDistribution"> | string
+    partnerId?: StringFilter<"PartnerDistribution"> | string
+    branchId?: StringFilter<"PartnerDistribution"> | string
+    amount?: DecimalFilter<"PartnerDistribution"> | Decimal | DecimalJsLike | number | string
+    note?: StringNullableFilter<"PartnerDistribution"> | string | null
+    topupId?: StringNullableFilter<"PartnerDistribution"> | string | null
+    fundSourceId?: StringFilter<"PartnerDistribution"> | string
+    recordedById?: StringFilter<"PartnerDistribution"> | string
+    distributedAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
+    createdAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
   }
 
   export type BranchUpsertWithWhereUniqueWithoutCreatedBySuperAdminInput = {
@@ -29998,6 +37143,7 @@ export namespace Prisma {
   export type AppUserCreateWithoutManagesBranchInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -30011,11 +37157,13 @@ export namespace Prisma {
     topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateWithoutManagesBranchInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -30029,6 +37177,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserCreateOrConnectWithoutManagesBranchInput = {
@@ -30075,6 +37224,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionCreateNestedManyWithoutRecordedByInput
     topupsInitiated?: TopupCreateNestedManyWithoutInitiatedByInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByAdminInput
     expensesPaid?: ExpenseCreateNestedManyWithoutPaidByInput
@@ -30089,6 +37241,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerUncheckedCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceUncheckedCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput
     topupsInitiated?: TopupUncheckedCreateNestedManyWithoutInitiatedByInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByAdminInput
     expensesPaid?: ExpenseUncheckedCreateNestedManyWithoutPaidByInput
@@ -30100,9 +37255,44 @@ export namespace Prisma {
     create: XOR<SuperAdminCreateWithoutBranchesCreatedInput, SuperAdminUncheckedCreateWithoutBranchesCreatedInput>
   }
 
+  export type PartnerDistributionCreateWithoutBranchInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    partner: PartnerCreateNestedOneWithoutDistributionsInput
+    topup?: TopupCreateNestedOneWithoutDistributionInput
+    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    recordedBy: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
+  }
+
+  export type PartnerDistributionUncheckedCreateWithoutBranchInput = {
+    id?: string
+    partnerId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    fundSourceId: string
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionCreateOrConnectWithoutBranchInput = {
+    where: PartnerDistributionWhereUniqueInput
+    create: XOR<PartnerDistributionCreateWithoutBranchInput, PartnerDistributionUncheckedCreateWithoutBranchInput>
+  }
+
+  export type PartnerDistributionCreateManyBranchInputEnvelope = {
+    data: PartnerDistributionCreateManyBranchInput | PartnerDistributionCreateManyBranchInput[]
+    skipDuplicates?: boolean
+  }
+
   export type AppUserCreateWithoutBranchInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -30116,11 +37306,13 @@ export namespace Prisma {
     topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateWithoutBranchInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -30134,6 +37326,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserCreateOrConnectWithoutBranchInput = {
@@ -30197,6 +37390,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
     commissionTier?: CommissionTierCreateNestedOneWithoutTransactionsInput
@@ -30205,6 +37400,7 @@ export namespace Prisma {
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutSenderBranchInput = {
@@ -30228,8 +37424,11 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutSenderBranchInput = {
@@ -30257,6 +37456,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
     commissionTier?: CommissionTierCreateNestedOneWithoutTransactionsInput
@@ -30265,6 +37466,7 @@ export namespace Prisma {
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutReceiverBranchInput = {
@@ -30288,8 +37490,11 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutReceiverBranchInput = {
@@ -30367,6 +37572,7 @@ export namespace Prisma {
     currency?: CurrencyCreateNestedOneWithoutTopupsInput
     initiatedBy: SuperAdminCreateNestedOneWithoutTopupsInitiatedInput
     branchManager: AppUserCreateNestedOneWithoutTopupsReceivedInput
+    distribution?: PartnerDistributionCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTopupInput
   }
 
@@ -30381,6 +37587,7 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     acknowledgedAt?: Date | string | null
+    distribution?: PartnerDistributionUncheckedCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTopupInput
   }
 
@@ -30438,6 +37645,7 @@ export namespace Prisma {
   export type AppUserUpdateWithoutManagesBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -30451,11 +37659,13 @@ export namespace Prisma {
     topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateWithoutManagesBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -30469,6 +37679,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
   }
 
   export type CurrencyUpsertWithoutBranchesInput = {
@@ -30527,6 +37738,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUpdateManyWithoutRecordedByNestedInput
     topupsInitiated?: TopupUpdateManyWithoutInitiatedByNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByAdminNestedInput
     expensesPaid?: ExpenseUpdateManyWithoutPaidByNestedInput
@@ -30541,10 +37755,29 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUncheckedUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput
     topupsInitiated?: TopupUncheckedUpdateManyWithoutInitiatedByNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByAdminNestedInput
     expensesPaid?: ExpenseUncheckedUpdateManyWithoutPaidByNestedInput
     salariesPaid?: SalaryPaymentUncheckedUpdateManyWithoutPaidByNestedInput
+  }
+
+  export type PartnerDistributionUpsertWithWhereUniqueWithoutBranchInput = {
+    where: PartnerDistributionWhereUniqueInput
+    update: XOR<PartnerDistributionUpdateWithoutBranchInput, PartnerDistributionUncheckedUpdateWithoutBranchInput>
+    create: XOR<PartnerDistributionCreateWithoutBranchInput, PartnerDistributionUncheckedCreateWithoutBranchInput>
+  }
+
+  export type PartnerDistributionUpdateWithWhereUniqueWithoutBranchInput = {
+    where: PartnerDistributionWhereUniqueInput
+    data: XOR<PartnerDistributionUpdateWithoutBranchInput, PartnerDistributionUncheckedUpdateWithoutBranchInput>
+  }
+
+  export type PartnerDistributionUpdateManyWithWhereWithoutBranchInput = {
+    where: PartnerDistributionScalarWhereInput
+    data: XOR<PartnerDistributionUpdateManyMutationInput, PartnerDistributionUncheckedUpdateManyWithoutBranchInput>
   }
 
   export type AppUserUpsertWithWhereUniqueWithoutBranchInput = {
@@ -30569,6 +37802,7 @@ export namespace Prisma {
     NOT?: AppUserScalarWhereInput | AppUserScalarWhereInput[]
     id?: StringFilter<"AppUser"> | string
     name?: StringFilter<"AppUser"> | string
+    phone?: StringNullableFilter<"AppUser"> | string | null
     email?: StringFilter<"AppUser"> | string
     passwordHash?: StringFilter<"AppUser"> | string
     role?: StringFilter<"AppUser"> | string
@@ -30745,6 +37979,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
     receivedTransactions?: TransactionCreateNestedManyWithoutReceiverBranchInput
@@ -30768,6 +38003,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
     receivedTransactions?: TransactionUncheckedCreateNestedManyWithoutReceiverBranchInput
@@ -30795,6 +38031,7 @@ export namespace Prisma {
     updatedAt?: Date | string
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -30818,6 +38055,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -30848,6 +38086,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
@@ -30856,6 +38096,7 @@ export namespace Prisma {
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutCreatedByInput = {
@@ -30879,8 +38120,11 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutCreatedByInput = {
@@ -30908,6 +38152,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
@@ -30916,6 +38162,7 @@ export namespace Prisma {
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutCompletedByInput = {
@@ -30939,8 +38186,11 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutCompletedByInput = {
@@ -30968,6 +38218,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
@@ -30976,6 +38228,7 @@ export namespace Prisma {
     completedBy?: AppUserCreateNestedOneWithoutCompletedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutRefundedByInput = {
@@ -30999,8 +38252,11 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutRefundedByInput = {
@@ -31024,6 +38280,7 @@ export namespace Prisma {
     branch: BranchCreateNestedOneWithoutTopupsInput
     currency?: CurrencyCreateNestedOneWithoutTopupsInput
     initiatedBy: SuperAdminCreateNestedOneWithoutTopupsInitiatedInput
+    distribution?: PartnerDistributionCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTopupInput
   }
 
@@ -31038,6 +38295,7 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     acknowledgedAt?: Date | string | null
+    distribution?: PartnerDistributionUncheckedCreateNestedOneWithoutTopupInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTopupInput
   }
 
@@ -31111,6 +38369,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PickupEventCreateWithoutCollectedByInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    receiptNumber: string
+    createdAt?: Date | string
+    transaction: TransactionCreateNestedOneWithoutPickupEventsInput
+  }
+
+  export type PickupEventUncheckedCreateWithoutCollectedByInput = {
+    id?: string
+    transactionId: string
+    amount: Decimal | DecimalJsLike | number | string
+    receiptNumber: string
+    createdAt?: Date | string
+  }
+
+  export type PickupEventCreateOrConnectWithoutCollectedByInput = {
+    where: PickupEventWhereUniqueInput
+    create: XOR<PickupEventCreateWithoutCollectedByInput, PickupEventUncheckedCreateWithoutCollectedByInput>
+  }
+
+  export type PickupEventCreateManyCollectedByInputEnvelope = {
+    data: PickupEventCreateManyCollectedByInput | PickupEventCreateManyCollectedByInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BranchUpsertWithoutUsersInput = {
     update: XOR<BranchUpdateWithoutUsersInput, BranchUncheckedUpdateWithoutUsersInput>
     create: XOR<BranchCreateWithoutUsersInput, BranchUncheckedCreateWithoutUsersInput>
@@ -31136,6 +38420,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
     receivedTransactions?: TransactionUpdateManyWithoutReceiverBranchNestedInput
@@ -31159,6 +38444,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
     receivedTransactions?: TransactionUncheckedUpdateManyWithoutReceiverBranchNestedInput
@@ -31192,6 +38478,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -31215,6 +38502,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -31321,6 +38609,218 @@ export namespace Prisma {
     data: XOR<SalaryPaymentUpdateManyMutationInput, SalaryPaymentUncheckedUpdateManyWithoutStaffInput>
   }
 
+  export type PickupEventUpsertWithWhereUniqueWithoutCollectedByInput = {
+    where: PickupEventWhereUniqueInput
+    update: XOR<PickupEventUpdateWithoutCollectedByInput, PickupEventUncheckedUpdateWithoutCollectedByInput>
+    create: XOR<PickupEventCreateWithoutCollectedByInput, PickupEventUncheckedCreateWithoutCollectedByInput>
+  }
+
+  export type PickupEventUpdateWithWhereUniqueWithoutCollectedByInput = {
+    where: PickupEventWhereUniqueInput
+    data: XOR<PickupEventUpdateWithoutCollectedByInput, PickupEventUncheckedUpdateWithoutCollectedByInput>
+  }
+
+  export type PickupEventUpdateManyWithWhereWithoutCollectedByInput = {
+    where: PickupEventScalarWhereInput
+    data: XOR<PickupEventUpdateManyMutationInput, PickupEventUncheckedUpdateManyWithoutCollectedByInput>
+  }
+
+  export type PickupEventScalarWhereInput = {
+    AND?: PickupEventScalarWhereInput | PickupEventScalarWhereInput[]
+    OR?: PickupEventScalarWhereInput[]
+    NOT?: PickupEventScalarWhereInput | PickupEventScalarWhereInput[]
+    id?: StringFilter<"PickupEvent"> | string
+    transactionId?: StringFilter<"PickupEvent"> | string
+    amount?: DecimalFilter<"PickupEvent"> | Decimal | DecimalJsLike | number | string
+    collectedById?: StringFilter<"PickupEvent"> | string
+    receiptNumber?: StringFilter<"PickupEvent"> | string
+    createdAt?: DateTimeFilter<"PickupEvent"> | Date | string
+  }
+
+  export type SuperAdminCreateWithoutPartnersCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    preferredLanguage?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    fundSourcesRecorded?: FundSourceCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionCreateNestedManyWithoutRecordedByInput
+    branchesCreated?: BranchCreateNestedManyWithoutCreatedBySuperAdminInput
+    topupsInitiated?: TopupCreateNestedManyWithoutInitiatedByInput
+    auditLogs?: AuditLogCreateNestedManyWithoutPerformedByAdminInput
+    expensesPaid?: ExpenseCreateNestedManyWithoutPaidByInput
+    salariesPaid?: SalaryPaymentCreateNestedManyWithoutPaidByInput
+  }
+
+  export type SuperAdminUncheckedCreateWithoutPartnersCreatedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    preferredLanguage?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    fundSourcesRecorded?: FundSourceUncheckedCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput
+    branchesCreated?: BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput
+    topupsInitiated?: TopupUncheckedCreateNestedManyWithoutInitiatedByInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByAdminInput
+    expensesPaid?: ExpenseUncheckedCreateNestedManyWithoutPaidByInput
+    salariesPaid?: SalaryPaymentUncheckedCreateNestedManyWithoutPaidByInput
+  }
+
+  export type SuperAdminCreateOrConnectWithoutPartnersCreatedInput = {
+    where: SuperAdminWhereUniqueInput
+    create: XOR<SuperAdminCreateWithoutPartnersCreatedInput, SuperAdminUncheckedCreateWithoutPartnersCreatedInput>
+  }
+
+  export type FundSourceCreateWithoutPartnerInput = {
+    id?: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+    distributions?: PartnerDistributionCreateNestedManyWithoutFundSourceInput
+    recordedBy: SuperAdminCreateNestedOneWithoutFundSourcesRecordedInput
+  }
+
+  export type FundSourceUncheckedCreateWithoutPartnerInput = {
+    id?: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    recordedById: string
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutFundSourceInput
+  }
+
+  export type FundSourceCreateOrConnectWithoutPartnerInput = {
+    where: FundSourceWhereUniqueInput
+    create: XOR<FundSourceCreateWithoutPartnerInput, FundSourceUncheckedCreateWithoutPartnerInput>
+  }
+
+  export type FundSourceCreateManyPartnerInputEnvelope = {
+    data: FundSourceCreateManyPartnerInput | FundSourceCreateManyPartnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type PartnerDistributionCreateWithoutPartnerInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    branch: BranchCreateNestedOneWithoutDistributionsInput
+    topup?: TopupCreateNestedOneWithoutDistributionInput
+    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    recordedBy: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
+  }
+
+  export type PartnerDistributionUncheckedCreateWithoutPartnerInput = {
+    id?: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    fundSourceId: string
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionCreateOrConnectWithoutPartnerInput = {
+    where: PartnerDistributionWhereUniqueInput
+    create: XOR<PartnerDistributionCreateWithoutPartnerInput, PartnerDistributionUncheckedCreateWithoutPartnerInput>
+  }
+
+  export type PartnerDistributionCreateManyPartnerInputEnvelope = {
+    data: PartnerDistributionCreateManyPartnerInput | PartnerDistributionCreateManyPartnerInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SuperAdminUpsertWithoutPartnersCreatedInput = {
+    update: XOR<SuperAdminUpdateWithoutPartnersCreatedInput, SuperAdminUncheckedUpdateWithoutPartnersCreatedInput>
+    create: XOR<SuperAdminCreateWithoutPartnersCreatedInput, SuperAdminUncheckedCreateWithoutPartnersCreatedInput>
+    where?: SuperAdminWhereInput
+  }
+
+  export type SuperAdminUpdateToOneWithWhereWithoutPartnersCreatedInput = {
+    where?: SuperAdminWhereInput
+    data: XOR<SuperAdminUpdateWithoutPartnersCreatedInput, SuperAdminUncheckedUpdateWithoutPartnersCreatedInput>
+  }
+
+  export type SuperAdminUpdateWithoutPartnersCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fundSourcesRecorded?: FundSourceUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUpdateManyWithoutRecordedByNestedInput
+    branchesCreated?: BranchUpdateManyWithoutCreatedBySuperAdminNestedInput
+    topupsInitiated?: TopupUpdateManyWithoutInitiatedByNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutPerformedByAdminNestedInput
+    expensesPaid?: ExpenseUpdateManyWithoutPaidByNestedInput
+    salariesPaid?: SalaryPaymentUpdateManyWithoutPaidByNestedInput
+  }
+
+  export type SuperAdminUncheckedUpdateWithoutPartnersCreatedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fundSourcesRecorded?: FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput
+    branchesCreated?: BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput
+    topupsInitiated?: TopupUncheckedUpdateManyWithoutInitiatedByNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByAdminNestedInput
+    expensesPaid?: ExpenseUncheckedUpdateManyWithoutPaidByNestedInput
+    salariesPaid?: SalaryPaymentUncheckedUpdateManyWithoutPaidByNestedInput
+  }
+
+  export type FundSourceUpsertWithWhereUniqueWithoutPartnerInput = {
+    where: FundSourceWhereUniqueInput
+    update: XOR<FundSourceUpdateWithoutPartnerInput, FundSourceUncheckedUpdateWithoutPartnerInput>
+    create: XOR<FundSourceCreateWithoutPartnerInput, FundSourceUncheckedCreateWithoutPartnerInput>
+  }
+
+  export type FundSourceUpdateWithWhereUniqueWithoutPartnerInput = {
+    where: FundSourceWhereUniqueInput
+    data: XOR<FundSourceUpdateWithoutPartnerInput, FundSourceUncheckedUpdateWithoutPartnerInput>
+  }
+
+  export type FundSourceUpdateManyWithWhereWithoutPartnerInput = {
+    where: FundSourceScalarWhereInput
+    data: XOR<FundSourceUpdateManyMutationInput, FundSourceUncheckedUpdateManyWithoutPartnerInput>
+  }
+
+  export type PartnerDistributionUpsertWithWhereUniqueWithoutPartnerInput = {
+    where: PartnerDistributionWhereUniqueInput
+    update: XOR<PartnerDistributionUpdateWithoutPartnerInput, PartnerDistributionUncheckedUpdateWithoutPartnerInput>
+    create: XOR<PartnerDistributionCreateWithoutPartnerInput, PartnerDistributionUncheckedCreateWithoutPartnerInput>
+  }
+
+  export type PartnerDistributionUpdateWithWhereUniqueWithoutPartnerInput = {
+    where: PartnerDistributionWhereUniqueInput
+    data: XOR<PartnerDistributionUpdateWithoutPartnerInput, PartnerDistributionUncheckedUpdateWithoutPartnerInput>
+  }
+
+  export type PartnerDistributionUpdateManyWithWhereWithoutPartnerInput = {
+    where: PartnerDistributionScalarWhereInput
+    data: XOR<PartnerDistributionUpdateManyMutationInput, PartnerDistributionUncheckedUpdateManyWithoutPartnerInput>
+  }
+
   export type BranchCreateWithoutCommissionTiersInput = {
     id?: string
     name: string
@@ -31335,6 +38835,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
     receivedTransactions?: TransactionCreateNestedManyWithoutReceiverBranchInput
@@ -31358,6 +38859,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
     receivedTransactions?: TransactionUncheckedCreateNestedManyWithoutReceiverBranchInput
@@ -31387,6 +38889,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
@@ -31395,6 +38899,7 @@ export namespace Prisma {
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutCommissionTierInput = {
@@ -31418,8 +38923,11 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutCommissionTierInput = {
@@ -31457,6 +38965,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
     receivedTransactions?: TransactionUpdateManyWithoutReceiverBranchNestedInput
@@ -31480,6 +38989,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
     receivedTransactions?: TransactionUncheckedUpdateManyWithoutReceiverBranchNestedInput
@@ -31519,6 +39029,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     receivedTransactions?: TransactionCreateNestedManyWithoutReceiverBranchInput
@@ -31542,6 +39053,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     receivedTransactions?: TransactionUncheckedCreateNestedManyWithoutReceiverBranchInput
@@ -31570,6 +39082,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -31593,6 +39106,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -31672,6 +39186,7 @@ export namespace Prisma {
   export type AppUserCreateWithoutCreatedTransactionsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -31685,11 +39200,13 @@ export namespace Prisma {
     topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateWithoutCreatedTransactionsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -31703,6 +39220,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserCreateOrConnectWithoutCreatedTransactionsInput = {
@@ -31713,6 +39231,7 @@ export namespace Prisma {
   export type AppUserCreateWithoutCompletedTransactionsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -31726,11 +39245,13 @@ export namespace Prisma {
     topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateWithoutCompletedTransactionsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -31744,6 +39265,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserCreateOrConnectWithoutCompletedTransactionsInput = {
@@ -31754,6 +39276,7 @@ export namespace Prisma {
   export type AppUserCreateWithoutRefundedTransactionsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -31767,11 +39290,13 @@ export namespace Prisma {
     topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateWithoutRefundedTransactionsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -31785,6 +39310,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserCreateOrConnectWithoutRefundedTransactionsInput = {
@@ -31846,6 +39372,32 @@ export namespace Prisma {
     skipDuplicates?: boolean
   }
 
+  export type PickupEventCreateWithoutTransactionInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    receiptNumber: string
+    createdAt?: Date | string
+    collectedBy: AppUserCreateNestedOneWithoutPickupEventsInput
+  }
+
+  export type PickupEventUncheckedCreateWithoutTransactionInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    collectedById: string
+    receiptNumber: string
+    createdAt?: Date | string
+  }
+
+  export type PickupEventCreateOrConnectWithoutTransactionInput = {
+    where: PickupEventWhereUniqueInput
+    create: XOR<PickupEventCreateWithoutTransactionInput, PickupEventUncheckedCreateWithoutTransactionInput>
+  }
+
+  export type PickupEventCreateManyTransactionInputEnvelope = {
+    data: PickupEventCreateManyTransactionInput | PickupEventCreateManyTransactionInput[]
+    skipDuplicates?: boolean
+  }
+
   export type BranchUpsertWithoutSentTransactionsInput = {
     update: XOR<BranchUpdateWithoutSentTransactionsInput, BranchUncheckedUpdateWithoutSentTransactionsInput>
     create: XOR<BranchCreateWithoutSentTransactionsInput, BranchUncheckedCreateWithoutSentTransactionsInput>
@@ -31871,6 +39423,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     receivedTransactions?: TransactionUpdateManyWithoutReceiverBranchNestedInput
@@ -31894,6 +39447,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     receivedTransactions?: TransactionUncheckedUpdateManyWithoutReceiverBranchNestedInput
@@ -31928,6 +39482,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -31951,6 +39506,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -32048,6 +39604,7 @@ export namespace Prisma {
   export type AppUserUpdateWithoutCreatedTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -32061,11 +39618,13 @@ export namespace Prisma {
     topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateWithoutCreatedTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -32079,6 +39638,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUpsertWithoutCompletedTransactionsInput = {
@@ -32095,6 +39655,7 @@ export namespace Prisma {
   export type AppUserUpdateWithoutCompletedTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -32108,11 +39669,13 @@ export namespace Prisma {
     topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateWithoutCompletedTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -32126,6 +39689,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUpsertWithoutRefundedTransactionsInput = {
@@ -32142,6 +39706,7 @@ export namespace Prisma {
   export type AppUserUpdateWithoutRefundedTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -32155,11 +39720,13 @@ export namespace Prisma {
     topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateWithoutRefundedTransactionsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -32173,6 +39740,7 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
   }
 
   export type SubLedgerEntryUpsertWithWhereUniqueWithoutTransactionInput = {
@@ -32207,6 +39775,22 @@ export namespace Prisma {
     data: XOR<GeneralLedgerEntryUpdateManyMutationInput, GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionInput>
   }
 
+  export type PickupEventUpsertWithWhereUniqueWithoutTransactionInput = {
+    where: PickupEventWhereUniqueInput
+    update: XOR<PickupEventUpdateWithoutTransactionInput, PickupEventUncheckedUpdateWithoutTransactionInput>
+    create: XOR<PickupEventCreateWithoutTransactionInput, PickupEventUncheckedCreateWithoutTransactionInput>
+  }
+
+  export type PickupEventUpdateWithWhereUniqueWithoutTransactionInput = {
+    where: PickupEventWhereUniqueInput
+    data: XOR<PickupEventUpdateWithoutTransactionInput, PickupEventUncheckedUpdateWithoutTransactionInput>
+  }
+
+  export type PickupEventUpdateManyWithWhereWithoutTransactionInput = {
+    where: PickupEventScalarWhereInput
+    data: XOR<PickupEventUpdateManyMutationInput, PickupEventUncheckedUpdateManyWithoutTransactionInput>
+  }
+
   export type BranchCreateWithoutSubLedgerEntriesInput = {
     id?: string
     name: string
@@ -32221,6 +39805,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -32244,6 +39829,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -32273,6 +39859,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
@@ -32281,6 +39869,7 @@ export namespace Prisma {
     completedBy?: AppUserCreateNestedOneWithoutCompletedTransactionsInput
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutSubLedgerEntriesInput = {
@@ -32305,7 +39894,10 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutSubLedgerEntriesInput = {
@@ -32338,6 +39930,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -32361,6 +39954,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -32396,6 +39990,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
@@ -32404,6 +40000,7 @@ export namespace Prisma {
     completedBy?: AppUserUpdateOneWithoutCompletedTransactionsNestedInput
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutSubLedgerEntriesInput = {
@@ -32428,7 +40025,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type BranchCreateWithoutGeneralLedgerEntriesInput = {
@@ -32445,6 +40045,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -32468,6 +40069,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -32497,6 +40099,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
     receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
     currency?: CurrencyCreateNestedOneWithoutTransactionsInput
@@ -32505,6 +40109,7 @@ export namespace Prisma {
     completedBy?: AppUserCreateNestedOneWithoutCompletedTransactionsInput
     refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
     subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionUncheckedCreateWithoutGeneralLedgerEntriesInput = {
@@ -32529,7 +40134,10 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutTransactionInput
   }
 
   export type TransactionCreateOrConnectWithoutGeneralLedgerEntriesInput = {
@@ -32549,6 +40157,7 @@ export namespace Prisma {
     currency?: CurrencyCreateNestedOneWithoutTopupsInput
     initiatedBy: SuperAdminCreateNestedOneWithoutTopupsInitiatedInput
     branchManager: AppUserCreateNestedOneWithoutTopupsReceivedInput
+    distribution?: PartnerDistributionCreateNestedOneWithoutTopupInput
   }
 
   export type TopupUncheckedCreateWithoutGeneralLedgerEntriesInput = {
@@ -32563,6 +40172,7 @@ export namespace Prisma {
     note?: string | null
     createdAt?: Date | string
     acknowledgedAt?: Date | string | null
+    distribution?: PartnerDistributionUncheckedCreateNestedOneWithoutTopupInput
   }
 
   export type TopupCreateOrConnectWithoutGeneralLedgerEntriesInput = {
@@ -32595,6 +40205,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -32618,6 +40229,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -32653,6 +40265,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
@@ -32661,6 +40275,7 @@ export namespace Prisma {
     completedBy?: AppUserUpdateOneWithoutCompletedTransactionsNestedInput
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutGeneralLedgerEntriesInput = {
@@ -32685,7 +40300,10 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TopupUpsertWithoutGeneralLedgerEntriesInput = {
@@ -32711,6 +40329,7 @@ export namespace Prisma {
     currency?: CurrencyUpdateOneWithoutTopupsNestedInput
     initiatedBy?: SuperAdminUpdateOneRequiredWithoutTopupsInitiatedNestedInput
     branchManager?: AppUserUpdateOneRequiredWithoutTopupsReceivedNestedInput
+    distribution?: PartnerDistributionUpdateOneWithoutTopupNestedInput
   }
 
   export type TopupUncheckedUpdateWithoutGeneralLedgerEntriesInput = {
@@ -32725,6 +40344,7 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    distribution?: PartnerDistributionUncheckedUpdateOneWithoutTopupNestedInput
   }
 
   export type BranchCreateWithoutTopupsInput = {
@@ -32741,6 +40361,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -32764,6 +40385,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -32817,6 +40439,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchCreateNestedManyWithoutCreatedBySuperAdminInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByAdminInput
     expensesPaid?: ExpenseCreateNestedManyWithoutPaidByInput
@@ -32831,6 +40456,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerUncheckedCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceUncheckedCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByAdminInput
     expensesPaid?: ExpenseUncheckedCreateNestedManyWithoutPaidByInput
@@ -32845,6 +40473,7 @@ export namespace Prisma {
   export type AppUserCreateWithoutTopupsReceivedInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -32858,11 +40487,13 @@ export namespace Prisma {
     refundedTransactions?: TransactionCreateNestedManyWithoutRefundedByInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateWithoutTopupsReceivedInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -32876,11 +40507,41 @@ export namespace Prisma {
     refundedTransactions?: TransactionUncheckedCreateNestedManyWithoutRefundedByInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
     salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserCreateOrConnectWithoutTopupsReceivedInput = {
     where: AppUserWhereUniqueInput
     create: XOR<AppUserCreateWithoutTopupsReceivedInput, AppUserUncheckedCreateWithoutTopupsReceivedInput>
+  }
+
+  export type PartnerDistributionCreateWithoutTopupInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    partner: PartnerCreateNestedOneWithoutDistributionsInput
+    branch: BranchCreateNestedOneWithoutDistributionsInput
+    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    recordedBy: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
+  }
+
+  export type PartnerDistributionUncheckedCreateWithoutTopupInput = {
+    id?: string
+    partnerId: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    fundSourceId: string
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionCreateOrConnectWithoutTopupInput = {
+    where: PartnerDistributionWhereUniqueInput
+    create: XOR<PartnerDistributionCreateWithoutTopupInput, PartnerDistributionUncheckedCreateWithoutTopupInput>
   }
 
   export type GeneralLedgerEntryCreateWithoutTopupInput = {
@@ -32936,6 +40597,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -32959,6 +40621,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -33024,6 +40687,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUpdateManyWithoutCreatedBySuperAdminNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByAdminNestedInput
     expensesPaid?: ExpenseUpdateManyWithoutPaidByNestedInput
@@ -33038,6 +40704,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUncheckedUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByAdminNestedInput
     expensesPaid?: ExpenseUncheckedUpdateManyWithoutPaidByNestedInput
@@ -33058,6 +40727,7 @@ export namespace Prisma {
   export type AppUserUpdateWithoutTopupsReceivedInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -33071,11 +40741,13 @@ export namespace Prisma {
     refundedTransactions?: TransactionUpdateManyWithoutRefundedByNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateWithoutTopupsReceivedInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -33089,6 +40761,42 @@ export namespace Prisma {
     refundedTransactions?: TransactionUncheckedUpdateManyWithoutRefundedByNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
+  }
+
+  export type PartnerDistributionUpsertWithoutTopupInput = {
+    update: XOR<PartnerDistributionUpdateWithoutTopupInput, PartnerDistributionUncheckedUpdateWithoutTopupInput>
+    create: XOR<PartnerDistributionCreateWithoutTopupInput, PartnerDistributionUncheckedCreateWithoutTopupInput>
+    where?: PartnerDistributionWhereInput
+  }
+
+  export type PartnerDistributionUpdateToOneWithWhereWithoutTopupInput = {
+    where?: PartnerDistributionWhereInput
+    data: XOR<PartnerDistributionUpdateWithoutTopupInput, PartnerDistributionUncheckedUpdateWithoutTopupInput>
+  }
+
+  export type PartnerDistributionUpdateWithoutTopupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
+    branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
+    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    recordedBy?: SuperAdminUpdateOneRequiredWithoutDistributionsRecordedNestedInput
+  }
+
+  export type PartnerDistributionUncheckedUpdateWithoutTopupInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
   export type GeneralLedgerEntryUpsertWithWhereUniqueWithoutTopupInput = {
@@ -33110,6 +40818,7 @@ export namespace Prisma {
   export type AppUserCreateWithoutAuditLogsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -33123,11 +40832,13 @@ export namespace Prisma {
     refundedTransactions?: TransactionCreateNestedManyWithoutRefundedByInput
     topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
     salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateWithoutAuditLogsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -33141,6 +40852,7 @@ export namespace Prisma {
     refundedTransactions?: TransactionUncheckedCreateNestedManyWithoutRefundedByInput
     topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
     salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserCreateOrConnectWithoutAuditLogsInput = {
@@ -33156,6 +40868,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchCreateNestedManyWithoutCreatedBySuperAdminInput
     topupsInitiated?: TopupCreateNestedManyWithoutInitiatedByInput
     expensesPaid?: ExpenseCreateNestedManyWithoutPaidByInput
@@ -33170,6 +40885,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerUncheckedCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceUncheckedCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput
     topupsInitiated?: TopupUncheckedCreateNestedManyWithoutInitiatedByInput
     expensesPaid?: ExpenseUncheckedCreateNestedManyWithoutPaidByInput
@@ -33195,6 +40913,7 @@ export namespace Prisma {
   export type AppUserUpdateWithoutAuditLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -33208,11 +40927,13 @@ export namespace Prisma {
     refundedTransactions?: TransactionUpdateManyWithoutRefundedByNestedInput
     topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
     salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateWithoutAuditLogsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -33226,6 +40947,7 @@ export namespace Prisma {
     refundedTransactions?: TransactionUncheckedUpdateManyWithoutRefundedByNestedInput
     topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
     salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
   }
 
   export type SuperAdminUpsertWithoutAuditLogsInput = {
@@ -33247,6 +40969,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUpdateManyWithoutCreatedBySuperAdminNestedInput
     topupsInitiated?: TopupUpdateManyWithoutInitiatedByNestedInput
     expensesPaid?: ExpenseUpdateManyWithoutPaidByNestedInput
@@ -33261,10 +40986,237 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUncheckedUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput
     topupsInitiated?: TopupUncheckedUpdateManyWithoutInitiatedByNestedInput
     expensesPaid?: ExpenseUncheckedUpdateManyWithoutPaidByNestedInput
     salariesPaid?: SalaryPaymentUncheckedUpdateManyWithoutPaidByNestedInput
+  }
+
+  export type TransactionCreateWithoutPickupEventsInput = {
+    id?: string
+    type?: string
+    senderName: string
+    senderIdNumber?: string | null
+    receiverName: string
+    amountSent: Decimal | DecimalJsLike | number | string
+    commissionAmount?: Decimal | DecimalJsLike | number | string
+    amountPayable: Decimal | DecimalJsLike | number | string
+    pickupCode: string
+    qrCodeData?: string | null
+    status?: string
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+    refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
+    senderBranch: BranchCreateNestedOneWithoutSentTransactionsInput
+    receiverBranch: BranchCreateNestedOneWithoutReceivedTransactionsInput
+    currency?: CurrencyCreateNestedOneWithoutTransactionsInput
+    commissionTier?: CommissionTierCreateNestedOneWithoutTransactionsInput
+    createdBy: AppUserCreateNestedOneWithoutCreatedTransactionsInput
+    completedBy?: AppUserCreateNestedOneWithoutCompletedTransactionsInput
+    refundedBy?: AppUserCreateNestedOneWithoutRefundedTransactionsInput
+    subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutTransactionInput
+    generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTransactionInput
+  }
+
+  export type TransactionUncheckedCreateWithoutPickupEventsInput = {
+    id?: string
+    type?: string
+    senderBranchId: string
+    receiverBranchId: string
+    senderName: string
+    senderIdNumber?: string | null
+    receiverName: string
+    amountSent: Decimal | DecimalJsLike | number | string
+    commissionAmount?: Decimal | DecimalJsLike | number | string
+    amountPayable: Decimal | DecimalJsLike | number | string
+    currencyId?: string | null
+    commissionTierId?: string | null
+    pickupCode: string
+    qrCodeData?: string | null
+    status?: string
+    createdById: string
+    completedById?: string | null
+    refundedById?: string | null
+    createdAt?: Date | string
+    completedAt?: Date | string | null
+    refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
+    subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+    generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTransactionInput
+  }
+
+  export type TransactionCreateOrConnectWithoutPickupEventsInput = {
+    where: TransactionWhereUniqueInput
+    create: XOR<TransactionCreateWithoutPickupEventsInput, TransactionUncheckedCreateWithoutPickupEventsInput>
+  }
+
+  export type AppUserCreateWithoutPickupEventsInput = {
+    id?: string
+    name: string
+    phone?: string | null
+    email: string
+    passwordHash: string
+    role: string
+    preferredLanguage?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    branch: BranchCreateNestedOneWithoutUsersInput
+    managesBranch?: BranchCreateNestedOneWithoutManagerInput
+    createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
+    completedTransactions?: TransactionCreateNestedManyWithoutCompletedByInput
+    refundedTransactions?: TransactionCreateNestedManyWithoutRefundedByInput
+    topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
+    auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
+    salaryPayments?: SalaryPaymentCreateNestedManyWithoutStaffInput
+  }
+
+  export type AppUserUncheckedCreateWithoutPickupEventsInput = {
+    id?: string
+    name: string
+    phone?: string | null
+    email: string
+    passwordHash: string
+    role: string
+    branchId: string
+    preferredLanguage?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
+    createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
+    completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
+    refundedTransactions?: TransactionUncheckedCreateNestedManyWithoutRefundedByInput
+    topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
+    salaryPayments?: SalaryPaymentUncheckedCreateNestedManyWithoutStaffInput
+  }
+
+  export type AppUserCreateOrConnectWithoutPickupEventsInput = {
+    where: AppUserWhereUniqueInput
+    create: XOR<AppUserCreateWithoutPickupEventsInput, AppUserUncheckedCreateWithoutPickupEventsInput>
+  }
+
+  export type TransactionUpsertWithoutPickupEventsInput = {
+    update: XOR<TransactionUpdateWithoutPickupEventsInput, TransactionUncheckedUpdateWithoutPickupEventsInput>
+    create: XOR<TransactionCreateWithoutPickupEventsInput, TransactionUncheckedCreateWithoutPickupEventsInput>
+    where?: TransactionWhereInput
+  }
+
+  export type TransactionUpdateToOneWithWhereWithoutPickupEventsInput = {
+    where?: TransactionWhereInput
+    data: XOR<TransactionUpdateWithoutPickupEventsInput, TransactionUncheckedUpdateWithoutPickupEventsInput>
+  }
+
+  export type TransactionUpdateWithoutPickupEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverName?: StringFieldUpdateOperationsInput | string
+    amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    pickupCode?: StringFieldUpdateOperationsInput | string
+    qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
+    receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
+    currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
+    commissionTier?: CommissionTierUpdateOneWithoutTransactionsNestedInput
+    createdBy?: AppUserUpdateOneRequiredWithoutCreatedTransactionsNestedInput
+    completedBy?: AppUserUpdateOneWithoutCompletedTransactionsNestedInput
+    refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
+    subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
+    generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type TransactionUncheckedUpdateWithoutPickupEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    type?: StringFieldUpdateOperationsInput | string
+    senderBranchId?: StringFieldUpdateOperationsInput | string
+    receiverBranchId?: StringFieldUpdateOperationsInput | string
+    senderName?: StringFieldUpdateOperationsInput | string
+    senderIdNumber?: NullableStringFieldUpdateOperationsInput | string | null
+    receiverName?: StringFieldUpdateOperationsInput | string
+    amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    pickupCode?: StringFieldUpdateOperationsInput | string
+    qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    createdById?: StringFieldUpdateOperationsInput | string
+    completedById?: NullableStringFieldUpdateOperationsInput | string | null
+    refundedById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+  }
+
+  export type AppUserUpsertWithoutPickupEventsInput = {
+    update: XOR<AppUserUpdateWithoutPickupEventsInput, AppUserUncheckedUpdateWithoutPickupEventsInput>
+    create: XOR<AppUserCreateWithoutPickupEventsInput, AppUserUncheckedCreateWithoutPickupEventsInput>
+    where?: AppUserWhereInput
+  }
+
+  export type AppUserUpdateToOneWithWhereWithoutPickupEventsInput = {
+    where?: AppUserWhereInput
+    data: XOR<AppUserUpdateWithoutPickupEventsInput, AppUserUncheckedUpdateWithoutPickupEventsInput>
+  }
+
+  export type AppUserUpdateWithoutPickupEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
+    managesBranch?: BranchUpdateOneWithoutManagerNestedInput
+    createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
+    completedTransactions?: TransactionUpdateManyWithoutCompletedByNestedInput
+    refundedTransactions?: TransactionUpdateManyWithoutRefundedByNestedInput
+    topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
+    salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+  }
+
+  export type AppUserUncheckedUpdateWithoutPickupEventsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    role?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
+    createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
+    completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
+    refundedTransactions?: TransactionUncheckedUpdateManyWithoutRefundedByNestedInput
+    topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
   }
 
   export type BranchCreateWithoutExpensesInput = {
@@ -33281,6 +41233,7 @@ export namespace Prisma {
     manager?: AppUserCreateNestedOneWithoutManagesBranchInput
     currency?: CurrencyCreateNestedOneWithoutBranchesInput
     createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutBranchInput
     users?: AppUserCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
@@ -33304,6 +41257,7 @@ export namespace Prisma {
     createdBySuperAdminId: string
     createdAt?: Date | string
     updatedAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutBranchInput
     users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
     commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
     sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
@@ -33326,6 +41280,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchCreateNestedManyWithoutCreatedBySuperAdminInput
     topupsInitiated?: TopupCreateNestedManyWithoutInitiatedByInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByAdminInput
@@ -33340,6 +41297,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerUncheckedCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceUncheckedCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput
     topupsInitiated?: TopupUncheckedCreateNestedManyWithoutInitiatedByInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByAdminInput
@@ -33376,6 +41336,7 @@ export namespace Prisma {
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -33399,6 +41360,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -33427,6 +41389,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUpdateManyWithoutCreatedBySuperAdminNestedInput
     topupsInitiated?: TopupUpdateManyWithoutInitiatedByNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByAdminNestedInput
@@ -33441,6 +41406,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUncheckedUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput
     topupsInitiated?: TopupUncheckedUpdateManyWithoutInitiatedByNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByAdminNestedInput
@@ -33450,6 +41418,7 @@ export namespace Prisma {
   export type AppUserCreateWithoutSalaryPaymentsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -33463,11 +41432,13 @@ export namespace Prisma {
     refundedTransactions?: TransactionCreateNestedManyWithoutRefundedByInput
     topupsReceived?: TopupCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByUserInput
+    pickupEvents?: PickupEventCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserUncheckedCreateWithoutSalaryPaymentsInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -33481,6 +41452,7 @@ export namespace Prisma {
     refundedTransactions?: TransactionUncheckedCreateNestedManyWithoutRefundedByInput
     topupsReceived?: TopupUncheckedCreateNestedManyWithoutBranchManagerInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByUserInput
+    pickupEvents?: PickupEventUncheckedCreateNestedManyWithoutCollectedByInput
   }
 
   export type AppUserCreateOrConnectWithoutSalaryPaymentsInput = {
@@ -33496,6 +41468,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchCreateNestedManyWithoutCreatedBySuperAdminInput
     topupsInitiated?: TopupCreateNestedManyWithoutInitiatedByInput
     auditLogs?: AuditLogCreateNestedManyWithoutPerformedByAdminInput
@@ -33510,6 +41485,9 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    partnersCreated?: PartnerUncheckedCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceUncheckedCreateNestedManyWithoutRecordedByInput
+    distributionsRecorded?: PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput
     branchesCreated?: BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput
     topupsInitiated?: TopupUncheckedCreateNestedManyWithoutInitiatedByInput
     auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByAdminInput
@@ -33535,6 +41513,7 @@ export namespace Prisma {
   export type AppUserUpdateWithoutSalaryPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -33548,11 +41527,13 @@ export namespace Prisma {
     refundedTransactions?: TransactionUpdateManyWithoutRefundedByNestedInput
     topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateWithoutSalaryPaymentsInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -33566,6 +41547,7 @@ export namespace Prisma {
     refundedTransactions?: TransactionUncheckedUpdateManyWithoutRefundedByNestedInput
     topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
   }
 
   export type SuperAdminUpsertWithoutSalariesPaidInput = {
@@ -33587,6 +41569,9 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUpdateManyWithoutCreatedBySuperAdminNestedInput
     topupsInitiated?: TopupUpdateManyWithoutInitiatedByNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByAdminNestedInput
@@ -33601,10 +41586,595 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUncheckedUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput
+    distributionsRecorded?: PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput
     branchesCreated?: BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput
     topupsInitiated?: TopupUncheckedUpdateManyWithoutInitiatedByNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByAdminNestedInput
     expensesPaid?: ExpenseUncheckedUpdateManyWithoutPaidByNestedInput
+  }
+
+  export type PartnerCreateWithoutFundSourcesInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    createdBy?: SuperAdminCreateNestedOneWithoutPartnersCreatedInput
+    distributions?: PartnerDistributionCreateNestedManyWithoutPartnerInput
+  }
+
+  export type PartnerUncheckedCreateWithoutFundSourcesInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    distributions?: PartnerDistributionUncheckedCreateNestedManyWithoutPartnerInput
+  }
+
+  export type PartnerCreateOrConnectWithoutFundSourcesInput = {
+    where: PartnerWhereUniqueInput
+    create: XOR<PartnerCreateWithoutFundSourcesInput, PartnerUncheckedCreateWithoutFundSourcesInput>
+  }
+
+  export type PartnerDistributionCreateWithoutFundSourceInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    distributedAt?: Date | string
+    createdAt?: Date | string
+    partner: PartnerCreateNestedOneWithoutDistributionsInput
+    branch: BranchCreateNestedOneWithoutDistributionsInput
+    topup?: TopupCreateNestedOneWithoutDistributionInput
+    recordedBy: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
+  }
+
+  export type PartnerDistributionUncheckedCreateWithoutFundSourceInput = {
+    id?: string
+    partnerId: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionCreateOrConnectWithoutFundSourceInput = {
+    where: PartnerDistributionWhereUniqueInput
+    create: XOR<PartnerDistributionCreateWithoutFundSourceInput, PartnerDistributionUncheckedCreateWithoutFundSourceInput>
+  }
+
+  export type PartnerDistributionCreateManyFundSourceInputEnvelope = {
+    data: PartnerDistributionCreateManyFundSourceInput | PartnerDistributionCreateManyFundSourceInput[]
+    skipDuplicates?: boolean
+  }
+
+  export type SuperAdminCreateWithoutFundSourcesRecordedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    preferredLanguage?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    partnersCreated?: PartnerCreateNestedManyWithoutCreatedByInput
+    distributionsRecorded?: PartnerDistributionCreateNestedManyWithoutRecordedByInput
+    branchesCreated?: BranchCreateNestedManyWithoutCreatedBySuperAdminInput
+    topupsInitiated?: TopupCreateNestedManyWithoutInitiatedByInput
+    auditLogs?: AuditLogCreateNestedManyWithoutPerformedByAdminInput
+    expensesPaid?: ExpenseCreateNestedManyWithoutPaidByInput
+    salariesPaid?: SalaryPaymentCreateNestedManyWithoutPaidByInput
+  }
+
+  export type SuperAdminUncheckedCreateWithoutFundSourcesRecordedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    preferredLanguage?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    partnersCreated?: PartnerUncheckedCreateNestedManyWithoutCreatedByInput
+    distributionsRecorded?: PartnerDistributionUncheckedCreateNestedManyWithoutRecordedByInput
+    branchesCreated?: BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput
+    topupsInitiated?: TopupUncheckedCreateNestedManyWithoutInitiatedByInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByAdminInput
+    expensesPaid?: ExpenseUncheckedCreateNestedManyWithoutPaidByInput
+    salariesPaid?: SalaryPaymentUncheckedCreateNestedManyWithoutPaidByInput
+  }
+
+  export type SuperAdminCreateOrConnectWithoutFundSourcesRecordedInput = {
+    where: SuperAdminWhereUniqueInput
+    create: XOR<SuperAdminCreateWithoutFundSourcesRecordedInput, SuperAdminUncheckedCreateWithoutFundSourcesRecordedInput>
+  }
+
+  export type PartnerUpsertWithoutFundSourcesInput = {
+    update: XOR<PartnerUpdateWithoutFundSourcesInput, PartnerUncheckedUpdateWithoutFundSourcesInput>
+    create: XOR<PartnerCreateWithoutFundSourcesInput, PartnerUncheckedCreateWithoutFundSourcesInput>
+    where?: PartnerWhereInput
+  }
+
+  export type PartnerUpdateToOneWithWhereWithoutFundSourcesInput = {
+    where?: PartnerWhereInput
+    data: XOR<PartnerUpdateWithoutFundSourcesInput, PartnerUncheckedUpdateWithoutFundSourcesInput>
+  }
+
+  export type PartnerUpdateWithoutFundSourcesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: SuperAdminUpdateOneWithoutPartnersCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutPartnerNestedInput
+  }
+
+  export type PartnerUncheckedUpdateWithoutFundSourcesInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutPartnerNestedInput
+  }
+
+  export type PartnerDistributionUpsertWithWhereUniqueWithoutFundSourceInput = {
+    where: PartnerDistributionWhereUniqueInput
+    update: XOR<PartnerDistributionUpdateWithoutFundSourceInput, PartnerDistributionUncheckedUpdateWithoutFundSourceInput>
+    create: XOR<PartnerDistributionCreateWithoutFundSourceInput, PartnerDistributionUncheckedCreateWithoutFundSourceInput>
+  }
+
+  export type PartnerDistributionUpdateWithWhereUniqueWithoutFundSourceInput = {
+    where: PartnerDistributionWhereUniqueInput
+    data: XOR<PartnerDistributionUpdateWithoutFundSourceInput, PartnerDistributionUncheckedUpdateWithoutFundSourceInput>
+  }
+
+  export type PartnerDistributionUpdateManyWithWhereWithoutFundSourceInput = {
+    where: PartnerDistributionScalarWhereInput
+    data: XOR<PartnerDistributionUpdateManyMutationInput, PartnerDistributionUncheckedUpdateManyWithoutFundSourceInput>
+  }
+
+  export type SuperAdminUpsertWithoutFundSourcesRecordedInput = {
+    update: XOR<SuperAdminUpdateWithoutFundSourcesRecordedInput, SuperAdminUncheckedUpdateWithoutFundSourcesRecordedInput>
+    create: XOR<SuperAdminCreateWithoutFundSourcesRecordedInput, SuperAdminUncheckedCreateWithoutFundSourcesRecordedInput>
+    where?: SuperAdminWhereInput
+  }
+
+  export type SuperAdminUpdateToOneWithWhereWithoutFundSourcesRecordedInput = {
+    where?: SuperAdminWhereInput
+    data: XOR<SuperAdminUpdateWithoutFundSourcesRecordedInput, SuperAdminUncheckedUpdateWithoutFundSourcesRecordedInput>
+  }
+
+  export type SuperAdminUpdateWithoutFundSourcesRecordedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUpdateManyWithoutCreatedByNestedInput
+    distributionsRecorded?: PartnerDistributionUpdateManyWithoutRecordedByNestedInput
+    branchesCreated?: BranchUpdateManyWithoutCreatedBySuperAdminNestedInput
+    topupsInitiated?: TopupUpdateManyWithoutInitiatedByNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutPerformedByAdminNestedInput
+    expensesPaid?: ExpenseUpdateManyWithoutPaidByNestedInput
+    salariesPaid?: SalaryPaymentUpdateManyWithoutPaidByNestedInput
+  }
+
+  export type SuperAdminUncheckedUpdateWithoutFundSourcesRecordedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUncheckedUpdateManyWithoutCreatedByNestedInput
+    distributionsRecorded?: PartnerDistributionUncheckedUpdateManyWithoutRecordedByNestedInput
+    branchesCreated?: BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput
+    topupsInitiated?: TopupUncheckedUpdateManyWithoutInitiatedByNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByAdminNestedInput
+    expensesPaid?: ExpenseUncheckedUpdateManyWithoutPaidByNestedInput
+    salariesPaid?: SalaryPaymentUncheckedUpdateManyWithoutPaidByNestedInput
+  }
+
+  export type PartnerCreateWithoutDistributionsInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+    createdBy?: SuperAdminCreateNestedOneWithoutPartnersCreatedInput
+    fundSources?: FundSourceCreateNestedManyWithoutPartnerInput
+  }
+
+  export type PartnerUncheckedCreateWithoutDistributionsInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdById?: string | null
+    createdAt?: Date | string
+    fundSources?: FundSourceUncheckedCreateNestedManyWithoutPartnerInput
+  }
+
+  export type PartnerCreateOrConnectWithoutDistributionsInput = {
+    where: PartnerWhereUniqueInput
+    create: XOR<PartnerCreateWithoutDistributionsInput, PartnerUncheckedCreateWithoutDistributionsInput>
+  }
+
+  export type BranchCreateWithoutDistributionsInput = {
+    id?: string
+    name: string
+    location?: string | null
+    address?: string | null
+    phone?: string | null
+    branchCode?: string | null
+    status?: string
+    defaultLanguage?: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    manager?: AppUserCreateNestedOneWithoutManagesBranchInput
+    currency?: CurrencyCreateNestedOneWithoutBranchesInput
+    createdBySuperAdmin: SuperAdminCreateNestedOneWithoutBranchesCreatedInput
+    users?: AppUserCreateNestedManyWithoutBranchInput
+    commissionTiers?: CommissionTierCreateNestedManyWithoutBranchInput
+    sentTransactions?: TransactionCreateNestedManyWithoutSenderBranchInput
+    receivedTransactions?: TransactionCreateNestedManyWithoutReceiverBranchInput
+    subLedgerEntries?: SubLedgerEntryCreateNestedManyWithoutBranchInput
+    generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutBranchInput
+    topups?: TopupCreateNestedManyWithoutBranchInput
+    expenses?: ExpenseCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchUncheckedCreateWithoutDistributionsInput = {
+    id?: string
+    name: string
+    location?: string | null
+    address?: string | null
+    phone?: string | null
+    branchCode?: string | null
+    status?: string
+    managerId?: string | null
+    currencyId?: string | null
+    defaultLanguage?: string
+    createdBySuperAdminId: string
+    createdAt?: Date | string
+    updatedAt?: Date | string
+    users?: AppUserUncheckedCreateNestedManyWithoutBranchInput
+    commissionTiers?: CommissionTierUncheckedCreateNestedManyWithoutBranchInput
+    sentTransactions?: TransactionUncheckedCreateNestedManyWithoutSenderBranchInput
+    receivedTransactions?: TransactionUncheckedCreateNestedManyWithoutReceiverBranchInput
+    subLedgerEntries?: SubLedgerEntryUncheckedCreateNestedManyWithoutBranchInput
+    generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutBranchInput
+    topups?: TopupUncheckedCreateNestedManyWithoutBranchInput
+    expenses?: ExpenseUncheckedCreateNestedManyWithoutBranchInput
+  }
+
+  export type BranchCreateOrConnectWithoutDistributionsInput = {
+    where: BranchWhereUniqueInput
+    create: XOR<BranchCreateWithoutDistributionsInput, BranchUncheckedCreateWithoutDistributionsInput>
+  }
+
+  export type TopupCreateWithoutDistributionInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    receiptNumber: string
+    status?: string
+    note?: string | null
+    createdAt?: Date | string
+    acknowledgedAt?: Date | string | null
+    branch: BranchCreateNestedOneWithoutTopupsInput
+    currency?: CurrencyCreateNestedOneWithoutTopupsInput
+    initiatedBy: SuperAdminCreateNestedOneWithoutTopupsInitiatedInput
+    branchManager: AppUserCreateNestedOneWithoutTopupsReceivedInput
+    generalLedgerEntries?: GeneralLedgerEntryCreateNestedManyWithoutTopupInput
+  }
+
+  export type TopupUncheckedCreateWithoutDistributionInput = {
+    id?: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    currencyId?: string | null
+    initiatedById: string
+    branchManagerId: string
+    receiptNumber: string
+    status?: string
+    note?: string | null
+    createdAt?: Date | string
+    acknowledgedAt?: Date | string | null
+    generalLedgerEntries?: GeneralLedgerEntryUncheckedCreateNestedManyWithoutTopupInput
+  }
+
+  export type TopupCreateOrConnectWithoutDistributionInput = {
+    where: TopupWhereUniqueInput
+    create: XOR<TopupCreateWithoutDistributionInput, TopupUncheckedCreateWithoutDistributionInput>
+  }
+
+  export type FundSourceCreateWithoutDistributionsInput = {
+    id?: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+    partner: PartnerCreateNestedOneWithoutFundSourcesInput
+    recordedBy: SuperAdminCreateNestedOneWithoutFundSourcesRecordedInput
+  }
+
+  export type FundSourceUncheckedCreateWithoutDistributionsInput = {
+    id?: string
+    partnerId: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    recordedById: string
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type FundSourceCreateOrConnectWithoutDistributionsInput = {
+    where: FundSourceWhereUniqueInput
+    create: XOR<FundSourceCreateWithoutDistributionsInput, FundSourceUncheckedCreateWithoutDistributionsInput>
+  }
+
+  export type SuperAdminCreateWithoutDistributionsRecordedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    preferredLanguage?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    partnersCreated?: PartnerCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceCreateNestedManyWithoutRecordedByInput
+    branchesCreated?: BranchCreateNestedManyWithoutCreatedBySuperAdminInput
+    topupsInitiated?: TopupCreateNestedManyWithoutInitiatedByInput
+    auditLogs?: AuditLogCreateNestedManyWithoutPerformedByAdminInput
+    expensesPaid?: ExpenseCreateNestedManyWithoutPaidByInput
+    salariesPaid?: SalaryPaymentCreateNestedManyWithoutPaidByInput
+  }
+
+  export type SuperAdminUncheckedCreateWithoutDistributionsRecordedInput = {
+    id?: string
+    name: string
+    email: string
+    passwordHash: string
+    preferredLanguage?: string
+    isActive?: boolean
+    createdAt?: Date | string
+    partnersCreated?: PartnerUncheckedCreateNestedManyWithoutCreatedByInput
+    fundSourcesRecorded?: FundSourceUncheckedCreateNestedManyWithoutRecordedByInput
+    branchesCreated?: BranchUncheckedCreateNestedManyWithoutCreatedBySuperAdminInput
+    topupsInitiated?: TopupUncheckedCreateNestedManyWithoutInitiatedByInput
+    auditLogs?: AuditLogUncheckedCreateNestedManyWithoutPerformedByAdminInput
+    expensesPaid?: ExpenseUncheckedCreateNestedManyWithoutPaidByInput
+    salariesPaid?: SalaryPaymentUncheckedCreateNestedManyWithoutPaidByInput
+  }
+
+  export type SuperAdminCreateOrConnectWithoutDistributionsRecordedInput = {
+    where: SuperAdminWhereUniqueInput
+    create: XOR<SuperAdminCreateWithoutDistributionsRecordedInput, SuperAdminUncheckedCreateWithoutDistributionsRecordedInput>
+  }
+
+  export type PartnerUpsertWithoutDistributionsInput = {
+    update: XOR<PartnerUpdateWithoutDistributionsInput, PartnerUncheckedUpdateWithoutDistributionsInput>
+    create: XOR<PartnerCreateWithoutDistributionsInput, PartnerUncheckedCreateWithoutDistributionsInput>
+    where?: PartnerWhereInput
+  }
+
+  export type PartnerUpdateToOneWithWhereWithoutDistributionsInput = {
+    where?: PartnerWhereInput
+    data: XOR<PartnerUpdateWithoutDistributionsInput, PartnerUncheckedUpdateWithoutDistributionsInput>
+  }
+
+  export type PartnerUpdateWithoutDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdBy?: SuperAdminUpdateOneWithoutPartnersCreatedNestedInput
+    fundSources?: FundSourceUpdateManyWithoutPartnerNestedInput
+  }
+
+  export type PartnerUncheckedUpdateWithoutDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdById?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fundSources?: FundSourceUncheckedUpdateManyWithoutPartnerNestedInput
+  }
+
+  export type BranchUpsertWithoutDistributionsInput = {
+    update: XOR<BranchUpdateWithoutDistributionsInput, BranchUncheckedUpdateWithoutDistributionsInput>
+    create: XOR<BranchCreateWithoutDistributionsInput, BranchUncheckedCreateWithoutDistributionsInput>
+    where?: BranchWhereInput
+  }
+
+  export type BranchUpdateToOneWithWhereWithoutDistributionsInput = {
+    where?: BranchWhereInput
+    data: XOR<BranchUpdateWithoutDistributionsInput, BranchUncheckedUpdateWithoutDistributionsInput>
+  }
+
+  export type BranchUpdateWithoutDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    branchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    defaultLanguage?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
+    currency?: CurrencyUpdateOneWithoutBranchesNestedInput
+    createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    users?: AppUserUpdateManyWithoutBranchNestedInput
+    commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
+    sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
+    receivedTransactions?: TransactionUpdateManyWithoutReceiverBranchNestedInput
+    subLedgerEntries?: SubLedgerEntryUpdateManyWithoutBranchNestedInput
+    generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutBranchNestedInput
+    topups?: TopupUpdateManyWithoutBranchNestedInput
+    expenses?: ExpenseUpdateManyWithoutBranchNestedInput
+  }
+
+  export type BranchUncheckedUpdateWithoutDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    location?: NullableStringFieldUpdateOperationsInput | string | null
+    address?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    branchCode?: NullableStringFieldUpdateOperationsInput | string | null
+    status?: StringFieldUpdateOperationsInput | string
+    managerId?: NullableStringFieldUpdateOperationsInput | string | null
+    currencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    defaultLanguage?: StringFieldUpdateOperationsInput | string
+    createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
+    commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
+    sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
+    receivedTransactions?: TransactionUncheckedUpdateManyWithoutReceiverBranchNestedInput
+    subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
+    generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutBranchNestedInput
+    topups?: TopupUncheckedUpdateManyWithoutBranchNestedInput
+    expenses?: ExpenseUncheckedUpdateManyWithoutBranchNestedInput
+  }
+
+  export type TopupUpsertWithoutDistributionInput = {
+    update: XOR<TopupUpdateWithoutDistributionInput, TopupUncheckedUpdateWithoutDistributionInput>
+    create: XOR<TopupCreateWithoutDistributionInput, TopupUncheckedCreateWithoutDistributionInput>
+    where?: TopupWhereInput
+  }
+
+  export type TopupUpdateToOneWithWhereWithoutDistributionInput = {
+    where?: TopupWhereInput
+    data: XOR<TopupUpdateWithoutDistributionInput, TopupUncheckedUpdateWithoutDistributionInput>
+  }
+
+  export type TopupUpdateWithoutDistributionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    branch?: BranchUpdateOneRequiredWithoutTopupsNestedInput
+    currency?: CurrencyUpdateOneWithoutTopupsNestedInput
+    initiatedBy?: SuperAdminUpdateOneRequiredWithoutTopupsInitiatedNestedInput
+    branchManager?: AppUserUpdateOneRequiredWithoutTopupsReceivedNestedInput
+    generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTopupNestedInput
+  }
+
+  export type TopupUncheckedUpdateWithoutDistributionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    currencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    initiatedById?: StringFieldUpdateOperationsInput | string
+    branchManagerId?: StringFieldUpdateOperationsInput | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    status?: StringFieldUpdateOperationsInput | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTopupNestedInput
+  }
+
+  export type FundSourceUpsertWithoutDistributionsInput = {
+    update: XOR<FundSourceUpdateWithoutDistributionsInput, FundSourceUncheckedUpdateWithoutDistributionsInput>
+    create: XOR<FundSourceCreateWithoutDistributionsInput, FundSourceUncheckedCreateWithoutDistributionsInput>
+    where?: FundSourceWhereInput
+  }
+
+  export type FundSourceUpdateToOneWithWhereWithoutDistributionsInput = {
+    where?: FundSourceWhereInput
+    data: XOR<FundSourceUpdateWithoutDistributionsInput, FundSourceUncheckedUpdateWithoutDistributionsInput>
+  }
+
+  export type FundSourceUpdateWithoutDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partner?: PartnerUpdateOneRequiredWithoutFundSourcesNestedInput
+    recordedBy?: SuperAdminUpdateOneRequiredWithoutFundSourcesRecordedNestedInput
+  }
+
+  export type FundSourceUncheckedUpdateWithoutDistributionsInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedById?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type SuperAdminUpsertWithoutDistributionsRecordedInput = {
+    update: XOR<SuperAdminUpdateWithoutDistributionsRecordedInput, SuperAdminUncheckedUpdateWithoutDistributionsRecordedInput>
+    create: XOR<SuperAdminCreateWithoutDistributionsRecordedInput, SuperAdminUncheckedCreateWithoutDistributionsRecordedInput>
+    where?: SuperAdminWhereInput
+  }
+
+  export type SuperAdminUpdateToOneWithWhereWithoutDistributionsRecordedInput = {
+    where?: SuperAdminWhereInput
+    data: XOR<SuperAdminUpdateWithoutDistributionsRecordedInput, SuperAdminUncheckedUpdateWithoutDistributionsRecordedInput>
+  }
+
+  export type SuperAdminUpdateWithoutDistributionsRecordedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUpdateManyWithoutRecordedByNestedInput
+    branchesCreated?: BranchUpdateManyWithoutCreatedBySuperAdminNestedInput
+    topupsInitiated?: TopupUpdateManyWithoutInitiatedByNestedInput
+    auditLogs?: AuditLogUpdateManyWithoutPerformedByAdminNestedInput
+    expensesPaid?: ExpenseUpdateManyWithoutPaidByNestedInput
+    salariesPaid?: SalaryPaymentUpdateManyWithoutPaidByNestedInput
+  }
+
+  export type SuperAdminUncheckedUpdateWithoutDistributionsRecordedInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: StringFieldUpdateOperationsInput | string
+    passwordHash?: StringFieldUpdateOperationsInput | string
+    preferredLanguage?: StringFieldUpdateOperationsInput | string
+    isActive?: BoolFieldUpdateOperationsInput | boolean
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partnersCreated?: PartnerUncheckedUpdateManyWithoutCreatedByNestedInput
+    fundSourcesRecorded?: FundSourceUncheckedUpdateManyWithoutRecordedByNestedInput
+    branchesCreated?: BranchUncheckedUpdateManyWithoutCreatedBySuperAdminNestedInput
+    topupsInitiated?: TopupUncheckedUpdateManyWithoutInitiatedByNestedInput
+    auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByAdminNestedInput
+    expensesPaid?: ExpenseUncheckedUpdateManyWithoutPaidByNestedInput
+    salariesPaid?: SalaryPaymentUncheckedUpdateManyWithoutPaidByNestedInput
   }
 
   export type BranchCreateManyCurrencyInput = {
@@ -33643,6 +42213,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
   }
 
   export type TopupCreateManyCurrencyInput = {
@@ -33694,6 +42266,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     createdBySuperAdmin?: SuperAdminUpdateOneRequiredWithoutBranchesCreatedNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -33717,6 +42290,7 @@ export namespace Prisma {
     createdBySuperAdminId?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -33757,6 +42331,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     commissionTier?: CommissionTierUpdateOneWithoutTransactionsNestedInput
@@ -33765,6 +42341,7 @@ export namespace Prisma {
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutCurrencyInput = {
@@ -33788,8 +42365,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutCurrencyInput = {
@@ -33813,6 +42393,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TopupUpdateWithoutCurrencyInput = {
@@ -33826,6 +42408,7 @@ export namespace Prisma {
     branch?: BranchUpdateOneRequiredWithoutTopupsNestedInput
     initiatedBy?: SuperAdminUpdateOneRequiredWithoutTopupsInitiatedNestedInput
     branchManager?: AppUserUpdateOneRequiredWithoutTopupsReceivedNestedInput
+    distribution?: PartnerDistributionUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTopupNestedInput
   }
 
@@ -33840,6 +42423,7 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    distribution?: PartnerDistributionUncheckedUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTopupNestedInput
   }
 
@@ -33925,6 +42509,37 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PartnerCreateManyCreatedByInput = {
+    id?: string
+    name: string
+    email?: string | null
+    phone?: string | null
+    createdAt?: Date | string
+  }
+
+  export type FundSourceCreateManyRecordedByInput = {
+    id?: string
+    partnerId: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionCreateManyRecordedByInput = {
+    id?: string
+    partnerId: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    fundSourceId: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
   export type BranchCreateManyCreatedBySuperAdminInput = {
     id?: string
     name: string
@@ -33983,6 +42598,105 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type PartnerUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fundSources?: FundSourceUpdateManyWithoutPartnerNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutPartnerNestedInput
+  }
+
+  export type PartnerUncheckedUpdateWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    fundSources?: FundSourceUncheckedUpdateManyWithoutPartnerNestedInput
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutPartnerNestedInput
+  }
+
+  export type PartnerUncheckedUpdateManyWithoutCreatedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    name?: StringFieldUpdateOperationsInput | string
+    email?: NullableStringFieldUpdateOperationsInput | string | null
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundSourceUpdateWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partner?: PartnerUpdateOneRequiredWithoutFundSourcesNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutFundSourceNestedInput
+  }
+
+  export type FundSourceUncheckedUpdateWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutFundSourceNestedInput
+  }
+
+  export type FundSourceUncheckedUpdateManyWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionUpdateWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
+    branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
+    topup?: TopupUpdateOneWithoutDistributionNestedInput
+    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+  }
+
+  export type PartnerDistributionUncheckedUpdateWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyWithoutRecordedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type BranchUpdateWithoutCreatedBySuperAdminInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
@@ -33996,6 +42710,7 @@ export namespace Prisma {
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     manager?: AppUserUpdateOneWithoutManagesBranchNestedInput
     currency?: CurrencyUpdateOneWithoutBranchesNestedInput
+    distributions?: PartnerDistributionUpdateManyWithoutBranchNestedInput
     users?: AppUserUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUpdateManyWithoutSenderBranchNestedInput
@@ -34019,6 +42734,7 @@ export namespace Prisma {
     defaultLanguage?: StringFieldUpdateOperationsInput | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     updatedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutBranchNestedInput
     users?: AppUserUncheckedUpdateManyWithoutBranchNestedInput
     commissionTiers?: CommissionTierUncheckedUpdateManyWithoutBranchNestedInput
     sentTransactions?: TransactionUncheckedUpdateManyWithoutSenderBranchNestedInput
@@ -34055,6 +42771,7 @@ export namespace Prisma {
     branch?: BranchUpdateOneRequiredWithoutTopupsNestedInput
     currency?: CurrencyUpdateOneWithoutTopupsNestedInput
     branchManager?: AppUserUpdateOneRequiredWithoutTopupsReceivedNestedInput
+    distribution?: PartnerDistributionUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTopupNestedInput
   }
 
@@ -34069,6 +42786,7 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    distribution?: PartnerDistributionUncheckedUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTopupNestedInput
   }
 
@@ -34175,9 +42893,22 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PartnerDistributionCreateManyBranchInput = {
+    id?: string
+    partnerId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    fundSourceId: string
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
   export type AppUserCreateManyBranchInput = {
     id?: string
     name: string
+    phone?: string | null
     email: string
     passwordHash: string
     role: string
@@ -34219,6 +42950,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionCreateManyReceiverBranchInput = {
@@ -34242,6 +42975,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
   }
 
   export type SubLedgerEntryCreateManyBranchInput = {
@@ -34284,9 +43019,46 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type PartnerDistributionUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
+    topup?: TopupUpdateOneWithoutDistributionNestedInput
+    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    recordedBy?: SuperAdminUpdateOneRequiredWithoutDistributionsRecordedNestedInput
+  }
+
+  export type PartnerDistributionUncheckedUpdateWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyWithoutBranchInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type AppUserUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -34300,11 +43072,13 @@ export namespace Prisma {
     topupsReceived?: TopupUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -34318,11 +43092,13 @@ export namespace Prisma {
     topupsReceived?: TopupUncheckedUpdateManyWithoutBranchManagerNestedInput
     auditLogs?: AuditLogUncheckedUpdateManyWithoutPerformedByUserNestedInput
     salaryPayments?: SalaryPaymentUncheckedUpdateManyWithoutStaffNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutCollectedByNestedInput
   }
 
   export type AppUserUncheckedUpdateManyWithoutBranchInput = {
     id?: StringFieldUpdateOperationsInput | string
     name?: StringFieldUpdateOperationsInput | string
+    phone?: NullableStringFieldUpdateOperationsInput | string | null
     email?: StringFieldUpdateOperationsInput | string
     passwordHash?: StringFieldUpdateOperationsInput | string
     role?: StringFieldUpdateOperationsInput | string
@@ -34384,6 +43160,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
     commissionTier?: CommissionTierUpdateOneWithoutTransactionsNestedInput
@@ -34392,6 +43170,7 @@ export namespace Prisma {
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutSenderBranchInput = {
@@ -34415,8 +43194,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutSenderBranchInput = {
@@ -34440,6 +43222,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionUpdateWithoutReceiverBranchInput = {
@@ -34457,6 +43241,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
     commissionTier?: CommissionTierUpdateOneWithoutTransactionsNestedInput
@@ -34465,6 +43251,7 @@ export namespace Prisma {
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutReceiverBranchInput = {
@@ -34488,8 +43275,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutReceiverBranchInput = {
@@ -34513,6 +43303,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type SubLedgerEntryUpdateWithoutBranchInput = {
@@ -34577,6 +43369,7 @@ export namespace Prisma {
     currency?: CurrencyUpdateOneWithoutTopupsNestedInput
     initiatedBy?: SuperAdminUpdateOneRequiredWithoutTopupsInitiatedNestedInput
     branchManager?: AppUserUpdateOneRequiredWithoutTopupsReceivedNestedInput
+    distribution?: PartnerDistributionUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTopupNestedInput
   }
 
@@ -34591,6 +43384,7 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    distribution?: PartnerDistributionUncheckedUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTopupNestedInput
   }
 
@@ -34658,6 +43452,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionCreateManyCompletedByInput = {
@@ -34681,6 +43477,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionCreateManyRefundedByInput = {
@@ -34704,6 +43502,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
   }
 
   export type TopupCreateManyBranchManagerInput = {
@@ -34739,6 +43539,14 @@ export namespace Prisma {
     createdAt?: Date | string
   }
 
+  export type PickupEventCreateManyCollectedByInput = {
+    id?: string
+    transactionId: string
+    amount: Decimal | DecimalJsLike | number | string
+    receiptNumber: string
+    createdAt?: Date | string
+  }
+
   export type TransactionUpdateWithoutCreatedByInput = {
     id?: StringFieldUpdateOperationsInput | string
     type?: StringFieldUpdateOperationsInput | string
@@ -34754,6 +43562,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
@@ -34762,6 +43572,7 @@ export namespace Prisma {
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutCreatedByInput = {
@@ -34785,8 +43596,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutCreatedByInput = {
@@ -34810,6 +43624,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionUpdateWithoutCompletedByInput = {
@@ -34827,6 +43643,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
@@ -34835,6 +43653,7 @@ export namespace Prisma {
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutCompletedByInput = {
@@ -34858,8 +43677,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutCompletedByInput = {
@@ -34883,6 +43705,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionUpdateWithoutRefundedByInput = {
@@ -34900,6 +43724,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
@@ -34908,6 +43734,7 @@ export namespace Prisma {
     completedBy?: AppUserUpdateOneWithoutCompletedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutRefundedByInput = {
@@ -34931,8 +43758,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutRefundedByInput = {
@@ -34956,6 +43786,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type TopupUpdateWithoutBranchManagerInput = {
@@ -34969,6 +43801,7 @@ export namespace Prisma {
     branch?: BranchUpdateOneRequiredWithoutTopupsNestedInput
     currency?: CurrencyUpdateOneWithoutTopupsNestedInput
     initiatedBy?: SuperAdminUpdateOneRequiredWithoutTopupsInitiatedNestedInput
+    distribution?: PartnerDistributionUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTopupNestedInput
   }
 
@@ -34983,6 +43816,7 @@ export namespace Prisma {
     note?: NullableStringFieldUpdateOperationsInput | string | null
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     acknowledgedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    distribution?: PartnerDistributionUncheckedUpdateOneWithoutTopupNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTopupNestedInput
   }
 
@@ -35059,6 +43893,124 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PickupEventUpdateWithoutCollectedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    transaction?: TransactionUpdateOneRequiredWithoutPickupEventsNestedInput
+  }
+
+  export type PickupEventUncheckedUpdateWithoutCollectedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PickupEventUncheckedUpdateManyWithoutCollectedByInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    transactionId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type FundSourceCreateManyPartnerInput = {
+    id?: string
+    commodityName: string
+    cashValue: Decimal | DecimalJsLike | number | string
+    description?: string | null
+    recordedById: string
+    code: string
+    recordedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionCreateManyPartnerInput = {
+    id?: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    fundSourceId: string
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type FundSourceUpdateWithoutPartnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUpdateManyWithoutFundSourceNestedInput
+    recordedBy?: SuperAdminUpdateOneRequiredWithoutFundSourcesRecordedNestedInput
+  }
+
+  export type FundSourceUncheckedUpdateWithoutPartnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedById?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    distributions?: PartnerDistributionUncheckedUpdateManyWithoutFundSourceNestedInput
+  }
+
+  export type FundSourceUncheckedUpdateManyWithoutPartnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    commodityName?: StringFieldUpdateOperationsInput | string
+    cashValue?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    description?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedById?: StringFieldUpdateOperationsInput | string
+    code?: StringFieldUpdateOperationsInput | string
+    recordedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionUpdateWithoutPartnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
+    topup?: TopupUpdateOneWithoutDistributionNestedInput
+    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    recordedBy?: SuperAdminUpdateOneRequiredWithoutDistributionsRecordedNestedInput
+  }
+
+  export type PartnerDistributionUncheckedUpdateWithoutPartnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyWithoutPartnerInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    fundSourceId?: StringFieldUpdateOperationsInput | string
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type TransactionCreateManyCommissionTierInput = {
     id?: string
     type?: string
@@ -35080,6 +44032,8 @@ export namespace Prisma {
     createdAt?: Date | string
     completedAt?: Date | string | null
     refundedAt?: Date | string | null
+    parentTransactionId?: string | null
+    amountCollected?: Decimal | DecimalJsLike | number | string
   }
 
   export type TransactionUpdateWithoutCommissionTierInput = {
@@ -35097,6 +44051,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     senderBranch?: BranchUpdateOneRequiredWithoutSentTransactionsNestedInput
     receiverBranch?: BranchUpdateOneRequiredWithoutReceivedTransactionsNestedInput
     currency?: CurrencyUpdateOneWithoutTransactionsNestedInput
@@ -35105,6 +44061,7 @@ export namespace Prisma {
     refundedBy?: AppUserUpdateOneWithoutRefundedTransactionsNestedInput
     subLedgerEntries?: SubLedgerEntryUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateWithoutCommissionTierInput = {
@@ -35128,8 +44085,11 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     subLedgerEntries?: SubLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
     generalLedgerEntries?: GeneralLedgerEntryUncheckedUpdateManyWithoutTransactionNestedInput
+    pickupEvents?: PickupEventUncheckedUpdateManyWithoutTransactionNestedInput
   }
 
   export type TransactionUncheckedUpdateManyWithoutCommissionTierInput = {
@@ -35153,6 +44113,8 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     completedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
     refundedAt?: NullableDateTimeFieldUpdateOperationsInput | Date | string | null
+    parentTransactionId?: NullableStringFieldUpdateOperationsInput | string | null
+    amountCollected?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
   }
 
   export type SubLedgerEntryCreateManyTransactionInput = {
@@ -35170,6 +44132,14 @@ export namespace Prisma {
     sourceType: string
     amount: Decimal | DecimalJsLike | number | string
     postedAt?: Date | string
+  }
+
+  export type PickupEventCreateManyTransactionInput = {
+    id?: string
+    amount: Decimal | DecimalJsLike | number | string
+    collectedById: string
+    receiptNumber: string
+    createdAt?: Date | string
   }
 
   export type SubLedgerEntryUpdateWithoutTransactionInput = {
@@ -35223,6 +44193,30 @@ export namespace Prisma {
     postedAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
+  export type PickupEventUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    collectedBy?: AppUserUpdateOneRequiredWithoutPickupEventsNestedInput
+  }
+
+  export type PickupEventUncheckedUpdateWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    collectedById?: StringFieldUpdateOperationsInput | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PickupEventUncheckedUpdateManyWithoutTransactionInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    collectedById?: StringFieldUpdateOperationsInput | string
+    receiptNumber?: StringFieldUpdateOperationsInput | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
   export type GeneralLedgerEntryCreateManyTopupInput = {
     id?: string
     branchId: string
@@ -35257,6 +44251,54 @@ export namespace Prisma {
     sourceType?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     postedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionCreateManyFundSourceInput = {
+    id?: string
+    partnerId: string
+    branchId: string
+    amount: Decimal | DecimalJsLike | number | string
+    note?: string | null
+    topupId?: string | null
+    recordedById: string
+    distributedAt?: Date | string
+    createdAt?: Date | string
+  }
+
+  export type PartnerDistributionUpdateWithoutFundSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
+    branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
+    topup?: TopupUpdateOneWithoutDistributionNestedInput
+    recordedBy?: SuperAdminUpdateOneRequiredWithoutDistributionsRecordedNestedInput
+  }
+
+  export type PartnerDistributionUncheckedUpdateWithoutFundSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+  }
+
+  export type PartnerDistributionUncheckedUpdateManyWithoutFundSourceInput = {
+    id?: StringFieldUpdateOperationsInput | string
+    partnerId?: StringFieldUpdateOperationsInput | string
+    branchId?: StringFieldUpdateOperationsInput | string
+    amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    note?: NullableStringFieldUpdateOperationsInput | string | null
+    topupId?: NullableStringFieldUpdateOperationsInput | string | null
+    recordedById?: StringFieldUpdateOperationsInput | string
+    distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
   }
 
 

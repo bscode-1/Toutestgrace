@@ -1,13 +1,14 @@
+// src/app/api/roles/[roleId]/route.ts
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 // DELETE /api/roles/:roleId — only allowed for non-system roles with zero staff assigned
 export async function DELETE(
   req: NextRequest,
   { params }: { params: Promise<{ roleId: string }> }
 ) {
-  const auth = requireSuperAdmin(req);
+  const auth = requirePermission(req, "MANAGE_ROLES");
   if (auth instanceof NextResponse) return auth;
 
   const { roleId } = await params;
@@ -36,7 +37,8 @@ export async function DELETE(
       entityType: "ROLE",
       entityId: roleId,
       action: "DELETED",
-      performedByAdminId: auth.id,
+      performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
+      performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
       metadata: { name: role.name },
     },
   });

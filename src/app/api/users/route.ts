@@ -20,23 +20,21 @@ export async function POST(req: NextRequest) {
 
   const body = await req.json();
   const parsed = createUserSchema.safeParse(body);
-
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
 
   const { name, email, password, role, branchId, preferredLanguage } = parsed.data;
 
-  // Confirm the branch actually exists before attaching a user to it
+  const roleExists = await prisma.role.findUnique({ where: { name: role } });
+  if (!roleExists) {
+    return NextResponse.json({ error: "Invalid role" }, { status: 400 });
+  }
+
   const branch = await prisma.branch.findUnique({ where: { id: branchId } });
   if (!branch) {
     return NextResponse.json({ error: "Branch not found" }, { status: 404 });
   }
-
-   const roleExists = await prisma.role.findUnique({ where: { name: role } });
-if (!roleExists) {
-  return NextResponse.json({ error: "Invalid role" }, { status: 400 });
-}
 
   const passwordHash = await hashPassword(password);
 
@@ -54,7 +52,6 @@ if (!roleExists) {
     },
   });
 
-  // Never return the password hash to the client
   const { passwordHash: _omit, ...safeUser } = user;
   return NextResponse.json({ user: safeUser }, { status: 201 });
 }
@@ -72,4 +69,3 @@ export async function GET(req: NextRequest) {
   const safeUsers = users.map(({ passwordHash, ...u }) => u);
   return NextResponse.json({ users: safeUsers });
 }
-

@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
-import { requireSuperAdmin } from "@/lib/require-super-admin";
+import { requirePermission } from "@/lib/require-permission";
 
 const DEFAULT_CATEGORIES = ["RENT", "UTILITIES", "BILLS", "SUPPLIES", "MAINTENANCE", "OTHER"];
 
-// GET /api/expense-categories — list, seeding defaults if empty (super admin only)
+// GET /api/expense-categories — list, seeding defaults if empty
 export async function GET(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "VIEW_EXPENSES");
   if (auth instanceof NextResponse) return auth;
 
   const count = await prisma.expenseCategory.count();
@@ -24,9 +24,9 @@ export async function GET(req: NextRequest) {
 
 const createSchema = z.object({ name: z.string().min(2).max(40) });
 
-// POST /api/expense-categories — add a new category (super admin only)
+// POST /api/expense-categories — add a new category
 export async function POST(req: NextRequest) {
-  const auth = requireSuperAdmin(req);
+  const auth = await requirePermission(req, "MANAGE_EXPENSE_CATEGORIES");
   if (auth instanceof NextResponse) return auth;
 
   const body = await req.json();

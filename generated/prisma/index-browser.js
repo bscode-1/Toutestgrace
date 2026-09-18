@@ -174,12 +174,22 @@ exports.Prisma.BranchScalarFieldEnum = {
 exports.Prisma.AppUserScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  phone: 'phone',
   email: 'email',
   passwordHash: 'passwordHash',
   role: 'role',
   branchId: 'branchId',
   preferredLanguage: 'preferredLanguage',
   isActive: 'isActive',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PartnerScalarFieldEnum = {
+  id: 'id',
+  name: 'name',
+  email: 'email',
+  phone: 'phone',
+  createdById: 'createdById',
   createdAt: 'createdAt'
 };
 
@@ -217,7 +227,9 @@ exports.Prisma.TransactionScalarFieldEnum = {
   refundedById: 'refundedById',
   createdAt: 'createdAt',
   completedAt: 'completedAt',
-  refundedAt: 'refundedAt'
+  refundedAt: 'refundedAt',
+  parentTransactionId: 'parentTransactionId',
+  amountCollected: 'amountCollected'
 };
 
 exports.Prisma.SubLedgerEntryScalarFieldEnum = {
@@ -279,6 +291,15 @@ exports.Prisma.RoleScalarFieldEnum = {
   createdAt: 'createdAt'
 };
 
+exports.Prisma.PickupEventScalarFieldEnum = {
+  id: 'id',
+  transactionId: 'transactionId',
+  amount: 'amount',
+  collectedById: 'collectedById',
+  receiptNumber: 'receiptNumber',
+  createdAt: 'createdAt'
+};
+
 exports.Prisma.ExpenseScalarFieldEnum = {
   id: 'id',
   branchId: 'branchId',
@@ -304,6 +325,31 @@ exports.Prisma.SalaryPaymentScalarFieldEnum = {
 exports.Prisma.ExpenseCategoryScalarFieldEnum = {
   id: 'id',
   name: 'name',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.FundSourceScalarFieldEnum = {
+  id: 'id',
+  partnerId: 'partnerId',
+  commodityName: 'commodityName',
+  cashValue: 'cashValue',
+  description: 'description',
+  recordedById: 'recordedById',
+  code: 'code',
+  recordedAt: 'recordedAt',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.PartnerDistributionScalarFieldEnum = {
+  id: 'id',
+  partnerId: 'partnerId',
+  branchId: 'branchId',
+  amount: 'amount',
+  note: 'note',
+  topupId: 'topupId',
+  fundSourceId: 'fundSourceId',
+  recordedById: 'recordedById',
+  distributedAt: 'distributedAt',
   createdAt: 'createdAt'
 };
 
@@ -341,6 +387,7 @@ exports.Prisma.ModelName = {
   SuperAdmin: 'SuperAdmin',
   Branch: 'Branch',
   AppUser: 'AppUser',
+  Partner: 'Partner',
   CommissionTier: 'CommissionTier',
   Transaction: 'Transaction',
   SubLedgerEntry: 'SubLedgerEntry',
@@ -349,9 +396,12 @@ exports.Prisma.ModelName = {
   AuditLog: 'AuditLog',
   RolePermission: 'RolePermission',
   Role: 'Role',
+  PickupEvent: 'PickupEvent',
   Expense: 'Expense',
   SalaryPayment: 'SalaryPayment',
-  ExpenseCategory: 'ExpenseCategory'
+  ExpenseCategory: 'ExpenseCategory',
+  FundSource: 'FundSource',
+  PartnerDistribution: 'PartnerDistribution'
 };
 
 /**
