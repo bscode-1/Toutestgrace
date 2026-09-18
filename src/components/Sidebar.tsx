@@ -5,7 +5,7 @@ import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { getUser, apiFetch } from "@/lib/client-auth";
 import { useLanguage } from "@/context/LanguageContext";
-import type { PermissionKey } from "@/lib/permissions";
+import type { PermissionKey } from "@/lib/permission-constants";
 
 type NavItem = {
   label: string;

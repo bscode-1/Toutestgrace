@@ -3,7 +3,7 @@ import { verifyToken } from "@/lib/auth";
 import { requireStaff } from "@/lib/require-staff";
 import { hasPermission } from "@/lib/permissions";
 import type { TokenPayload } from "@/lib/auth";
-import type { PermissionKey } from "@/lib/permissions";
+import type { PermissionKey } from "@/lib/permission-constants";
 
 /**
  * Gates a route behind a specific permission key.
