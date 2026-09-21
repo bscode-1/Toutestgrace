@@ -19,5 +19,13 @@ export function requireSuperAdmin(req: NextRequest): TokenPayload | NextResponse
     return NextResponse.json({ error: "Unauthorized: super admin access required" }, { status: 403 });
   }
 
+  // Kept for parity with requireStaff/requirePermission — currently a no-op
+  // for SuperAdmin since that model has no mustChangePassword field yet
+  // (see open schema gap). Harmless once added; SuperAdmin logins never
+  // set this claim today, so payload.mustChangePassword is always falsy here.
+  if (payload.mustChangePassword) {
+    return NextResponse.json({ error: "Password change required" }, { status: 403 });
+  }
+
   return payload;
 }

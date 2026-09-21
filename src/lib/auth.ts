@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import jwt from "jsonwebtoken";
+import jwt, { SignOptions } from "jsonwebtoken";
 
 const JWT_SECRET = process.env.JWT_SECRET as string;
 
@@ -19,10 +19,11 @@ export type TokenPayload = {
   id: string;
   role: string; // "SUPER_ADMIN" or any custom staff role name (e.g. "TELLER", "CASHIER", "RECEPTIONIST")
   branchId?: string;
+  mustChangePassword?: boolean;
 };
 
-export function signToken(payload: TokenPayload): string {
-  return jwt.sign(payload, JWT_SECRET, { expiresIn: "8h" });
+export function signToken(payload: TokenPayload, options?: SignOptions): string {
+  return jwt.sign(payload, JWT_SECRET, { expiresIn: "8h", ...options });
 }
 
 export function verifyToken(token: string): TokenPayload | null {

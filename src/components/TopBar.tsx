@@ -2,13 +2,16 @@
 
 import React, { useState, useEffect } from "react";
 import { useTheme } from "@/context/ThemeContext";
-import { logout } from "@/lib/client-auth";
+import { logout, apiFetch, getUser } from "@/lib/client-auth";
 import { useLanguage } from "@/context/LanguageContext";
 
 export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
   const { theme, toggleTheme } = useTheme();
   const [showNotif, setShowNotif] = useState(false);
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
   const [today, setToday] = useState("");
+  const [branchLabel, setBranchLabel] = useState<string | null>(null);
+  const [branchSubtitle, setBranchSubtitle] = useState<string>("");
   const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
@@ -22,6 +25,30 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
     );
   }, []);
 
+  useEffect(() => {
+    const user = getUser();
+    if (!user) return;
+
+    if (user.role === "SUPER_ADMIN") {
+      setBranchLabel(t("allBranches"));
+      setBranchSubtitle(t("systemOverview"));
+      return;
+    }
+
+    if (!user.branchId) return;
+
+    apiFetch(`/api/branches/${user.branchId}`)
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => {
+        if (data?.branch?.name) {
+          setBranchLabel(data.branch.name);
+          setBranchSubtitle("");
+        }
+      })
+      .catch(() => {});
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
+
   return (
     <header className="h-16 bg-white dark:bg-slate-800 border-b border-slate-200 dark:border-slate-700 flex items-center justify-between px-4 lg:px-6 shrink-0 relative">
       <div className="flex items-center gap-3">
@@ -33,30 +60,32 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
           <i className="fa-solid fa-bars text-slate-600 dark:text-slate-300" />
         </button>
 
-        <div className="hidden sm:flex items-center gap-3">
-          <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2">
-            <i className="fa-solid fa-building-columns text-blue-500 text-sm" />
-              <span className="text-sm font-medium text-slate-700 dark:text-slate-200">{t("allBranches")}</span>
-              <span className="text-xs text-slate-400">• {t("systemOverview")}</span>
-          </div>
+        <div className="flex items-center gap-2 bg-slate-50 dark:bg-slate-700 border border-slate-200 dark:border-slate-600 rounded-lg px-3 py-2">
+          <i className="fa-solid fa-building-columns text-blue-500 text-sm" />
+          <span className="text-sm font-medium text-slate-700 dark:text-slate-200">
+            {branchLabel ?? t("allBranches")}
+          </span>
+          {branchSubtitle && (
+            <span className="text-xs text-slate-400 hidden sm:inline">• {branchSubtitle}</span>
+          )}
+        </div>
 
-          <div className="flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
-            <i className="fa-regular fa-calendar text-slate-400" />
-            {today}
-          </div>
+        <div className="hidden sm:flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
+          <i className="fa-regular fa-calendar text-slate-400" />
+          {today}
         </div>
       </div>
 
       <div className="flex items-center gap-2 lg:gap-3">
-        <a
-          href="/admin/reports"
+        
+         <a href="/admin/reports"
           className="w-9 h-9 rounded-lg bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition"
           aria-label="Reports"
           title="Reports"
         >
           <i className="fa-solid fa-chart-simple text-sm" />
         </a>
-         <button
+        <button
           onClick={() => setLanguage(language === "en" ? "fr" : "en")}
           className="px-3 py-1.5 rounded-lg text-xs font-semibold bg-slate-50 dark:bg-slate-700 text-slate-600 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition"
         >
@@ -93,9 +122,28 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
           )}
         </div>
 
-        <button className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition" aria-label="Profile">
-          <i className="fa-solid fa-user-circle text-xl text-slate-500 dark:text-slate-300" />
-        </button>
+        <div className="relative">
+          <button
+            onClick={() => setShowProfileMenu(!showProfileMenu)}
+            className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700 transition"
+            aria-label="Profile"
+          >
+            <i className="fa-solid fa-user-circle text-xl text-slate-500 dark:text-slate-300" />
+          </button>
+
+          {showProfileMenu && (
+            <div className="absolute right-0 top-12 w-56 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden">
+              
+              <a  href="/account/change-password"
+                onClick={() => setShowProfileMenu(false)}
+                className="flex items-center gap-2 px-4 py-3 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
+              >
+                <i className="fa-solid fa-key text-xs text-slate-400" />
+                Change Password
+              </a>
+            </div>
+          )}
+        </div>
 
         <button
           onClick={logout}

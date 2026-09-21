@@ -40,6 +40,7 @@ export const PERMISSION_KEYS = [
   "MANAGE_ROLES",
   "VIEW_PERMISSIONS",
   "MANAGE_PERMISSIONS",
+  "RESET_STAFF_PASSWORD",
 ] as const;
 
 export type PermissionKey = (typeof PERMISSION_KEYS)[number];
@@ -86,4 +87,6 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   MANAGE_ROLES: "Create / edit custom roles",
   VIEW_PERMISSIONS: "View permissions page",
   MANAGE_PERMISSIONS: "Toggle role permissions",
+
+  RESET_STAFF_PASSWORD: "Reset staff password",
 };

@@ -45,6 +45,11 @@ export default function StaffPage() {
   const [savingEdit, setSavingEdit] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
 
+  const [resettingStaff, setResettingStaff] = useState<Staff | null>(null);
+  const [tempPassword, setTempPassword] = useState<string | null>(null);
+  const [resetLoading, setResetLoading] = useState(false);
+  const [copied, setCopied] = useState(false);
+
   const [roles, setRoles] = useState<RoleOption[]>([]);
 
   const { t } = useLanguage();
@@ -111,6 +116,39 @@ export default function StaffPage() {
       alert((err as Error).message);
     }
   }
+
+  async function resetStaffPassword(s: Staff) {
+  if (!confirm(`Generate a new temporary password for ${s.name}?`)) return;
+  setResetLoading(true);
+  try {
+    const res = await apiFetch(`/api/users/${s.id}/reset-password`, { method: "POST" });
+    const data = await res.json();
+    if (!res.ok) throw new Error(data.error || "Failed to reset password");
+    setResettingStaff(s);
+    setTempPassword(data.tempPassword);
+    setCopied(false);
+  } catch (err) {
+    alert((err as Error).message);
+  } finally {
+    setResetLoading(false);
+  }
+}
+
+function closeResetModal() {
+  setResettingStaff(null);
+  setTempPassword(null);
+  setCopied(false);
+}
+
+async function copyTempPassword() {
+  if (!tempPassword) return;
+  try {
+    await navigator.clipboard.writeText(tempPassword);
+    setCopied(true);
+  } catch {
+    // clipboard may be unavailable — text is still select-all in the modal
+  }
+}
 
   async function loadData() {
   setLoading(true);
@@ -404,6 +442,15 @@ export default function StaffPage() {
                       >
                         <i className={`fa-solid ${s.isActive ? "fa-pause" : "fa-play"} text-xs`} />
                       </button>
+
+                      <button
+                          onClick={() => resetStaffPassword(s)}
+                          disabled={resetLoading}
+                          className="text-slate-400 hover:text-purple-600 dark:hover:text-purple-400 disabled:opacity-50"
+                          aria-label="Reset password"
+                        >
+                          <i className="fa-solid fa-key text-xs" />
+                        </button>
                       <button
                         onClick={() => deleteStaff(s)}
                         className="text-slate-400 hover:text-red-600 dark:hover:text-red-400"
@@ -520,6 +567,41 @@ export default function StaffPage() {
           </div>
         </div>
       )}
+
+      {resettingStaff && tempPassword && (
+  <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
+    <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md">
+      <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-2">
+        Temporary Password Generated
+      </h3>
+      <p className="text-xs text-slate-500 dark:text-slate-400 mb-4">
+        Share this with {resettingStaff.name} now — it won&apos;t be shown again. They&apos;ll be
+        required to set a new password on next login.
+      </p>
+      <div className="flex items-center gap-2 mb-4">
+        <code className="flex-1 px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-mono text-slate-900 dark:text-white select-all overflow-x-auto">
+          {tempPassword}
+        </code>
+        <button
+          type="button"
+          onClick={copyTempPassword}
+          className="shrink-0 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-4 py-2.5 hover:opacity-90 transition-opacity"
+        >
+          {copied ? "Copied!" : "Copy"}
+        </button>
+      </div>
+      <div className="flex justify-end">
+        <button
+          type="button"
+          onClick={closeResetModal}
+          className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200"
+        >
+          Done
+        </button>
+      </div>
+    </div>
+  </div>
+)}
     </div>
   );
 }

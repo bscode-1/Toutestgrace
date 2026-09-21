@@ -9514,6 +9514,7 @@ export namespace Prisma {
     preferredLanguage: string | null
     isActive: boolean | null
     createdAt: Date | null
+    mustChangePassword: boolean | null
   }
 
   export type AppUserMaxAggregateOutputType = {
@@ -9527,6 +9528,7 @@ export namespace Prisma {
     preferredLanguage: string | null
     isActive: boolean | null
     createdAt: Date | null
+    mustChangePassword: boolean | null
   }
 
   export type AppUserCountAggregateOutputType = {
@@ -9540,6 +9542,7 @@ export namespace Prisma {
     preferredLanguage: number
     isActive: number
     createdAt: number
+    mustChangePassword: number
     _all: number
   }
 
@@ -9555,6 +9558,7 @@ export namespace Prisma {
     preferredLanguage?: true
     isActive?: true
     createdAt?: true
+    mustChangePassword?: true
   }
 
   export type AppUserMaxAggregateInputType = {
@@ -9568,6 +9572,7 @@ export namespace Prisma {
     preferredLanguage?: true
     isActive?: true
     createdAt?: true
+    mustChangePassword?: true
   }
 
   export type AppUserCountAggregateInputType = {
@@ -9581,6 +9586,7 @@ export namespace Prisma {
     preferredLanguage?: true
     isActive?: true
     createdAt?: true
+    mustChangePassword?: true
     _all?: true
   }
 
@@ -9667,6 +9673,7 @@ export namespace Prisma {
     preferredLanguage: string
     isActive: boolean
     createdAt: Date
+    mustChangePassword: boolean
     _count: AppUserCountAggregateOutputType | null
     _min: AppUserMinAggregateOutputType | null
     _max: AppUserMaxAggregateOutputType | null
@@ -9697,6 +9704,7 @@ export namespace Prisma {
     preferredLanguage?: boolean
     isActive?: boolean
     createdAt?: boolean
+    mustChangePassword?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     managesBranch?: boolean | AppUser$managesBranchArgs<ExtArgs>
     createdTransactions?: boolean | AppUser$createdTransactionsArgs<ExtArgs>
@@ -9720,6 +9728,7 @@ export namespace Prisma {
     preferredLanguage?: boolean
     isActive?: boolean
     createdAt?: boolean
+    mustChangePassword?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["appUser"]>
 
@@ -9734,6 +9743,7 @@ export namespace Prisma {
     preferredLanguage?: boolean
     isActive?: boolean
     createdAt?: boolean
+    mustChangePassword?: boolean
     branch?: boolean | BranchDefaultArgs<ExtArgs>
   }, ExtArgs["result"]["appUser"]>
 
@@ -9748,9 +9758,10 @@ export namespace Prisma {
     preferredLanguage?: boolean
     isActive?: boolean
     createdAt?: boolean
+    mustChangePassword?: boolean
   }
 
-  export type AppUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "phone" | "email" | "passwordHash" | "role" | "branchId" | "preferredLanguage" | "isActive" | "createdAt", ExtArgs["result"]["appUser"]>
+  export type AppUserOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "name" | "phone" | "email" | "passwordHash" | "role" | "branchId" | "preferredLanguage" | "isActive" | "createdAt" | "mustChangePassword", ExtArgs["result"]["appUser"]>
   export type AppUserInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     managesBranch?: boolean | AppUser$managesBranchArgs<ExtArgs>
@@ -9794,6 +9805,7 @@ export namespace Prisma {
       preferredLanguage: string
       isActive: boolean
       createdAt: Date
+      mustChangePassword: boolean
     }, ExtArgs["result"]["appUser"]>
     composites: {}
   }
@@ -10236,6 +10248,7 @@ export namespace Prisma {
     readonly preferredLanguage: FieldRef<"AppUser", 'String'>
     readonly isActive: FieldRef<"AppUser", 'Boolean'>
     readonly createdAt: FieldRef<"AppUser", 'DateTime'>
+    readonly mustChangePassword: FieldRef<"AppUser", 'Boolean'>
   }
     
 
@@ -28357,7 +28370,8 @@ export namespace Prisma {
     branchId: 'branchId',
     preferredLanguage: 'preferredLanguage',
     isActive: 'isActive',
-    createdAt: 'createdAt'
+    createdAt: 'createdAt',
+    mustChangePassword: 'mustChangePassword'
   };
 
   export type AppUserScalarFieldEnum = (typeof AppUserScalarFieldEnum)[keyof typeof AppUserScalarFieldEnum]
@@ -29138,6 +29152,7 @@ export namespace Prisma {
     preferredLanguage?: StringFilter<"AppUser"> | string
     isActive?: BoolFilter<"AppUser"> | boolean
     createdAt?: DateTimeFilter<"AppUser"> | Date | string
+    mustChangePassword?: BoolFilter<"AppUser"> | boolean
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     managesBranch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     createdTransactions?: TransactionListRelationFilter
@@ -29160,6 +29175,7 @@ export namespace Prisma {
     preferredLanguage?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    mustChangePassword?: SortOrder
     branch?: BranchOrderByWithRelationInput
     managesBranch?: BranchOrderByWithRelationInput
     createdTransactions?: TransactionOrderByRelationAggregateInput
@@ -29185,6 +29201,7 @@ export namespace Prisma {
     preferredLanguage?: StringFilter<"AppUser"> | string
     isActive?: BoolFilter<"AppUser"> | boolean
     createdAt?: DateTimeFilter<"AppUser"> | Date | string
+    mustChangePassword?: BoolFilter<"AppUser"> | boolean
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     managesBranch?: XOR<BranchNullableScalarRelationFilter, BranchWhereInput> | null
     createdTransactions?: TransactionListRelationFilter
@@ -29207,6 +29224,7 @@ export namespace Prisma {
     preferredLanguage?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    mustChangePassword?: SortOrder
     _count?: AppUserCountOrderByAggregateInput
     _max?: AppUserMaxOrderByAggregateInput
     _min?: AppUserMinOrderByAggregateInput
@@ -29226,6 +29244,7 @@ export namespace Prisma {
     preferredLanguage?: StringWithAggregatesFilter<"AppUser"> | string
     isActive?: BoolWithAggregatesFilter<"AppUser"> | boolean
     createdAt?: DateTimeWithAggregatesFilter<"AppUser"> | Date | string
+    mustChangePassword?: BoolWithAggregatesFilter<"AppUser"> | boolean
   }
 
   export type PartnerWhereInput = {
@@ -30853,6 +30872,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
@@ -30875,6 +30895,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
@@ -30895,6 +30916,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
@@ -30917,6 +30939,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
@@ -30938,6 +30961,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
   }
 
   export type AppUserUpdateManyMutationInput = {
@@ -30950,6 +30974,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type AppUserUncheckedUpdateManyInput = {
@@ -30963,6 +30988,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type PartnerCreateInput = {
@@ -32690,6 +32716,7 @@ export namespace Prisma {
     preferredLanguage?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    mustChangePassword?: SortOrder
   }
 
   export type AppUserMaxOrderByAggregateInput = {
@@ -32703,6 +32730,7 @@ export namespace Prisma {
     preferredLanguage?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    mustChangePassword?: SortOrder
   }
 
   export type AppUserMinOrderByAggregateInput = {
@@ -32716,6 +32744,7 @@ export namespace Prisma {
     preferredLanguage?: SortOrder
     isActive?: SortOrder
     createdAt?: SortOrder
+    mustChangePassword?: SortOrder
   }
 
   export type SuperAdminNullableScalarRelationFilter = {
@@ -37150,6 +37179,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionCreateNestedManyWithoutCompletedByInput
@@ -37171,6 +37201,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
     refundedTransactions?: TransactionUncheckedCreateNestedManyWithoutRefundedByInput
@@ -37299,6 +37330,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionCreateNestedManyWithoutCompletedByInput
@@ -37319,6 +37351,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
@@ -37652,6 +37685,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUpdateManyWithoutCompletedByNestedInput
@@ -37673,6 +37707,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
     refundedTransactions?: TransactionUncheckedUpdateManyWithoutRefundedByNestedInput
@@ -37810,6 +37845,7 @@ export namespace Prisma {
     preferredLanguage?: StringFilter<"AppUser"> | string
     isActive?: BoolFilter<"AppUser"> | boolean
     createdAt?: DateTimeFilter<"AppUser"> | Date | string
+    mustChangePassword?: BoolFilter<"AppUser"> | boolean
   }
 
   export type CommissionTierUpsertWithWhereUniqueWithoutBranchInput = {
@@ -39193,6 +39229,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     completedTransactions?: TransactionCreateNestedManyWithoutCompletedByInput
@@ -39214,6 +39251,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
     refundedTransactions?: TransactionUncheckedCreateNestedManyWithoutRefundedByInput
@@ -39238,6 +39276,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
@@ -39259,6 +39298,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     refundedTransactions?: TransactionUncheckedCreateNestedManyWithoutRefundedByInput
@@ -39283,6 +39323,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
@@ -39304,6 +39345,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
@@ -39611,6 +39653,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     completedTransactions?: TransactionUpdateManyWithoutCompletedByNestedInput
@@ -39632,6 +39675,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
     refundedTransactions?: TransactionUncheckedUpdateManyWithoutRefundedByNestedInput
@@ -39662,6 +39706,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
@@ -39683,6 +39728,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     refundedTransactions?: TransactionUncheckedUpdateManyWithoutRefundedByNestedInput
@@ -39713,6 +39759,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
@@ -39734,6 +39781,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
@@ -40480,6 +40528,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
@@ -40501,6 +40550,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
@@ -40734,6 +40784,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
@@ -40755,6 +40806,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
@@ -40825,6 +40877,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
@@ -40846,6 +40899,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
@@ -40920,6 +40974,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
@@ -40941,6 +40996,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
@@ -41066,6 +41122,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
@@ -41087,6 +41144,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
@@ -41189,6 +41247,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
@@ -41210,6 +41269,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
@@ -41425,6 +41485,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     branch: BranchCreateNestedOneWithoutUsersInput
     managesBranch?: BranchCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionCreateNestedManyWithoutCreatedByInput
@@ -41446,6 +41507,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
     managesBranch?: BranchUncheckedCreateNestedOneWithoutManagerInput
     createdTransactions?: TransactionUncheckedCreateNestedManyWithoutCreatedByInput
     completedTransactions?: TransactionUncheckedCreateNestedManyWithoutCompletedByInput
@@ -41520,6 +41582,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     branch?: BranchUpdateOneRequiredWithoutUsersNestedInput
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
@@ -41541,6 +41604,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
@@ -42915,6 +42979,7 @@ export namespace Prisma {
     preferredLanguage?: string
     isActive?: boolean
     createdAt?: Date | string
+    mustChangePassword?: boolean
   }
 
   export type CommissionTierCreateManyBranchInput = {
@@ -43065,6 +43130,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUpdateManyWithoutCompletedByNestedInput
@@ -43085,6 +43151,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
     managesBranch?: BranchUncheckedUpdateOneWithoutManagerNestedInput
     createdTransactions?: TransactionUncheckedUpdateManyWithoutCreatedByNestedInput
     completedTransactions?: TransactionUncheckedUpdateManyWithoutCompletedByNestedInput
@@ -43105,6 +43172,7 @@ export namespace Prisma {
     preferredLanguage?: StringFieldUpdateOperationsInput | string
     isActive?: BoolFieldUpdateOperationsInput | boolean
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
+    mustChangePassword?: BoolFieldUpdateOperationsInput | boolean
   }
 
   export type CommissionTierUpdateWithoutBranchInput = {

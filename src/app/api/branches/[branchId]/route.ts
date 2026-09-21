@@ -155,3 +155,21 @@ export async function DELETE(
 
   return NextResponse.json({ success: true });
 }
+
+// GET /api/branches/:branchId — fetch a single branch's details
+export async function GET(
+  req: NextRequest,
+  { params }: { params: Promise<{ branchId: string }> }
+) {
+  const auth = await requirePermission(req, "VIEW_BRANCHES");
+  if (auth instanceof NextResponse) return auth;
+
+  const { branchId } = await params;
+
+  const branch = await prisma.branch.findUnique({ where: { id: branchId } });
+  if (!branch) {
+    return NextResponse.json({ error: "Branch not found" }, { status: 404 });
+  }
+
+  return NextResponse.json({ branch });
+}

@@ -36,4 +36,5 @@ export async function POST(req: NextRequest) {
     token,
     user: { id: superAdmin.id, name: superAdmin.name, email: superAdmin.email },
   });
+  
 }

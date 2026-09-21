@@ -37,6 +37,17 @@ export async function requirePermission(
     );
   }
 
+  // Shared mustChangePassword lockout — applies before any role branching,
+  // so a limited (15m) token can never slip through to a real action route.
+  // The dedicated /api/auth/change-password route reads the token directly
+  // and never calls this guard, so it's unaffected.
+  if (payload.mustChangePassword) {
+    return NextResponse.json(
+      { error: "Password change required" },
+      { status: 403 }
+    );
+  }
+
   // Owner bypass — no permission check applies to SUPER_ADMIN
   if (payload.role === "SUPER_ADMIN") {
     return payload;

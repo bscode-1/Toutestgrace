@@ -17,6 +17,9 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const [permissions, setPermissions] = useState<Record<string, boolean> | null>(null);
 
+  const [branchName, setBranchName] = useState("");
+  const [showProfileMenu, setShowProfileMenu] = useState(false);
+
   const NAV_ITEMS = [
     { label: t("dashboard"), href: "/branch", icon: "fa-house", permission: null },
     { label: t("newTransfer"), href: "/branch/new-transfer", icon: "fa-paper-plane", permission: "CREATE_TRANSFER" },
@@ -46,6 +49,16 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
       .then((res) => (res.ok ? res.json() : null))
       .then((data) => data && setPermissions(data.permissions));
   }, []);
+
+  useEffect(() => {
+  const user = getUser();
+  if (!user?.branchId) return;
+  fetch(`/api/branches/${user.branchId}`, {
+    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+  })
+    .then((res) => (res.ok ? res.json() : null))
+    .then((data) => data && setBranchName(data.branch.name));
+}, []);
 
   const visibleNav = NAV_ITEMS.filter(
     (item) => item.permission === null || permissions === null || permissions[item.permission]
@@ -166,6 +179,14 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
             >
               <i className="fa-solid fa-bars text-slate-600 dark:text-slate-300" />
             </button>
+            
+              {branchName && (
+                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-sm font-semibold text-blue-600 dark:text-blue-400">
+                  <i className="fa-solid fa-building-columns text-[10px]" />
+                  {branchName}
+                </div>
+              )}
+
             <div className="hidden sm:flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
               <i className="fa-regular fa-calendar text-slate-400" />
               {today}
@@ -190,16 +211,37 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
                 <i className="fa-solid fa-moon text-yellow-400" />
               )}
             </button>
-            <div className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold">
-              {userName ? userName.charAt(0).toUpperCase() : "?"}
+            
+            <div className="relative">
+              <button
+                onClick={() => setShowProfileMenu((v) => !v)}
+                className="w-9 h-9 rounded-full bg-gradient-to-br from-blue-400 to-indigo-500 flex items-center justify-center text-white text-xs font-semibold"
+              >
+                {userName ? userName.charAt(0).toUpperCase() : "?"}
+              </button>
+              {showProfileMenu && (
+                <div
+                  className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg py-1 z-50"
+                  onMouseLeave={() => setShowProfileMenu(false)}
+                >
+                  <Link
+                    href="/account/change-password"
+                    onClick={() => setShowProfileMenu(false)}
+                    className="flex items-center gap-2 px-4 py-2 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700"
+                  >
+                    <i className="fa-solid fa-key w-4 text-center" />
+                    Change Password
+                  </Link>
+                  <button
+                    onClick={logout}
+                    className="w-full flex items-center gap-2 px-4 py-2 text-sm text-red-500 hover:bg-red-50 dark:hover:bg-red-900/20"
+                  >
+                    <i className="fa-solid fa-right-from-bracket w-4 text-center" />
+                    Sign out
+                  </button>
+                </div>
+              )}
             </div>
-            <button
-              onClick={logout}
-              className="p-2 rounded-lg hover:bg-red-50 dark:hover:bg-red-900/20 transition group"
-              aria-label="Logout"
-            >
-              <i className="fa-solid fa-right-from-bracket text-slate-500 dark:text-slate-300 group-hover:text-red-500" />
-            </button>
           </div>
         </header>
 

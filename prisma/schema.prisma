@@ -146,6 +146,8 @@ model AppUser {
   salaryPayments     SalaryPayment[]
   pickupEvents PickupEvent[]
 
+  mustChangePassword Boolean @default(false)
+
   @@map("app_user")
 }
 

@@ -16,9 +16,16 @@ export function requireStaff(req: NextRequest): TokenPayload | NextResponse {
   const token = authHeader.replace("Bearer ", "");
   const payload = verifyToken(token);
 
- if (!payload || payload.role === "SUPER_ADMIN") {
-  return NextResponse.json({ error: "Unauthorized: branch staff access required" }, { status: 403 });
-}
+  if (!payload || payload.role === "SUPER_ADMIN") {
+    return NextResponse.json({ error: "Unauthorized: branch staff access required" }, { status: 403 });
+  }
+
+  // Limited (15m) tokens issued during a forced password reset can't be
+  // used against any real staff route — only /api/auth/change-password
+  // reads this claim directly and bypasses this guard entirely.
+  if (payload.mustChangePassword) {
+    return NextResponse.json({ error: "Password change required" }, { status: 403 });
+  }
 
   return payload;
 }

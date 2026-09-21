@@ -181,7 +181,8 @@ exports.Prisma.AppUserScalarFieldEnum = {
   branchId: 'branchId',
   preferredLanguage: 'preferredLanguage',
   isActive: 'isActive',
-  createdAt: 'createdAt'
+  createdAt: 'createdAt',
+  mustChangePassword: 'mustChangePassword'
 };
 
 exports.Prisma.PartnerScalarFieldEnum = {

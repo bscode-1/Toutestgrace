@@ -8,8 +8,8 @@ const prisma = new PrismaClient({ adapter });
 
 
 async function main() {
-  const email = "admin@porttransfer.com";
-  const plainPassword = "ChangeMe123!"; // change immediately after first login
+  const email = "admin@gmail.com";
+  const plainPassword = "admin123"; // change immediately after first login
 
   const existing = await prisma.superAdmin.findUnique({ where: { email } });
   if (existing) {
