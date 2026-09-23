@@ -1,5 +1,5 @@
 git add .
-git commit -m "wip: permissions module client-bundle fix"
+git commit -m "wip: module password rest added"
 git push origin main
 
 

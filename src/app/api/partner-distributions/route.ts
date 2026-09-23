@@ -4,7 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requirePermission } from "@/lib/require-permission";
 
 const createSchema = z.object({
-  partnerId: z.string().uuid(),
+  partnerId: z.string().min(1),   // Partner.id is cuid(), not uuid — only this one changes
   branchId: z.string().uuid(),
   fundSourceId: z.string().uuid(),
   amount: z.number().positive(),
