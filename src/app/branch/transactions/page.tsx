@@ -3,6 +3,7 @@
 import { useEffect, useState, useCallback } from "react";
 import { apiFetch } from "@/lib/client-auth";
 import * as XLSX from "xlsx";
+import Pagination from "@/components/Pagination";
 
 type Tx = {
   id: string;
@@ -11,8 +12,9 @@ type Tx = {
   amountSent: number;
   commissionAmount: number;
   amountPayable: number;
+  amountCollected: number;
   pickupCode: string;
-  status: "PENDING" | "COMPLETED" | "REFUNDED";
+  status: "PENDING" | "PARTIAL" | "COMPLETED" | "REFUNDED";
   createdAt: string;
   senderBranchId: string;
   senderBranch: { name: string };
@@ -22,9 +24,12 @@ type Tx = {
 
 const statusStyle: Record<string, string> = {
   PENDING: "bg-amber-100 text-amber-700 dark:bg-amber-900/30 dark:text-amber-400",
+  PARTIAL: "bg-blue-100 text-blue-700 dark:bg-blue-900/30 dark:text-blue-400",
   COMPLETED: "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400",
   REFUNDED: "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400",
 };
+
+const PAGE_SIZE = 10;
 
 export default function BranchTransactionsPage() {
   const [transactions, setTransactions] = useState<Tx[]>([]);
@@ -36,6 +41,7 @@ export default function BranchTransactionsPage() {
   const [from, setFrom] = useState("");
   const [to, setTo] = useState("");
   const [search, setSearch] = useState("");
+  const [page, setPage] = useState(1);
 
   const loadTransactions = useCallback(async () => {
     setLoading(true);
@@ -69,9 +75,20 @@ export default function BranchTransactionsPage() {
     return () => clearTimeout(timeout);
   }, [loadTransactions]);
 
+  // Reset to page 1 whenever the filters change
+  useEffect(() => {
+    setPage(1);
+  }, [status, from, to, search]);
+
+  const paginatedTransactions = transactions.slice(
+    (page - 1) * PAGE_SIZE,
+    page * PAGE_SIZE
+  );
+
   function exportToExcel() {
     const rows = transactions.map((tx) => {
       const isSender = tx.senderBranchId === myBranchId;
+      const remaining = tx.status === "PARTIAL" ? Number(tx.amountPayable) - Number(tx.amountCollected) : "";
       return {
         "Pickup Code": tx.pickupCode,
         "Sender": tx.senderName,
@@ -81,11 +98,11 @@ export default function BranchTransactionsPage() {
         "Received Amount": !isSender ? Number(tx.amountSent) : 0,
         "Commission": isSender ? Number(tx.commissionAmount) : 0,
         "Status": tx.status,
+        "Remaining Balance": remaining,
         "Created By": tx.createdBy?.name || "—",
         "Date": new Date(tx.createdAt).toLocaleString("en-US"),
       };
     });
-
     const worksheet = XLSX.utils.json_to_sheet(rows);
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
@@ -132,6 +149,7 @@ export default function BranchTransactionsPage() {
             >
               <option value="">All</option>
               <option value="PENDING">Pending</option>
+              <option value="PARTIAL">Partial</option>
               <option value="COMPLETED">Completed</option>
               <option value="REFUNDED">Refunded</option>
             </select>
@@ -173,45 +191,49 @@ export default function BranchTransactionsPage() {
 
       {!loading && transactions.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover overflow-x-auto">
-          <table className="w-full text-sm">
+          <table className="w-full text-sm table-fixed">
             <thead>
-              <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                <th className="px-5 py-3 font-medium">Pickup Code</th>
-                <th className="px-5 py-3 font-medium">Transfer</th>
-                <th className="px-5 py-3 font-medium">Sent</th>
-                <th className="px-5 py-3 font-medium">Received</th>
-                <th className="px-5 py-3 font-medium">Status</th>
-                <th className="px-5 py-3 font-medium">Date</th>
+              <tr className="...">
+                <th className="px-5 py-3 font-medium text-left">Pickup Code</th>
+                <th className="px-5 py-3 font-medium text-left">Transfer</th>
+                <th className="px-5 py-3 font-medium text-left">Sent</th>
+                <th className="px-5 py-3 font-medium text-left">Received</th>
+                <th className="px-5 py-3 font-medium text-left">Remaining</th>
+                <th className="px-5 py-3 font-medium text-center">Status</th>
+                <th className="px-5 py-3 font-medium text-right">Date</th>
               </tr>
             </thead>
             <tbody>
-              {transactions.map((tx) => {
+              {paginatedTransactions.map((tx) => {
                 const isSender = tx.senderBranchId === myBranchId;
+                const remaining = Number(tx.amountPayable) - Number(tx.amountCollected || 0);
                 return (
-                  <tr
-                    key={tx.id}
-                    className="border-b border-slate-50 dark:border-slate-700/50 last:border-0 hover:bg-slate-50 dark:hover:bg-slate-700/40 transition-colors"
-                  >
-                    <td className="px-5 py-4 font-mono text-xs text-slate-500">{tx.pickupCode}</td>
-                    <td className="px-5 py-4 text-slate-900 dark:text-white">
+                  <tr key={tx.id} className="...">
+                    <td className="px-5 py-4 font-mono text-xs text-slate-500 truncate text-left">{tx.pickupCode}</td>
+                    <td className="px-5 py-4 text-slate-900 dark:text-white truncate text-left">
                       {tx.senderName} → {tx.receiverName}
                     </td>
-                    <td className="px-5 py-4 font-semibold text-rose-600 dark:text-rose-400">
+                    <td className="px-5 py-4 font-semibold text-rose-600 dark:text-rose-400 text-left">
                       {isSender
                         ? `$${Number(tx.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-                        : "—"}
+                        : "$0.00"}
                     </td>
-                    <td className="px-5 py-4 font-semibold text-green-600 dark:text-green-400">
+                    <td className="px-5 py-4 font-semibold text-green-600 dark:text-green-400 text-left">
                       {!isSender
                         ? `$${Number(tx.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
-                        : "—"}
+                        : "$0.00"}
                     </td>
-                    <td className="px-5 py-4">
+                    <td className="px-5 py-4 font-semibold text-amber-600 dark:text-amber-400 text-left">
+                      {tx.status === "PARTIAL"
+                        ? `$${remaining.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                        : "$0.00"}
+                    </td>
+                    <td className="px-5 py-4 text-center">
                       <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${statusStyle[tx.status]}`}>
                         {tx.status}
                       </span>
                     </td>
-                    <td className="px-5 py-4 text-slate-400 whitespace-nowrap">
+                    <td className="px-5 py-4 text-slate-400 whitespace-nowrap text-right">
                       {new Date(tx.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                     </td>
                   </tr>
@@ -219,6 +241,13 @@ export default function BranchTransactionsPage() {
               })}
             </tbody>
           </table>
+
+          <Pagination
+            currentPage={page}
+            totalItems={transactions.length}
+            pageSize={PAGE_SIZE}
+            onPageChange={setPage}
+          />
         </div>
       )}
     </div>

@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/client-auth";
+import { useLanguage } from "@/context/LanguageContext";
 import * as XLSX from "xlsx";
 
 type BranchDetail = {
@@ -86,6 +87,8 @@ export default function BranchDetailPage() {
   const [editBranchCode, setEditBranchCode] = useState("");
   const [savingEdit, setSavingEdit] = useState(false);
   const [editError, setEditError] = useState<string | null>(null);
+  const { t } = useLanguage();
+  
 
 
   function openEditForm() {
@@ -215,7 +218,7 @@ async function confirmAssignManager(e: React.FormEvent) {
     if (branchId) load();
   }, [branchId]);
 
-  if (loading) return <p className="text-sm text-slate-500">Loading branch...</p>;
+  if (loading) return <p className="text-sm text-slate-500">{t("loadingBranch")}</p>;
   if (error) return <p className="text-sm text-red-600">{error}</p>;
   if (!branch) return null;
 
@@ -230,14 +233,14 @@ async function confirmAssignManager(e: React.FormEvent) {
             className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-sm font-medium rounded-xl px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
           >
             <i className="fa-solid fa-percent text-xs" />
-            Commission Tiers
+            {t("commissionTiers")}
           </a>
           <button
             onClick={openEditForm}
             className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-sm font-medium rounded-xl px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
           >
             <i className="fa-solid fa-pen text-xs" />
-            Edit
+            {t("edit")}
           </button>
           <button
             onClick={toggleStatus}
@@ -247,7 +250,7 @@ async function confirmAssignManager(e: React.FormEvent) {
               }`}
           >
             <i className={`fa-solid ${branch.status === "ACTIVE" ? "fa-pause" : "fa-play"} text-xs`} />
-            {branch.status === "ACTIVE" ? "Deactivate" : "Activate"}
+            {branch.status === "ACTIVE" ? t("deactivate") : t("activate")}
           </button>
         </div>
 
@@ -255,13 +258,13 @@ async function confirmAssignManager(e: React.FormEvent) {
           className="flex items-center gap-2 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 text-slate-700 dark:text-slate-200 text-sm font-medium rounded-xl px-4 py-2.5 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors"
         >
           <i className="fa-solid fa-percent text-xs" />
-          Commission Tiers
+          {t("commissionTiers")}
         </a>
       </div>
 
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-gradient-to-br from-blue-500 to-indigo-600 rounded-2xl p-5 text-white shadow-lg">
-          <p className="text-xs text-white/70 uppercase tracking-wide mb-2">Ledger Balance</p>
+          <p className="text-xs text-white/70 uppercase tracking-wide mb-2">{t("ledgerBalance")}</p>
           <p className="text-2xl font-bold">
             {currencySymbol}
             {balance !== null ? Number(balance).toLocaleString("en-US", { minimumFractionDigits: 2 }) : "—"}
@@ -270,9 +273,9 @@ async function confirmAssignManager(e: React.FormEvent) {
                 <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
           <div className="flex items-start justify-between">
             <div>
-              <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Manager</p>
+              <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("manager")}</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">
-                {branch.manager ? branch.manager.name : <span className="text-amber-500">Unassigned</span>}
+                {branch.manager ? branch.manager.name : <span className="text-amber-500">{t("unassigned")}</span>}
               </p>
               <p className="text-xs text-slate-400">{branch.manager?.email}</p>
             </div>
@@ -280,16 +283,16 @@ async function confirmAssignManager(e: React.FormEvent) {
               onClick={openAssignManager}
               className="text-xs font-medium text-blue-600 dark:text-blue-400 hover:underline whitespace-nowrap"
             >
-              {branch.manager ? "Change" : "Assign"}
+              {branch.manager ? t("change") : t("assign")}
             </button>
           </div>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Phone</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("phone")}</p>
           <p className="text-sm font-semibold text-slate-900 dark:text-white">{branch.phone || "—"}</p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Address</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("address")}</p>
           <p className="text-sm font-semibold text-slate-900 dark:text-white truncate">{branch.address || "—"}</p>
         </div>
       </div>
@@ -359,7 +362,7 @@ async function confirmAssignManager(e: React.FormEvent) {
 
       <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover">
         <div className="p-5 border-b border-slate-100 dark:border-slate-700 flex items-center justify-between">
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Recent Transactions</h3>
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("recentTransactions")}</h3>
           <button
             onClick={() => {
               const rows = transactions.map((tx) => {
@@ -382,7 +385,7 @@ async function confirmAssignManager(e: React.FormEvent) {
             className="flex items-center gap-2 bg-green-600 text-white text-xs font-medium rounded-lg px-3 py-2 hover:opacity-90 transition-opacity disabled:opacity-40"
           >
             <i className="fa-solid fa-file-excel text-xs" />
-            Export to Excel
+            {t("exportToExcel")}
           </button>
         </div>
         {transactions.length === 0 ? (
@@ -391,11 +394,12 @@ async function confirmAssignManager(e: React.FormEvent) {
           <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                <th className="px-5 py-3 font-medium">Transfer</th>
-                <th className="px-5 py-3 font-medium">Sent</th>
-                <th className="px-5 py-3 font-medium">Received</th>
-                <th className="px-5 py-3 font-medium">Status</th>
-                <th className="px-5 py-3 font-medium">Date</th>
+               
+                <th className="px-5 py-3 font-medium">{t("transfer")}</th>
+                <th className="px-5 py-3 font-medium">{t("sent")}</th>
+                <th className="px-5 py-3 font-medium">{t("received")}</th>
+                <th className="px-5 py-3 font-medium">{t("status")}</th>
+                <th className="px-5 py-3 font-medium">{t("date")}</th>
               </tr>
             </thead>
             <tbody>
@@ -431,7 +435,7 @@ async function confirmAssignManager(e: React.FormEvent) {
               {editing && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-lg">
-            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">Edit Branch</h3>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-4">{t("editBranch")}</h3>
 
             {editError && (
               <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2 mb-4">
@@ -443,7 +447,7 @@ async function confirmAssignManager(e: React.FormEvent) {
               <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                    Branch name
+                    {t("branchName")}
                   </label>
                   <input
                     type="text"
@@ -455,7 +459,7 @@ async function confirmAssignManager(e: React.FormEvent) {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                    Branch code
+                    {t("branchCode")}
                   </label>
                   <input
                     type="text"
@@ -466,7 +470,7 @@ async function confirmAssignManager(e: React.FormEvent) {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                    City / Location
+                    {t("cityLocation")}
                   </label>
                   <input
                     type="text"
@@ -477,7 +481,7 @@ async function confirmAssignManager(e: React.FormEvent) {
                 </div>
                 <div>
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                    Phone number
+                    {t("phoneNumber")}
                   </label>
                   <input
                     type="text"
@@ -488,7 +492,7 @@ async function confirmAssignManager(e: React.FormEvent) {
                 </div>
                 <div className="sm:col-span-2">
                   <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
-                    Full address
+                    {t("fullAddress")}
                   </label>
                   <input
                     type="text"
@@ -505,14 +509,14 @@ async function confirmAssignManager(e: React.FormEvent) {
                   disabled={savingEdit}
                   className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
                 >
-                  {savingEdit ? "Saving..." : "Save Changes"}
+                  {savingEdit ? t("saving") : t("saveChanges")}
                 </button>
                 <button
                   type="button"
                   onClick={() => setEditing(false)}
                   className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200"
                 >
-                  Cancel
+                  {t("cancel")}
                 </button>
               </div>
             </form>
@@ -523,9 +527,9 @@ async function confirmAssignManager(e: React.FormEvent) {
             {showAssignManager && (
         <div className="fixed inset-0 bg-black/40 flex items-center justify-center z-50 p-4">
           <div className="bg-white dark:bg-slate-800 rounded-2xl p-6 w-full max-w-md">
-            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">Assign Manager</h3>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200 mb-1">{t("assignManager")}</h3>
             <p className="text-xs text-slate-400 mb-4">
-              Only staff already created at this branch with the Branch Manager role can be assigned.
+              {t("assignManagerDesc")}
             </p>
 
             {assignError && (
@@ -536,9 +540,9 @@ async function confirmAssignManager(e: React.FormEvent) {
 
             {eligibleManagers.length === 0 ? (
               <div className="text-sm text-slate-500 dark:text-slate-400 bg-slate-50 dark:bg-slate-700 rounded-xl p-4 mb-4">
-                No eligible Branch Manager accounts found for this branch yet. Create one first from the{" "}
+                {t("noEligibleManagers")}{" "}
                 <a href="/admin/staff" className="text-blue-600 dark:text-blue-400 hover:underline">
-                  Staff page
+                  {t("staffPageLink")}
                 </a>
                 .
               </div>
@@ -550,7 +554,7 @@ async function confirmAssignManager(e: React.FormEvent) {
                   onChange={(e) => setSelectedManagerId(e.target.value)}
                   className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500"
                 >
-                  <option value="">Select a manager</option>
+                  <option value="">{t("selectManager")}</option>
                   {eligibleManagers.map((m) => (
                     <option key={m.id} value={m.id}>
                       {m.name} — {m.email}
@@ -564,14 +568,14 @@ async function confirmAssignManager(e: React.FormEvent) {
                     disabled={assigningManager}
                     className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50"
                   >
-                    {assigningManager ? "Assigning..." : "Confirm"}
+                    {assigningManager ? t("assigning") : t("confirm")}
                   </button>
                   <button
                     type="button"
                     onClick={() => setShowAssignManager(false)}
                     className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200"
                   >
-                    Cancel
+                    {t("cancel")}
                   </button>
                 </div>
               </form>
@@ -582,7 +586,7 @@ async function confirmAssignManager(e: React.FormEvent) {
                 onClick={() => setShowAssignManager(false)}
                 className="w-full text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200"
               >
-                Close
+                {t("close")}
               </button>
             )}
           </div>

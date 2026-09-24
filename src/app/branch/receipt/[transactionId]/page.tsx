@@ -6,6 +6,8 @@ import { apiFetch } from "@/lib/client-auth";
 import { QRCodeSVG } from "qrcode.react";
 import { useLanguage } from "@/context/LanguageContext";
 
+type CommissionMode = "DEDUCTED" | "PAID_BY_SENDER";
+
 type Transaction = {
   id: string;
   senderName: string;
@@ -14,6 +16,8 @@ type Transaction = {
   amountSent: number;
   commissionAmount: number;
   amountPayable: number;
+  totalCharged: number;
+  commissionMode: CommissionMode;
   pickupCode: string;
   qrCodeData: string;
   status: string;
@@ -24,7 +28,6 @@ type Transaction = {
 };
 
 export default function ReceiptPage() {
-  
   const { t, language, setLanguage } = useLanguage();
   const params = useParams();
   const transactionId = params.transactionId as string;
@@ -55,6 +58,8 @@ export default function ReceiptPage() {
 
   if (error) return <p className="p-8 text-sm text-red-600">{error}</p>;
   if (!tx) return <p className="p-8 text-sm text-slate-500">Loading receipt...</p>;
+
+  const isPaidBySender = tx.commissionMode === "PAID_BY_SENDER";
 
   return (
     <div className="min-h-screen bg-slate-100 py-8 print:bg-white print:py-0">
@@ -121,10 +126,23 @@ export default function ReceiptPage() {
               ${Number(tx.commissionAmount).toLocaleString("en-US", { minimumFractionDigits: 2 })}
             </span>
           </div>
-          <div className="flex justify-between text-base font-bold pt-1 border-t border-slate-100">
+          {isPaidBySender && (
+            <div className="flex justify-between">
+              <span className="text-slate-500">Total Charged to Sender</span>
+              <span className="font-medium text-slate-900">
+                ${Number(tx.totalCharged).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              </span>
+            </div>
+          )}
+          <div className="flex justify-between text-base font-bold pt-1 border-t border-slate-100 text-slate-900">
             <span>Amount Receiver Gets</span>
             <span>${Number(tx.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}</span>
           </div>
+          <p className="text-[10px] text-slate-400 pt-1">
+            {isPaidBySender
+              ? "Commission paid separately by sender — receiver gets the full amount."
+              : "Commission deducted from the amount sent."}
+          </p>
         </div>
 
         <div className="border-t border-dashed border-slate-300 pt-4 text-center">
@@ -140,7 +158,7 @@ export default function ReceiptPage() {
           Issued by {tx.createdBy.name} — Port Transfer System
         </p>
 
-                <div className="grid grid-cols-2 gap-2 mt-4 print:hidden">
+        <div className="grid grid-cols-2 gap-2 mt-4 print:hidden">
           <button
             onClick={() => window.print()}
             className="bg-slate-900 text-white text-sm font-medium rounded-xl py-2.5"
@@ -148,9 +166,22 @@ export default function ReceiptPage() {
             <i className="fa-solid fa-print mr-2" />
             Print
           </button>
-          
-           <a href={`https://wa.me/?text=${encodeURIComponent(
-              `Money transfer receipt\n\nSender: ${tx.senderName}\nReceiver: ${tx.receiverName}\nAmount Sent: $${Number(tx.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nAmount Receiver Gets: $${Number(tx.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nPickup Code: ${tx.pickupCode}\n\nReceipt: ${typeof window !== "undefined" ? window.location.href : ""}`
+
+          <a
+            href={`https://wa.me/?text=${encodeURIComponent(
+              `Money transfer receipt\n\nSender: ${tx.senderName}\nReceiver: ${tx.receiverName}\nAmount Sent: $${Number(
+                tx.amountSent
+              ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nAmount Receiver Gets: $${Number(
+                tx.amountPayable
+              ).toLocaleString("en-US", { minimumFractionDigits: 2 })}${
+                isPaidBySender
+                  ? `\nTotal Charged to Sender: $${Number(tx.totalCharged).toLocaleString("en-US", {
+                      minimumFractionDigits: 2,
+                    })}`
+                  : ""
+              }\nPickup Code: ${tx.pickupCode}\n\nReceipt: ${
+                typeof window !== "undefined" ? window.location.href : ""
+              }`
             )}`}
             target="_blank"
             rel="noopener noreferrer"

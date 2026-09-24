@@ -3,6 +3,7 @@
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/client-auth";
 import Pagination from "@/components/Pagination";
+import { useLanguage } from "@/context/LanguageContext";
 
 type Partner = {
   id: string;
@@ -26,6 +27,8 @@ export default function PartnersPage() {
   const [phone, setPhone] = useState("");
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
+  const { t } = useLanguage();
+  
 
   async function loadPartners() {
     setLoading(true);
@@ -68,52 +71,52 @@ export default function PartnersPage() {
     <div>
       <div className="flex items-center justify-between mb-6">
         <div>
-          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Partners</h1>
-          <p className="text-sm text-slate-500 dark:text-slate-400">{partners.length} partner(s) in the system</p>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">{t("partners")}</h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{partners.length} {partners.length} {t("partnersInSystem")}</p>
         </div>
         <button
           onClick={() => setShowForm(!showForm)}
           className="flex items-center gap-2 bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-4 py-2.5 hover:opacity-90 transition-opacity"
         >
           <i className="fa-solid fa-plus text-xs" />
-          New Partner
+          {t("newPartner")}
         </button>
       </div>
 
       {showForm && (
         <form onSubmit={handleCreate} className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm mb-6 space-y-4 card-hover">
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Create a new partner</h3>
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("createNewPartner")}</h3>
           {formError && <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{formError}</div>}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Full name</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("fullName")}</label>
               <input type="text" required value={name} onChange={(e) => setName(e.target.value)} placeholder="e.g. John Doe" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Email</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("email")}</label>
               <input type="email" required value={email} onChange={(e) => setEmail(e.target.value)} placeholder="email@example.com" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Phone number</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("phoneNumber")}</label>
               <input type="tel" value={phone} onChange={(e) => setPhone(e.target.value)} placeholder="+256 7XX XXX XXX" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
           </div>
           <div className="flex gap-3">
             <button type="submit" disabled={submitting} className="bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50">
-              {submitting ? "Creating..." : "Create Partner"}
+              {submitting ? t("creating") : t("createPartner")}
             </button>
-            <button type="button" onClick={() => setShowForm(false)} className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200">Cancel</button>
+            <button type="button" onClick={() => setShowForm(false)} className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200">{t("cancel")}</button>
           </div>
         </form>
       )}
 
-      {loading && <p className="text-sm text-slate-500">Loading partners...</p>}
+      {loading && <p className="text-sm text-slate-500">{t("loadingPartners")}...</p>}
       {error && <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2 inline-block">{error}</p>}
 
       {!loading && partners.length === 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-10 text-center shadow-sm">
           <i className="fa-solid fa-handshake text-3xl text-slate-300 dark:text-slate-600 mb-3" />
-          <p className="text-sm text-slate-500 dark:text-slate-400">No partners yet.</p>
+          <p className="text-sm text-slate-500 dark:text-slate-400">{t("noPartnersYet")}.</p>
         </div>
       )}
 
@@ -123,11 +126,12 @@ export default function PartnersPage() {
             <table className="w-full text-sm">
               <thead>
                 <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                  <th className="px-5 py-3 font-medium">Name</th>
-                  <th className="px-5 py-3 font-medium">Email</th>
-                  <th className="px-5 py-3 font-medium">Phone</th>
-                  <th className="px-5 py-3 font-medium">Status</th>
-                  <th className="px-5 py-3 font-medium">Actions</th>
+                  <th className="px-5 py-3 font-medium">{t("name")}</th>
+                  <th className="px-5 py-3 font-medium">{t("email")}</th>
+                  <th className="px-5 py-3 font-medium">{t("phone")}</th>
+                  <th className="px-5 py-3 font-medium">{t("status")}</th>
+                  <th className="px-5 py-3 font-medium">{t("actions")}</th>
+                  
                 </tr>
               </thead>
               <tbody>
@@ -138,12 +142,12 @@ export default function PartnersPage() {
                     <td className="px-5 py-4 text-slate-500 dark:text-slate-400">{p.phone ?? "—"}</td>
                     <td className="px-5 py-4">
                       <span className={`text-xs font-medium px-2.5 py-1 rounded-full ${p.isActive ? "bg-green-100 text-green-700 dark:bg-green-900/30 dark:text-green-400" : "bg-slate-100 text-slate-500 dark:bg-slate-700 dark:text-slate-400"}`}>
-                        {p.isActive ? "Active" : "Inactive"}
+                        {p.isActive ? t("active") : t("inactive")}
                       </span>
                     </td>
                     <td className="px-5 py-4">
                       <a href={`/admin/partners/${p.id}`} className="text-blue-600 dark:text-blue-400 text-xs font-medium hover:underline">
-                        View Details
+                        {t("viewDetails")}
                       </a>
                     </td>
                   </tr>

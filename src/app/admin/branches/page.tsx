@@ -202,7 +202,7 @@ export default function BranchesPage() {
         </form>
       )}
 
-      {loading && <p className="text-sm text-slate-500">Loading branches...</p>}
+      {loading && <p className="text-sm text-slate-500">{t("loadingBranches")}</p>}
       {error && (
         <p className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2 inline-block">
           {error}
@@ -222,12 +222,12 @@ export default function BranchesPage() {
             <table className="w-full text-sm">
             <thead>
               <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                <th className="px-5 py-3 font-medium">Branch</th>
-                <th className="px-5 py-3 font-medium">Code</th>
-                <th className="px-5 py-3 font-medium">Location</th>
-                <th className="px-5 py-3 font-medium">Manager</th>
-                <th className="px-5 py-3 font-medium">Status</th>
-                <th className="px-5 py-3 font-medium">Created</th>
+                <th className="px-5 py-3 font-medium">{t("branches")}</th>
+                <th className="px-5 py-3 font-medium">{t("code")}</th>
+                <th className="px-5 py-3 font-medium">{t("location")}</th>
+                <th className="px-5 py-3 font-medium">{t("manager")}</th>
+                <th className="px-5 py-3 font-medium">{t("status")}</th>
+                <th className="px-5 py-3 font-medium">{t("created")}</th>
               </tr>
             </thead>
             <tbody>
@@ -248,8 +248,8 @@ export default function BranchesPage() {
                   <td className="px-5 py-4 text-slate-400 font-mono text-xs">{b.branchCode || "—"}</td>
                   <td className="px-5 py-4 text-slate-500 dark:text-slate-400">{b.location || "—"}</td>
                   <td className="px-5 py-4 text-slate-500 dark:text-slate-400">
-                    {b.manager ? b.manager.name : <span className="text-amber-500">Unassigned</span>}
-                  </td>
+  {b.manager ? b.manager.name : <span className="text-amber-500">{t("unassigned")}</span>}
+</td>
                   <td className="px-5 py-4">
                     <span
                       className={`text-xs font-medium px-2.5 py-1 rounded-full ${

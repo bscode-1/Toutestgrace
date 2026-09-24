@@ -3,6 +3,7 @@
 import { useEffect, useMemo, useState } from "react";
 import { useParams } from "next/navigation";
 import { apiFetch } from "@/lib/client-auth";
+import { useLanguage } from "@/context/LanguageContext";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
@@ -68,6 +69,8 @@ export default function PartnerDetailPage() {
   const [txBranchFilter, setTxBranchFilter] = useState("");
   const [txFrom, setTxFrom] = useState("");
   const [txTo, setTxTo] = useState("");
+
+  const { t } = useLanguage();
 
   async function load() {
     setLoading(true);
@@ -275,7 +278,7 @@ export default function PartnerDetailPage() {
     doc.save(`${data.partner.name.replace(/\s+/g, "_")}_branch_transactions.pdf`);
   }
 
-  if (loading) return <p className="text-sm text-slate-500">Loading partner...</p>;
+  if (loading) return <p className="text-sm text-slate-500">{t("loadingPartner")}...</p>;
   if (error) return <p className="text-sm text-red-600">{error}</p>;
   if (!data) return null;
 
@@ -286,7 +289,7 @@ export default function PartnerDetailPage() {
     <div>
       {/* Header */}
       <div className="flex items-center gap-2 text-xs text-slate-400 mb-2">
-        <a href="/admin/partners" className="hover:underline">Partners</a>
+        <a href="/admin/partners" className="hover:underline">{t("partners")}</a>
         <i className="fa-solid fa-chevron-right text-[10px]" />
         <span>{data.partner.name}</span>
       </div>
@@ -299,11 +302,11 @@ export default function PartnerDetailPage() {
         <div className="flex gap-2">
           <button onClick={() => { setShowFundForm(!showFundForm); setShowDistForm(false); }} className="flex items-center gap-2 bg-green-600 text-white text-sm font-medium rounded-xl px-4 py-2.5 hover:opacity-90 transition-opacity">
             <i className="fa-solid fa-arrow-down text-xs" />
-            Cash In
+            {t("cashIn")}
           </button>
           <button onClick={() => { setShowDistForm(!showDistForm); setShowFundForm(false); }} className="flex items-center gap-2 bg-rose-600 text-white text-sm font-medium rounded-xl px-4 py-2.5 hover:opacity-90 transition-opacity">
             <i className="fa-solid fa-arrow-up text-xs" />
-            Cash Out
+            {t("cashOut")}
           </button>
         </div>
       </div>
@@ -311,15 +314,15 @@ export default function PartnerDetailPage() {
       {/* Balance cards */}
       <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 mb-6">
         <div className="bg-gradient-to-br from-emerald-500 to-teal-600 rounded-2xl p-5 text-white shadow-lg">
-          <p className="text-xs text-white/70 uppercase tracking-wide mb-2">Current Balance</p>
+          <p className="text-xs text-white/70 uppercase tracking-wide mb-2">{t("currentBalance")}</p>
           <p className="text-2xl font-bold">{fmt(data.balance)}</p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Total Cash In</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("totalCashIn")}</p>
           <p className="text-xl font-bold text-green-600 dark:text-green-400">{fmt(data.totalCashIn)}</p>
         </div>
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">Total Distributed</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("totalDistributed")}</p>
           <p className="text-xl font-bold text-rose-600 dark:text-rose-400">{fmt(data.totalCashOut)}</p>
         </div>
       </div>
@@ -327,25 +330,25 @@ export default function PartnerDetailPage() {
       {/* Cash In form */}
       {showFundForm && (
         <form onSubmit={handleFundSource} className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm mb-6 space-y-4 card-hover">
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Record Cash In (Fund Source)</h3>
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("recordCashInTitle")}</h3>
           {fundError && <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{fundError}</div>}
           <div className="grid grid-cols-1 sm:grid-cols-3 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Commodity</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("commodity")}</label>
               <input type="text" required value={commodityName} onChange={(e) => setCommodityName(e.target.value)} placeholder="e.g. Gold, Oil, USD" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Cash Value ($)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("cashValue")}</label>
               <input type="number" required min="0.01" step="0.01" value={cashValue} onChange={(e) => setCashValue(e.target.value)} placeholder="e.g. 20000" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Description (optional)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("descriptionOptional")}</label>
               <input type="text" value={fundDescription} onChange={(e) => setFundDescription(e.target.value)} placeholder="e.g. 10kg gold at $2000/kg" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
           </div>
           <div className="flex gap-3">
-            <button type="submit" disabled={fundSubmitting} className="bg-green-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50">{fundSubmitting ? "Saving..." : "Record Cash In"}</button>
-            <button type="button" onClick={() => setShowFundForm(false)} className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200">Cancel</button>
+            <button type="submit" disabled={fundSubmitting} className="bg-green-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50">{fundSubmitting ? t("saving") : t("recordCashIn")}</button>
+            <button type="button" onClick={() => setShowFundForm(false)} className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200">{t("cancel")}</button>
           </div>
         </form>
       )}
@@ -353,40 +356,40 @@ export default function PartnerDetailPage() {
       {/* Cash Out / Distribution form */}
       {showDistForm && (
         <form onSubmit={handleDistribution} className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm mb-6 space-y-4 card-hover">
-          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Record Cash Out (Distribute to Branch)</h3>
+          <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("recordCashOutTitle")}</h3>
           {distError && <div className="text-sm text-red-700 bg-red-50 border border-red-200 rounded-lg px-3 py-2">{distError}</div>}
           <div className="grid grid-cols-1 sm:grid-cols-4 gap-4">
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Cash-In Source</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("cashInSource")}</label>
               <select required value={fundSourceId} onChange={(e) => setFundSourceId(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Select a cash-in</option>
+                <option value="">{t("selectCashIn")}</option>
                 {data.availableSources.map((s) => (
                   <option key={s.id} value={s.id}>{s.code} · {s.commodityName} · {fmt(s.remaining)} left</option>
                 ))}
               </select>
               {selectedSource && (
-                <p className="text-xs text-slate-400 mt-1">Remaining: {fmt(selectedSource.remaining)}</p>
+                <p className="text-xs text-slate-400 mt-1">{t("remainingLabel")}: {fmt(selectedSource.remaining)}</p>
               )}
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Branch</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("branch")}</label>
               <select required value={branchId} onChange={(e) => setBranchId(e.target.value)} className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">Select a branch</option>
+                <option value="">{t("selectBranch")}</option>
                 {branches.map((b) => (<option key={b.id} value={b.id}>{b.name}</option>))}
               </select>
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Amount ($)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("amountDollar")} </label>
               <input type="number" required min="0.01" step="0.01" max={selectedSource?.remaining} value={distAmount} onChange={(e) => setDistAmount(e.target.value)} placeholder="e.g. 5000" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
             <div>
-              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">Note (optional)</label>
+              <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">{t("noteOptionalShort")}</label>
               <input type="text" value={distNote} onChange={(e) => setDistNote(e.target.value)} placeholder="e.g. Weekly operating cash" className="w-full px-3.5 py-2.5 rounded-xl border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-sm font-medium text-slate-900 dark:text-white placeholder-slate-400 focus:outline-none focus:ring-2 focus:ring-blue-500" />
             </div>
           </div>
           <div className="flex gap-3">
-            <button type="submit" disabled={distSubmitting} className="bg-rose-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50">{distSubmitting ? "Saving..." : "Distribute Cash"}</button>
-            <button type="button" onClick={() => setShowDistForm(false)} className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200">Cancel</button>
+            <button type="submit" disabled={distSubmitting} className="bg-rose-600 text-white text-sm font-medium rounded-xl px-5 py-2.5 hover:opacity-90 transition-opacity disabled:opacity-50">{distSubmitting ? t("saving") : t("distributeCash")}</button>
+            <button type="button" onClick={() => setShowDistForm(false)} className="text-sm font-medium text-slate-500 dark:text-slate-400 px-5 py-2.5 hover:text-slate-700 dark:hover:text-slate-200">{t("cancel")}</button>
           </div>
         </form>
       )}
@@ -395,15 +398,15 @@ export default function PartnerDetailPage() {
       <div className="flex justify-end gap-2 mb-4">
         <button onClick={() => setShowAllTx(!showAllTx)} className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
           <i className="fa-solid fa-table-list text-blue-600" />
-          {showAllTx ? "Hide" : "View"} All Branch Transactions
+          {showAllTx ? t("hide") : t("view")} {t("allBranchTransactions")}
         </button>
         <button onClick={exportExcel} className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
           <i className="fa-solid fa-file-excel text-green-600" />
-          Export Excel
+          {t("exportExcel")}
         </button>
         <button onClick={exportPdf} className="flex items-center gap-2 text-sm font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-xl px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
           <i className="fa-solid fa-file-pdf text-red-600" />
-          Export PDF
+          {t("exportPdf")}
         </button>
       </div>
 
@@ -412,12 +415,12 @@ export default function PartnerDetailPage() {
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover mb-6">
           <div className="p-4 border-b border-slate-100 dark:border-slate-700 flex flex-wrap items-center justify-between gap-3">
             <div>
-              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">All Branch Transactions</h3>
-              <p className="text-xs text-slate-400 mt-0.5">Every distribution made to every branch</p>
+              <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("allBranchTransactions")}</h3>
+              <p className="text-xs text-slate-400 mt-0.5">{t("everyDistributionMade")}</p>
             </div>
             <div className="flex flex-wrap items-center gap-2">
               <select value={txBranchFilter} onChange={(e) => setTxBranchFilter(e.target.value)} className="text-sm rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-700 dark:text-white px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500">
-                <option value="">All branches</option>
+                <option value="">{t("allBranchesLower")}</option>
                 {branches.map((b) => (<option key={b.id} value={b.name}>{b.name}</option>))}
               </select>
               <input type="date" value={txFrom} onChange={(e) => setTxFrom(e.target.value)} className="text-sm rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-700 dark:text-white px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500" />
@@ -425,7 +428,7 @@ export default function PartnerDetailPage() {
               <input type="date" value={txTo} onChange={(e) => setTxTo(e.target.value)} className="text-sm rounded-lg border border-slate-200 dark:border-slate-600 dark:bg-slate-700 text-slate-700 dark:text-white px-3 py-1.5 focus:outline-none focus:ring-2 focus:ring-blue-500" />
               {(txBranchFilter || txFrom || txTo) && (
                 <button onClick={() => { setTxBranchFilter(""); setTxFrom(""); setTxTo(""); }} className="text-xs font-medium text-slate-400 hover:text-slate-600 dark:hover:text-slate-200 px-2">
-                  Clear
+                  {t("clear")}
                 </button>
               )}
               <button onClick={exportAllTxExcel} className="flex items-center gap-1.5 text-xs font-medium text-slate-600 dark:text-slate-300 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-600 rounded-lg px-4 py-2 hover:bg-slate-50 dark:hover:bg-slate-700 transition-colors">
@@ -446,10 +449,10 @@ export default function PartnerDetailPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                    <th className="px-4 py-2.5 font-medium">Date</th>
-                    <th className="px-4 py-2.5 font-medium">Branch</th>
-                    <th className="px-4 py-2.5 font-medium">Issued By</th>
-                    <th className="px-4 py-2.5 font-medium">Amount</th>
+                      <th className="px-4 py-2.5 font-medium">{t("date")}</th>
+<th className="px-4 py-2.5 font-medium">{t("branch")}</th>
+<th className="px-4 py-2.5 font-medium">{t("issuedBy")}</th>
+<th className="px-4 py-2.5 font-medium">{t("amount")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -464,7 +467,7 @@ export default function PartnerDetailPage() {
                 </tbody>
                 <tfoot>
                   <tr className="bg-slate-50 dark:bg-slate-900/30">
-                    <td className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200" colSpan={3}>Total</td>
+                    <td className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200" colSpan={3}>{t("total")}</td>
                     <td className="px-4 py-3 font-bold text-slate-900 dark:text-white">{fmt(filteredTotal)}</td>
                   </tr>
                 </tfoot>
@@ -479,22 +482,23 @@ export default function PartnerDetailPage() {
         {/* Cycle-based Cash In History table */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover">
           <div className="p-4 border-b border-slate-100 dark:border-slate-700">
-            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Cash In History</h3>
-            <p className="text-xs text-slate-400 mt-0.5">Click a row to see how that cycle was distributed</p>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("cashInHistory")}</h3>
+            <p className="text-xs text-slate-400 mt-0.5">{t("clickRowToSeeDistribution")}</p>
           </div>
           {cycles.length === 0 ? (
-            <p className="text-sm text-slate-400 p-4">No activity recorded yet.</p>
+            <p className="text-sm text-slate-400 p-4">{t("noActivityRecorded")}</p>
           ) : (
             <div className="overflow-x-auto">
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                    <th className="px-4 py-2.5 font-medium">Code</th>
-                    <th className="px-4 py-2.5 font-medium">Date</th>
-                    <th className="px-4 py-2.5 font-medium">Cash In</th>
-                    <th className="px-4 py-2.5 font-medium">Cash Out</th>
-                    <th className="px-4 py-2.5 font-medium">Balance</th>
-                    <th className="px-4 py-2.5 font-medium text-center">Cycle</th>
+                    
+                    <th className="px-4 py-2.5 font-medium">{t("code")}</th>
+                    <th className="px-4 py-2.5 font-medium">{t("date")}</th>
+                    <th className="px-4 py-2.5 font-medium">{t("cashInCol")}</th>
+                    <th className="px-4 py-2.5 font-medium">{t("cashOutCol")}</th>
+                    <th className="px-4 py-2.5 font-medium">{t("balance")}</th>
+                    <th  className="px-4 py-2.5 font-medium text-center">{t("cycle")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -517,9 +521,9 @@ export default function PartnerDetailPage() {
                         <td className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200">{fmt(e.remaining)}</td>
                         <td className="px-4 py-3 text-center">
                           {e.complete ? (
-                            <i className="fa-solid fa-circle-check text-green-500" title="Cycle complete" />
+                            <i className="fa-solid fa-circle-check text-green-500" title={t("cycleComplete")} />
                           ) : (
-                            <i className="fa-regular fa-clock text-slate-300 dark:text-slate-500" title="In progress" />
+                            <i className="fa-regular fa-clock text-slate-300 dark:text-slate-500" title={t("cycleInProgress")} />
                           )}
                         </td>
                       </tr>
@@ -534,7 +538,7 @@ export default function PartnerDetailPage() {
         {/* Distribution History — drill-down for the selected cycle */}
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover">
           <div className="p-4 border-b border-slate-100 dark:border-slate-700">
-            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">Distribution History</h3>
+            <h3 className="text-sm font-semibold text-slate-700 dark:text-slate-200">{t("distributionHistory")}</h3>
             {selected && (
               <p className="text-xs text-slate-400 mt-0.5">
                 {selected.code} · {selected.commodityName} · {new Date(selected.date).toLocaleDateString("en-US", { month: "long", day: "numeric", year: "numeric" })}
@@ -543,9 +547,9 @@ export default function PartnerDetailPage() {
           </div>
 
           {!selected ? (
-            <p className="text-sm text-slate-400 p-4">Select a cash-in row to see its distribution breakdown.</p>
+            <p className="text-sm text-slate-400 p-4">{t("selectCashInRow")}</p>
           ) : !selected.allocations || selected.allocations.length === 0 ? (
-            <p className="text-sm text-slate-400 p-4">None of this cash has been distributed yet. Remaining: {fmt(selected.remainingBalance ?? 0)}</p>
+            <p className="text-sm text-slate-400 p-4">{t("noneDistributedYet")}: {fmt(selected.remainingBalance ?? 0)}</p>
           ) : (
             <div className="divide-y divide-slate-50 dark:divide-slate-700/50">
               {selected.allocations.map((a, i) => (
@@ -561,7 +565,7 @@ export default function PartnerDetailPage() {
               ))}
               {(selected.remainingBalance ?? 0) > 0 && (
                 <div className="flex items-center justify-between px-4 py-3 bg-slate-50 dark:bg-slate-900/30">
-                  <p className="text-sm text-slate-500 dark:text-slate-400">Undistributed</p>
+                  <p className="text-sm text-slate-500 dark:text-slate-400">{t("undistributed")}</p>
                   <p className="text-sm font-semibold text-slate-500 dark:text-slate-400">{fmt(selected.remainingBalance ?? 0)}</p>
                 </div>
               )}

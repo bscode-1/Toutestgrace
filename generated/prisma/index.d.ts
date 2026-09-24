@@ -132,11 +132,23 @@ export namespace $Enums {
 
 export type TransactionStatus = (typeof TransactionStatus)[keyof typeof TransactionStatus]
 
+
+export const CommissionMode: {
+  DEDUCTED: 'DEDUCTED',
+  PAID_BY_SENDER: 'PAID_BY_SENDER'
+};
+
+export type CommissionMode = (typeof CommissionMode)[keyof typeof CommissionMode]
+
 }
 
 export type TransactionStatus = $Enums.TransactionStatus
 
 export const TransactionStatus: typeof $Enums.TransactionStatus
+
+export type CommissionMode = $Enums.CommissionMode
+
+export const CommissionMode: typeof $Enums.CommissionMode
 
 /**
  * ##  Prisma Client ʲˢ
@@ -13228,6 +13240,7 @@ export namespace Prisma {
     amountSent: Decimal | null
     commissionAmount: Decimal | null
     amountPayable: Decimal | null
+    totalCharged: Decimal | null
     amountCollected: Decimal | null
   }
 
@@ -13235,6 +13248,7 @@ export namespace Prisma {
     amountSent: Decimal | null
     commissionAmount: Decimal | null
     amountPayable: Decimal | null
+    totalCharged: Decimal | null
     amountCollected: Decimal | null
   }
 
@@ -13251,6 +13265,8 @@ export namespace Prisma {
     amountPayable: Decimal | null
     currencyId: string | null
     commissionTierId: string | null
+    commissionMode: $Enums.CommissionMode | null
+    totalCharged: Decimal | null
     pickupCode: string | null
     qrCodeData: string | null
     status: string | null
@@ -13277,6 +13293,8 @@ export namespace Prisma {
     amountPayable: Decimal | null
     currencyId: string | null
     commissionTierId: string | null
+    commissionMode: $Enums.CommissionMode | null
+    totalCharged: Decimal | null
     pickupCode: string | null
     qrCodeData: string | null
     status: string | null
@@ -13303,6 +13321,8 @@ export namespace Prisma {
     amountPayable: number
     currencyId: number
     commissionTierId: number
+    commissionMode: number
+    totalCharged: number
     pickupCode: number
     qrCodeData: number
     status: number
@@ -13322,6 +13342,7 @@ export namespace Prisma {
     amountSent?: true
     commissionAmount?: true
     amountPayable?: true
+    totalCharged?: true
     amountCollected?: true
   }
 
@@ -13329,6 +13350,7 @@ export namespace Prisma {
     amountSent?: true
     commissionAmount?: true
     amountPayable?: true
+    totalCharged?: true
     amountCollected?: true
   }
 
@@ -13345,6 +13367,8 @@ export namespace Prisma {
     amountPayable?: true
     currencyId?: true
     commissionTierId?: true
+    commissionMode?: true
+    totalCharged?: true
     pickupCode?: true
     qrCodeData?: true
     status?: true
@@ -13371,6 +13395,8 @@ export namespace Prisma {
     amountPayable?: true
     currencyId?: true
     commissionTierId?: true
+    commissionMode?: true
+    totalCharged?: true
     pickupCode?: true
     qrCodeData?: true
     status?: true
@@ -13397,6 +13423,8 @@ export namespace Prisma {
     amountPayable?: true
     currencyId?: true
     commissionTierId?: true
+    commissionMode?: true
+    totalCharged?: true
     pickupCode?: true
     qrCodeData?: true
     status?: true
@@ -13510,6 +13538,8 @@ export namespace Prisma {
     amountPayable: Decimal
     currencyId: string | null
     commissionTierId: string | null
+    commissionMode: $Enums.CommissionMode
+    totalCharged: Decimal
     pickupCode: string
     qrCodeData: string | null
     status: string
@@ -13555,6 +13585,8 @@ export namespace Prisma {
     amountPayable?: boolean
     currencyId?: boolean
     commissionTierId?: boolean
+    commissionMode?: boolean
+    totalCharged?: boolean
     pickupCode?: boolean
     qrCodeData?: boolean
     status?: boolean
@@ -13592,6 +13624,8 @@ export namespace Prisma {
     amountPayable?: boolean
     currencyId?: boolean
     commissionTierId?: boolean
+    commissionMode?: boolean
+    totalCharged?: boolean
     pickupCode?: boolean
     qrCodeData?: boolean
     status?: boolean
@@ -13625,6 +13659,8 @@ export namespace Prisma {
     amountPayable?: boolean
     currencyId?: boolean
     commissionTierId?: boolean
+    commissionMode?: boolean
+    totalCharged?: boolean
     pickupCode?: boolean
     qrCodeData?: boolean
     status?: boolean
@@ -13658,6 +13694,8 @@ export namespace Prisma {
     amountPayable?: boolean
     currencyId?: boolean
     commissionTierId?: boolean
+    commissionMode?: boolean
+    totalCharged?: boolean
     pickupCode?: boolean
     qrCodeData?: boolean
     status?: boolean
@@ -13671,7 +13709,7 @@ export namespace Prisma {
     amountCollected?: boolean
   }
 
-  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "senderBranchId" | "receiverBranchId" | "senderName" | "senderIdNumber" | "receiverName" | "amountSent" | "commissionAmount" | "amountPayable" | "currencyId" | "commissionTierId" | "pickupCode" | "qrCodeData" | "status" | "createdById" | "completedById" | "refundedById" | "createdAt" | "completedAt" | "refundedAt" | "parentTransactionId" | "amountCollected", ExtArgs["result"]["transaction"]>
+  export type TransactionOmit<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = $Extensions.GetOmit<"id" | "type" | "senderBranchId" | "receiverBranchId" | "senderName" | "senderIdNumber" | "receiverName" | "amountSent" | "commissionAmount" | "amountPayable" | "currencyId" | "commissionTierId" | "commissionMode" | "totalCharged" | "pickupCode" | "qrCodeData" | "status" | "createdById" | "completedById" | "refundedById" | "createdAt" | "completedAt" | "refundedAt" | "parentTransactionId" | "amountCollected", ExtArgs["result"]["transaction"]>
   export type TransactionInclude<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
     senderBranch?: boolean | BranchDefaultArgs<ExtArgs>
     receiverBranch?: boolean | BranchDefaultArgs<ExtArgs>
@@ -13731,6 +13769,8 @@ export namespace Prisma {
       amountPayable: Prisma.Decimal
       currencyId: string | null
       commissionTierId: string | null
+      commissionMode: $Enums.CommissionMode
+      totalCharged: Prisma.Decimal
       pickupCode: string
       qrCodeData: string | null
       status: string
@@ -14187,6 +14227,8 @@ export namespace Prisma {
     readonly amountPayable: FieldRef<"Transaction", 'Decimal'>
     readonly currencyId: FieldRef<"Transaction", 'String'>
     readonly commissionTierId: FieldRef<"Transaction", 'String'>
+    readonly commissionMode: FieldRef<"Transaction", 'CommissionMode'>
+    readonly totalCharged: FieldRef<"Transaction", 'Decimal'>
     readonly pickupCode: FieldRef<"Transaction", 'String'>
     readonly qrCodeData: FieldRef<"Transaction", 'String'>
     readonly status: FieldRef<"Transaction", 'String'>
@@ -28418,6 +28460,8 @@ export namespace Prisma {
     amountPayable: 'amountPayable',
     currencyId: 'currencyId',
     commissionTierId: 'commissionTierId',
+    commissionMode: 'commissionMode',
+    totalCharged: 'totalCharged',
     pickupCode: 'pickupCode',
     qrCodeData: 'qrCodeData',
     status: 'status',
@@ -28697,6 +28741,20 @@ export namespace Prisma {
    * Reference to a field of type 'Decimal[]'
    */
   export type ListDecimalFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'Decimal[]'>
+    
+
+
+  /**
+   * Reference to a field of type 'CommissionMode'
+   */
+  export type EnumCommissionModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommissionMode'>
+    
+
+
+  /**
+   * Reference to a field of type 'CommissionMode[]'
+   */
+  export type ListEnumCommissionModeFieldRefInput<$PrismaModel> = FieldRefInputType<$PrismaModel, 'CommissionMode[]'>
     
 
 
@@ -29414,6 +29472,8 @@ export namespace Prisma {
     amountPayable?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     currencyId?: StringNullableFilter<"Transaction"> | string | null
     commissionTierId?: StringNullableFilter<"Transaction"> | string | null
+    commissionMode?: EnumCommissionModeFilter<"Transaction"> | $Enums.CommissionMode
+    totalCharged?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFilter<"Transaction"> | string
     qrCodeData?: StringNullableFilter<"Transaction"> | string | null
     status?: StringFilter<"Transaction"> | string
@@ -29450,6 +29510,8 @@ export namespace Prisma {
     amountPayable?: SortOrder
     currencyId?: SortOrderInput | SortOrder
     commissionTierId?: SortOrderInput | SortOrder
+    commissionMode?: SortOrder
+    totalCharged?: SortOrder
     pickupCode?: SortOrder
     qrCodeData?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -29490,6 +29552,8 @@ export namespace Prisma {
     amountPayable?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     currencyId?: StringNullableFilter<"Transaction"> | string | null
     commissionTierId?: StringNullableFilter<"Transaction"> | string | null
+    commissionMode?: EnumCommissionModeFilter<"Transaction"> | $Enums.CommissionMode
+    totalCharged?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     qrCodeData?: StringNullableFilter<"Transaction"> | string | null
     status?: StringFilter<"Transaction"> | string
     createdById?: StringFilter<"Transaction"> | string
@@ -29525,6 +29589,8 @@ export namespace Prisma {
     amountPayable?: SortOrder
     currencyId?: SortOrderInput | SortOrder
     commissionTierId?: SortOrderInput | SortOrder
+    commissionMode?: SortOrder
+    totalCharged?: SortOrder
     pickupCode?: SortOrder
     qrCodeData?: SortOrderInput | SortOrder
     status?: SortOrder
@@ -29559,6 +29625,8 @@ export namespace Prisma {
     amountPayable?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     currencyId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     commissionTierId?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
+    commissionMode?: EnumCommissionModeWithAggregatesFilter<"Transaction"> | $Enums.CommissionMode
+    totalCharged?: DecimalWithAggregatesFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     pickupCode?: StringWithAggregatesFilter<"Transaction"> | string
     qrCodeData?: StringNullableWithAggregatesFilter<"Transaction"> | string | null
     status?: StringWithAggregatesFilter<"Transaction"> | string
@@ -31164,6 +31232,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -31197,6 +31267,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -31222,6 +31294,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -31255,6 +31329,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -31284,6 +31360,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -31306,6 +31384,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -31329,6 +31409,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -32884,6 +32966,13 @@ export namespace Prisma {
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
 
+  export type EnumCommissionModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CommissionMode | EnumCommissionModeFieldRefInput<$PrismaModel>
+    in?: $Enums.CommissionMode[] | ListEnumCommissionModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CommissionMode[] | ListEnumCommissionModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCommissionModeFilter<$PrismaModel> | $Enums.CommissionMode
+  }
+
   export type CommissionTierNullableScalarRelationFilter = {
     is?: CommissionTierWhereInput | null
     isNot?: CommissionTierWhereInput | null
@@ -32907,6 +32996,8 @@ export namespace Prisma {
     amountPayable?: SortOrder
     currencyId?: SortOrder
     commissionTierId?: SortOrder
+    commissionMode?: SortOrder
+    totalCharged?: SortOrder
     pickupCode?: SortOrder
     qrCodeData?: SortOrder
     status?: SortOrder
@@ -32924,6 +33015,7 @@ export namespace Prisma {
     amountSent?: SortOrder
     commissionAmount?: SortOrder
     amountPayable?: SortOrder
+    totalCharged?: SortOrder
     amountCollected?: SortOrder
   }
 
@@ -32940,6 +33032,8 @@ export namespace Prisma {
     amountPayable?: SortOrder
     currencyId?: SortOrder
     commissionTierId?: SortOrder
+    commissionMode?: SortOrder
+    totalCharged?: SortOrder
     pickupCode?: SortOrder
     qrCodeData?: SortOrder
     status?: SortOrder
@@ -32966,6 +33060,8 @@ export namespace Prisma {
     amountPayable?: SortOrder
     currencyId?: SortOrder
     commissionTierId?: SortOrder
+    commissionMode?: SortOrder
+    totalCharged?: SortOrder
     pickupCode?: SortOrder
     qrCodeData?: SortOrder
     status?: SortOrder
@@ -32983,7 +33079,18 @@ export namespace Prisma {
     amountSent?: SortOrder
     commissionAmount?: SortOrder
     amountPayable?: SortOrder
+    totalCharged?: SortOrder
     amountCollected?: SortOrder
+  }
+
+  export type EnumCommissionModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CommissionMode | EnumCommissionModeFieldRefInput<$PrismaModel>
+    in?: $Enums.CommissionMode[] | ListEnumCommissionModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CommissionMode[] | ListEnumCommissionModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCommissionModeWithAggregatesFilter<$PrismaModel> | $Enums.CommissionMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCommissionModeFilter<$PrismaModel>
+    _max?: NestedEnumCommissionModeFilter<$PrismaModel>
   }
 
   export type TransactionScalarRelationFilter = {
@@ -35175,6 +35282,10 @@ export namespace Prisma {
     connect?: PickupEventWhereUniqueInput | PickupEventWhereUniqueInput[]
   }
 
+  export type EnumCommissionModeFieldUpdateOperationsInput = {
+    set?: $Enums.CommissionMode
+  }
+
   export type BranchUpdateOneRequiredWithoutSentTransactionsNestedInput = {
     create?: XOR<BranchCreateWithoutSentTransactionsInput, BranchUncheckedCreateWithoutSentTransactionsInput>
     connectOrCreate?: BranchCreateOrConnectWithoutSentTransactionsInput
@@ -36018,6 +36129,23 @@ export namespace Prisma {
     _min?: NestedDateTimeNullableFilter<$PrismaModel>
     _max?: NestedDateTimeNullableFilter<$PrismaModel>
   }
+
+  export type NestedEnumCommissionModeFilter<$PrismaModel = never> = {
+    equals?: $Enums.CommissionMode | EnumCommissionModeFieldRefInput<$PrismaModel>
+    in?: $Enums.CommissionMode[] | ListEnumCommissionModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CommissionMode[] | ListEnumCommissionModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCommissionModeFilter<$PrismaModel> | $Enums.CommissionMode
+  }
+
+  export type NestedEnumCommissionModeWithAggregatesFilter<$PrismaModel = never> = {
+    equals?: $Enums.CommissionMode | EnumCommissionModeFieldRefInput<$PrismaModel>
+    in?: $Enums.CommissionMode[] | ListEnumCommissionModeFieldRefInput<$PrismaModel>
+    notIn?: $Enums.CommissionMode[] | ListEnumCommissionModeFieldRefInput<$PrismaModel>
+    not?: NestedEnumCommissionModeWithAggregatesFilter<$PrismaModel> | $Enums.CommissionMode
+    _count?: NestedIntFilter<$PrismaModel>
+    _min?: NestedEnumCommissionModeFilter<$PrismaModel>
+    _max?: NestedEnumCommissionModeFilter<$PrismaModel>
+  }
   export type NestedJsonNullableFilter<$PrismaModel = never> =
     | PatchUndefined<
         Either<Required<NestedJsonNullableFilterBase<$PrismaModel>>, Exclude<keyof Required<NestedJsonNullableFilterBase<$PrismaModel>>, 'path'>>,
@@ -36177,6 +36305,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -36208,6 +36338,8 @@ export namespace Prisma {
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -36417,6 +36549,8 @@ export namespace Prisma {
     amountPayable?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     currencyId?: StringNullableFilter<"Transaction"> | string | null
     commissionTierId?: StringNullableFilter<"Transaction"> | string | null
+    commissionMode?: EnumCommissionModeFilter<"Transaction"> | $Enums.CommissionMode
+    totalCharged?: DecimalFilter<"Transaction"> | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFilter<"Transaction"> | string
     qrCodeData?: StringNullableFilter<"Transaction"> | string | null
     status?: StringFilter<"Transaction"> | string
@@ -37417,6 +37551,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -37448,6 +37584,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -37483,6 +37621,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -37514,6 +37654,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -38116,6 +38258,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -38148,6 +38292,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -38182,6 +38328,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -38214,6 +38362,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -38248,6 +38398,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -38280,6 +38432,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -38919,6 +39073,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -38950,6 +39106,8 @@ export namespace Prisma {
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -39901,6 +40059,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -39933,6 +40093,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -40032,6 +40194,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -40064,6 +40228,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -40141,6 +40307,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -40173,6 +40341,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -40307,6 +40477,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -40339,6 +40511,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -41060,6 +41234,8 @@ export namespace Prisma {
     amountSent: Decimal | DecimalJsLike | number | string
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -41092,6 +41268,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -41179,6 +41357,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -41211,6 +41391,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -42268,6 +42450,8 @@ export namespace Prisma {
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -42389,6 +42573,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -42420,6 +42606,8 @@ export namespace Prisma {
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -42448,6 +42636,8 @@ export namespace Prisma {
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43006,6 +43196,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -43031,6 +43223,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -43222,6 +43416,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43253,6 +43449,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43281,6 +43479,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43303,6 +43503,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43334,6 +43536,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43362,6 +43566,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43512,6 +43718,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -43537,6 +43745,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -43562,6 +43772,8 @@ export namespace Prisma {
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
     commissionTierId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -43624,6 +43836,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43656,6 +43870,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43684,6 +43900,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43705,6 +43923,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43737,6 +43957,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43765,6 +43987,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43786,6 +44010,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43818,6 +44044,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -43846,6 +44074,8 @@ export namespace Prisma {
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
     commissionTierId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -44091,6 +44321,8 @@ export namespace Prisma {
     commissionAmount?: Decimal | DecimalJsLike | number | string
     amountPayable: Decimal | DecimalJsLike | number | string
     currencyId?: string | null
+    commissionMode?: $Enums.CommissionMode
+    totalCharged: Decimal | DecimalJsLike | number | string
     pickupCode: string
     qrCodeData?: string | null
     status?: string
@@ -44113,6 +44345,8 @@ export namespace Prisma {
     amountSent?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -44144,6 +44378,8 @@ export namespace Prisma {
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string
@@ -44172,6 +44408,8 @@ export namespace Prisma {
     commissionAmount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     amountPayable?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     currencyId?: NullableStringFieldUpdateOperationsInput | string | null
+    commissionMode?: EnumCommissionModeFieldUpdateOperationsInput | $Enums.CommissionMode
+    totalCharged?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     pickupCode?: StringFieldUpdateOperationsInput | string
     qrCodeData?: NullableStringFieldUpdateOperationsInput | string | null
     status?: StringFieldUpdateOperationsInput | string

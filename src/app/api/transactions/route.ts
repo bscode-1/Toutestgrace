@@ -12,6 +12,7 @@ const createTransactionSchema = z.object({
   receiverName: z.string().min(2),
   amountSent: z.number().positive(),
   currencyId: z.string().uuid().optional(),
+  commissionMode: z.enum(["DEDUCTED", "PAID_BY_SENDER"]).default("DEDUCTED"),
 });
 
 // POST /api/transactions — create a new send (staff only, from their own branch)
@@ -31,9 +32,10 @@ export async function POST(req: NextRequest) {
   if (!parsed.success) {
     return NextResponse.json({ error: parsed.error.flatten() }, { status: 400 });
   }
-
-  const { receiverBranchId, senderName, senderIdNumber, receiverName, amountSent, currencyId } =
+  const { receiverBranchId, senderName, senderIdNumber, receiverName, amountSent, currencyId, commissionMode } =
     parsed.data;
+
+  
 
   const senderBranchId = auth.branchId as string;
 
@@ -55,14 +57,13 @@ export async function POST(req: NextRequest) {
   if (!receiverBranch || receiverBranch.status !== "ACTIVE") {
     return NextResponse.json({ error: "Receiver branch is not active" }, { status: 400 });
   }
-
   let commissionResult;
   try {
-    commissionResult = await calculateCommission(senderBranchId, amountSent);
+    commissionResult = await calculateCommission(senderBranchId, amountSent, commissionMode);
   } catch (err) {
     return NextResponse.json({ error: (err as Error).message }, { status: 400 });
   }
-  const { tier, commissionAmount, amountPayable } = commissionResult;
+  const { tier, commissionAmount, amountPayable, totalCharged } = commissionResult;
 
   const pickupCode = await generatePickupCode();
 
@@ -77,6 +78,8 @@ export async function POST(req: NextRequest) {
         amountSent,
         commissionAmount,
         amountPayable,
+        totalCharged,
+        commissionMode,
         currencyId,
         commissionTierId: tier.id,
         pickupCode,
@@ -96,7 +99,7 @@ export async function POST(req: NextRequest) {
         branchId: senderBranchId,
         transactionId: transaction.id,
         entryType: "PENDING_IN",
-        amount: amountSent,
+        amount: totalCharged,   // was amountSent
       },
     });
 
@@ -106,7 +109,7 @@ export async function POST(req: NextRequest) {
         entityId: transaction.id,
         action: "CREATED",
         performedByUserId: auth.id,
-        metadata: { amountSent, commissionAmount, pickupCode, receiverBranchId },
+        metadata: { amountSent, commissionAmount, totalCharged, commissionMode, pickupCode, receiverBranchId },
       },
     });
 
@@ -175,16 +178,28 @@ export async function GET(req: NextRequest) {
     ];
   }
 
-  const transactions = await prisma.transaction.findMany({
-    where,
-    orderBy: { createdAt: "desc" },
-    take: limit,
-    include: {
-      senderBranch: { select: { name: true } },
-      receiverBranch: { select: { name: true } },
-      createdBy: { select: { name: true } },
-    },
-  });
+ const transactions = await prisma.transaction.findMany({
+  where,
+  orderBy: { createdAt: "desc" },
+  take: limit,
+  include: {
+    senderBranch: { select: { name: true } },
+    receiverBranch: { select: { name: true } },
+    createdBy: { select: { name: true } },
+    pickupEvents: { select: { amount: true } }, // NEW
+  },
+});
+
+// NEW — derive collected/remaining per row, no schema change needed
+const withBalances = transactions.map((tx) => {
+  const amountCollected = tx.pickupEvents.reduce(
+    (sum, ev) => sum + Number(ev.amount),
+    0
+  );
+  const remainingBalance = Number(tx.amountPayable) - amountCollected;
+  return { ...tx, amountCollected, remainingBalance };
+});
+  return NextResponse.json({ transactions: withBalances });
 
   return NextResponse.json({ transactions });
 }

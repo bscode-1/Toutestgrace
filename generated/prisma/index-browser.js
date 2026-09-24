@@ -220,6 +220,8 @@ exports.Prisma.TransactionScalarFieldEnum = {
   amountPayable: 'amountPayable',
   currencyId: 'currencyId',
   commissionTierId: 'commissionTierId',
+  commissionMode: 'commissionMode',
+  totalCharged: 'totalCharged',
   pickupCode: 'pickupCode',
   qrCodeData: 'qrCodeData',
   status: 'status',
@@ -379,7 +381,10 @@ exports.Prisma.JsonNullValueFilter = {
   JsonNull: Prisma.JsonNull,
   AnyNull: Prisma.AnyNull
 };
-
+exports.CommissionMode = exports.$Enums.CommissionMode = {
+  DEDUCTED: 'DEDUCTED',
+  PAID_BY_SENDER: 'PAID_BY_SENDER'
+};
 
 exports.Prisma.ModelName = {
   SystemConfig: 'SystemConfig',

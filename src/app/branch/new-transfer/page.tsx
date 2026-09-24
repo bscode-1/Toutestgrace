@@ -6,6 +6,8 @@ import { useLanguage } from "@/context/LanguageContext";
 
 type BranchOption = { id: string; name: string; location: string | null };
 
+type CommissionMode = "DEDUCTED" | "PAID_BY_SENDER";
+
 type CreatedTransaction = {
   id: string;
   pickupCode: string;
@@ -14,6 +16,8 @@ type CreatedTransaction = {
   amountSent: number;
   commissionAmount: number;
   amountPayable: number;
+  totalCharged: number;
+  commissionMode: CommissionMode;
   qrCodeData: string;
 };
 
@@ -25,30 +29,28 @@ export default function NewTransferPage() {
   const [senderIdNumber, setSenderIdNumber] = useState("");
   const [receiverName, setReceiverName] = useState("");
   const [amountSent, setAmountSent] = useState("");
+  const [commissionMode, setCommissionMode] = useState<CommissionMode>("DEDUCTED");
 
-  const [preview, setPreview] = useState<{ commissionAmount: number; amountPayable: number } | null>(null);
+  const [preview, setPreview] = useState<{ commissionAmount: number; amountPayable: number; totalCharged: number } | null>(null);
   const [previewError, setPreviewError] = useState<string | null>(null);
 
   const [submitting, setSubmitting] = useState(false);
   const [formError, setFormError] = useState<string | null>(null);
   const [result, setResult] = useState<CreatedTransaction | null>(null);
-
-  
   
 
   useEffect(() => {
-  const user = getUser();
-  apiFetch("/api/branches/directory")
-    .then((res) => (res.ok ? res.json() : { branches: [] }))
-    .then((data) => {
-      const allBranches = data.branches || [];
-      const filtered = user?.branchId
-        ? allBranches.filter((b: { id: string }) => b.id !== user.branchId)
-        : allBranches;
-      setBranches(filtered);
-    });
-}, []);
-
+    const user = getUser();
+    apiFetch("/api/branches/directory")
+      .then((res) => (res.ok ? res.json() : { branches: [] }))
+      .then((data) => {
+        const allBranches = data.branches || [];
+        const filtered = user?.branchId
+          ? allBranches.filter((b: { id: string }) => b.id !== user.branchId)
+          : allBranches;
+        setBranches(filtered);
+      });
+  }, []);
 
   useEffect(() => {
     const amount = Number(amountSent);
@@ -59,7 +61,9 @@ export default function NewTransferPage() {
     }
     const timeout = setTimeout(async () => {
       try {
-        const res = await apiFetch(`/api/branch/me/commission-preview?amount=${amount}`);
+        const res = await apiFetch(
+          `/api/branch/me/commission-preview?amount=${amount}&commissionMode=${commissionMode}`
+        );
         const data = await res.json();
         if (!res.ok) {
           setPreview(null);
@@ -73,7 +77,8 @@ export default function NewTransferPage() {
       }
     }, 350);
     return () => clearTimeout(timeout);
-  }, [amountSent]);
+    // re-run whenever the sender toggles who bears the commission
+  }, [amountSent, commissionMode]);
 
   async function handleSubmit(e: React.FormEvent) {
     e.preventDefault();
@@ -88,6 +93,7 @@ export default function NewTransferPage() {
           senderIdNumber: senderIdNumber || undefined,
           receiverName,
           amountSent: Number(amountSent),
+          commissionMode,
         }),
       });
       const data = await res.json();
@@ -109,6 +115,7 @@ export default function NewTransferPage() {
     setSenderIdNumber("");
     setReceiverName("");
     setAmountSent("");
+    setCommissionMode("DEDUCTED");
     setPreview(null);
   }
 
@@ -121,7 +128,7 @@ export default function NewTransferPage() {
           </div>
           <h2 className="text-lg font-semibold text-slate-900 dark:text-white mb-1">{t("transferCreated")}</h2>
           <p className="text-sm text-slate-500 dark:text-slate-400 mb-6">
-            Give this pickup code to {result.senderName} to share with {result.receiverName}
+            {t("giveCodeTo")} {result.senderName} {t("toShareWith")} {result.receiverName}
           </p>
 
           <div className="bg-slate-50 dark:bg-slate-700 rounded-2xl p-6 mb-6">
@@ -131,7 +138,7 @@ export default function NewTransferPage() {
             </p>
           </div>
 
-          <div className="grid grid-cols-3 gap-3 text-left mb-6">
+          <div className="grid grid-cols-2 gap-3 text-left mb-3">
             <div>
               <p className="text-xs text-slate-400">{t("sent")}</p>
               <p className="text-sm font-semibold text-slate-900 dark:text-white">
@@ -145,16 +152,28 @@ export default function NewTransferPage() {
               </p>
             </div>
             <div>
-              <p className="text-xs text-slate-400">Receiver Gets</p>
+              <p className="text-xs text-slate-400">{t("receiverGetsAmount")}</p>
               <p className="text-sm font-semibold text-green-600 dark:text-green-400">
                 ${Number(result.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}
               </p>
             </div>
+            <div>
+              <p className="text-xs text-slate-400">{t("collectedFromSender")}</p>
+              <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                ${Number(result.totalCharged).toLocaleString("en-US", { minimumFractionDigits: 2 })}
+              </p>
+            </div>
           </div>
 
-          <div className="grid grid-cols-2 gap-3 mb-3">
+          <p className="text-xs text-slate-400 mb-6">
+            {result.commissionMode === "PAID_BY_SENDER"
+              ? t("commissionPaidBySenderNote")
+              : t("commissionDeductedNote")}
+          </p>
 
-            <a href={`/branch/receipt/${result.id}`}
+          <div className="grid grid-cols-2 gap-3 mb-3">
+            <a
+              href={`/branch/receipt/${result.id}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-slate-900 dark:bg-slate-700 text-white text-sm font-medium rounded-xl py-3 hover:opacity-90 transition-opacity"
@@ -163,9 +182,19 @@ export default function NewTransferPage() {
               {t("printReceipt")}
             </a>
 
-            <a href={`https://wa.me/?text=${encodeURIComponent(
-              `Money transfer receipt\n\nSender: ${result.senderName}\nReceiver: ${result.receiverName}\nAmount Sent: $${Number(result.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nAmount Receiver Gets: $${Number(result.amountPayable).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nPickup Code: ${result.pickupCode}\n\nReceipt: ${typeof window !== "undefined" ? window.location.origin : ""}/branch/receipt/${result.id}`
-            )}`}
+            <a
+                          
+              href={`https://wa.me/?text=${encodeURIComponent(
+                `${t("moneyTransferReceipt")}\n\n${t("senderLabel")}: ${result.senderName}\n${t("receiverLabel")}: ${result.receiverName}\n${t("amountSentLabel")}: $${Number(
+                  result.amountSent
+                ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("receiverGetsAmount")}: $${Number(
+                  result.amountPayable
+                ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("collectedFromSender")}: $${Number(
+                  result.totalCharged
+                ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("pickupCodeLabel")}: ${result.pickupCode}\n\n${t("receiptLabel")}: ${
+                  typeof window !== "undefined" ? window.location.origin : ""
+                }/branch/receipt/${result.id}`
+              )}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-green-600 text-white text-sm font-medium rounded-xl py-3 hover:opacity-90 transition-opacity"
@@ -180,8 +209,6 @@ export default function NewTransferPage() {
           >
             {t("newTransfer")}
           </button>
-
-
         </div>
       </div>
     );
@@ -263,6 +290,38 @@ export default function NewTransferPage() {
 
         <div>
           <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
+            {t("whoPaysCommission")}
+          </label>
+          <div className="grid grid-cols-2 gap-3">
+            <button
+              type="button"
+              onClick={() => setCommissionMode("DEDUCTED")}
+              className={`rounded-xl border px-4 py-3 text-sm font-medium text-left transition-colors ${
+                commissionMode === "DEDUCTED"
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+                  : "border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300"
+              }`}
+            >
+              <div className="font-semibold">{t("deductFromAmount")}</div>
+              <div className="text-xs opacity-80 mt-0.5">{t("receiverGetsLess")}</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => setCommissionMode("PAID_BY_SENDER")}
+              className={`rounded-xl border px-4 py-3 text-sm font-medium text-left transition-colors ${
+                commissionMode === "PAID_BY_SENDER"
+                  ? "border-blue-500 bg-blue-50 dark:bg-blue-900/20 text-blue-700 dark:text-blue-300"
+                  : "border-slate-200 dark:border-slate-600 text-slate-600 dark:text-slate-300"
+              }`}
+            >
+              <div className="font-semibold">{t("senderPaysExtra")}</div>
+              <div className="text-xs opacity-80 mt-0.5">{t("receiverGetsFullAmount")}</div>
+            </button>
+          </div>
+        </div>
+
+        <div>
+          <label className="block text-sm font-medium text-slate-700 dark:text-slate-300 mb-1.5">
             {t("amountToSend")}
           </label>
           <div className="relative">
@@ -282,7 +341,7 @@ export default function NewTransferPage() {
           {previewError && <p className="text-xs text-red-500 mt-2">{previewError}</p>}
 
           {preview && (
-            <div className="mt-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 grid grid-cols-2 gap-4">
+            <div className="mt-3 bg-blue-50 dark:bg-blue-900/20 rounded-xl p-4 grid grid-cols-3 gap-4">
               <div>
                 <p className="text-xs text-slate-500 dark:text-slate-400">{t("commission")}</p>
                 <p className="text-sm font-semibold text-slate-900 dark:text-white">
@@ -295,6 +354,12 @@ export default function NewTransferPage() {
                   ${preview.amountPayable.toLocaleString("en-US", { minimumFractionDigits: 2 })}
                 </p>
               </div>
+              <div>
+                <p className="text-xs text-slate-500 dark:text-slate-400">Sender pays</p>
+                <p className="text-sm font-semibold text-slate-900 dark:text-white">
+                  ${preview.totalCharged.toLocaleString("en-US", { minimumFractionDigits: 2 })}
+                </p>
+              </div>
             </div>
           )}
         </div>
@@ -304,7 +369,7 @@ export default function NewTransferPage() {
           disabled={submitting || !preview}
           className="w-full bg-gradient-to-r from-blue-600 to-indigo-600 text-white text-sm font-medium rounded-xl py-3 hover:opacity-90 transition-opacity disabled:opacity-50"
         >
-          {submitting ? "Creating transfer..." : "Create Transfer"}
+          {submitting ? t("creatingTransfer") : t("newTransfer")}
         </button>
       </form>
     </div>

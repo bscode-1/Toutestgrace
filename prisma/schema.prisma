@@ -168,6 +168,12 @@ model Partner {
 // ============================================================
 // COMMISSION TIER — per branch, versioned
 // ============================================================
+enum CommissionMode {
+  DEDUCTED   // receiver gets (amount - commission)
+  PAID_BY_SENDER  // sender pays (amount + commission), receiver gets full amount
+}
+
+
 model CommissionTier {
   id                  String    @id @default(uuid())
   branchId            String    @map("branch_id")
@@ -207,9 +213,15 @@ model Transaction {
   currency            Currency? @relation(fields: [currencyId], references: [id])
   commissionTierId    String?   @map("commission_tier_id")
   commissionTier      CommissionTier? @relation(fields: [commissionTierId], references: [id])
+  commissionMode CommissionMode @default(DEDUCTED) @map("commission_mode")
+  totalCharged   Decimal        @db.Decimal(18, 2)  @map("total_charged")
+  
+
   pickupCode          String    @unique @map("pickup_code") @db.Char(16)
   qrCodeData          String?   @map("qr_code_data")
   status              String @default("PENDING") // PENDING | PARTIAL | COMPLETED | REFUNDED
+
+  
 
   createdById         String    @map("created_by")
   createdBy           AppUser   @relation("CreatedByTeller", fields: [createdById], references: [id])
