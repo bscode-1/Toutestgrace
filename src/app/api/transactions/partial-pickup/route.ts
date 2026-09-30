@@ -3,6 +3,7 @@ import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/require-staff";
 import { hasPermission } from "@/lib/permissions";
+import { assertTellerCanPay, recordTellerLedgerEntry } from "@/lib/teller-ledger";
 
 const withdrawSchema = z.object({
   amount: z.number().positive(),
@@ -29,8 +30,6 @@ export async function POST(req: NextRequest) {
     where: { pickupCode: code, status: { in: ["PENDING", "PARTIAL"] } },
   });
 
-  // ...rest of the handler is unchanged
-
   if (!transaction) {
     return NextResponse.json(
       { error: "No pending or partial transaction found for this pickup code" },
@@ -49,15 +48,25 @@ export async function POST(req: NextRequest) {
   const total = Number(transaction.amountPayable);
   const remaining = total - collected;
 
-  if (withdrawAmount > remaining) {
+  if (withdrawAmount > remaining + 0.005) {
     return NextResponse.json(
       { error: `Amount exceeds remaining balance. Remaining: $${remaining.toFixed(2)}` },
       { status: 400 }
     );
   }
 
+  // Teller must have enough cash to pay out
+  try {
+    await assertTellerCanPay(auth.id, withdrawAmount);
+  } catch (e: any) {
+    if (e.code === "INSUFFICIENT_TELLER_BALANCE") {
+      return NextResponse.json({ error: e.message }, { status: 400 });
+    }
+    throw e;
+  }
+
   const newCollected = collected + withdrawAmount;
-  const isFullyCollected = newCollected === total;
+  const isFullyCollected = Math.abs(total - newCollected) < 0.005;
   const newStatus = isFullyCollected ? "COMPLETED" : "PARTIAL";
   const receiptNumber = `PKP-${Date.now()}`;
 
@@ -70,6 +79,17 @@ export async function POST(req: NextRequest) {
         receiptNumber,
       },
     });
+
+   await recordTellerLedgerEntry(
+      {
+        tellerId: auth.id,
+        type: "WITHDRAWAL_PAID",
+        amount: withdrawAmount,
+        refType: "PICKUP_EVENT",
+        refId: event.id,
+      },
+      tx
+    );
 
     await tx.generalLedgerEntry.create({
       data: {
@@ -91,7 +111,7 @@ export async function POST(req: NextRequest) {
       },
     });
 
-    return [event, updated];
+    return [event, updated] as const;
   });
 
   await prisma.auditLog.create({

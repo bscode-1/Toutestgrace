@@ -1,6 +1,7 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { verifyToken } from "@/lib/auth";
+import { EditRecordModal, HistoryModal, FieldConfig } from "@/components/partners/EditRecordModals";
 
 type Allocation = {
   branchName: string;
@@ -28,6 +29,7 @@ type LedgerEntry = {
   // both:
   recordedByName?: string;
 };
+
 
 export async function GET(
   req: NextRequest,
@@ -60,7 +62,11 @@ export async function GET(
     prisma.fundSource.findMany({
       where: { partnerId },
       orderBy: { recordedAt: "asc" },
-      include: { recordedBy: { select: { name: true } } },
+      include: {
+          recordedBy: { select: { name: true } },
+          recordedByUser: { select: { name: true } },
+        },
+      
     }),
     prisma.partnerDistribution.findMany({
       where: { partnerId },
@@ -68,6 +74,7 @@ export async function GET(
       include: {
         branch: { select: { name: true } },
         recordedBy: { select: { name: true } },
+        recordedByUser: { select: { name: true } },
       },
     }),
   ]);
@@ -128,7 +135,7 @@ export async function GET(
         code: fs.code,
         commodityName: fs.commodityName,
         description: fs.description,
-        recordedByName: fs.recordedBy.name,
+        recordedByName: fs.recordedBy?.name ?? fs.recordedByUser?.name ?? "—",
       })
     ),
     ...distributions.map(
@@ -139,7 +146,7 @@ export async function GET(
         amount: Number(d.amount),
         branchName: d.branch.name,
         note: d.note,
-        recordedByName: d.recordedBy.name,
+        recordedByName: d.recordedBy?.name ?? d.recordedByUser?.name ?? "—",
       })
     ),
   ].sort((a, b) => a.date.getTime() - b.date.getTime());
@@ -199,3 +206,4 @@ export async function GET(
     availableSources,
   });
 }
+

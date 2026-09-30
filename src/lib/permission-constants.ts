@@ -41,6 +41,16 @@ export const PERMISSION_KEYS = [
   "VIEW_PERMISSIONS",
   "MANAGE_PERMISSIONS",
   "RESET_STAFF_PASSWORD",
+    "VIEW_STAFF",
+  "MANAGE_STAFF",
+
+  "FUND_TELLER",
+  "VIEW_TELLER_LEDGER",
+
+  "VIEW_BRANCH_CAPITAL",
+  "MANAGE_BRANCH_CAPITAL",
+
+  "VIEW_TOPUPS",
 ] as const;
 
 export type PermissionKey = (typeof PERMISSION_KEYS)[number];
@@ -89,4 +99,11 @@ export const PERMISSION_LABELS: Record<PermissionKey, string> = {
   MANAGE_PERMISSIONS: "Toggle role permissions",
 
   RESET_STAFF_PASSWORD: "Reset staff password",
+
+  FUND_TELLER: "Fund a teller's float",
+  VIEW_TELLER_LEDGER: "View teller ledger / balance",
+
+  VIEW_BRANCH_CAPITAL: "View branch capital owed to partner",
+  MANAGE_BRANCH_CAPITAL: "Record branch capital return to partner",
+  
 };

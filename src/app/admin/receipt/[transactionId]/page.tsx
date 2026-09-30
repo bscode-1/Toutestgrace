@@ -134,7 +134,7 @@ export default function ReceiptPage() {
         </div>
 
         <p className="text-center text-[10px] text-slate-300 mt-4 pt-3 border-t border-dashed border-slate-300">
-          Issued by {tx.createdBy.name} — Port Transfer System
+          Issued by {tx.createdBy.name} — TIMS B.
         </p>
 
         <div className="grid grid-cols-2 gap-2 mt-4 print:hidden">

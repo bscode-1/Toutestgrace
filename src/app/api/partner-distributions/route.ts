@@ -127,6 +127,7 @@ export async function GET(req: NextRequest) {
       partner: { select: { name: true } },
       branch: { select: { name: true } },
       recordedBy: { select: { name: true } },
+      recordedByUser: { select: { name: true } },
     },
   });
 

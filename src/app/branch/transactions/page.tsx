@@ -4,6 +4,7 @@ import { useEffect, useState, useCallback } from "react";
 import { apiFetch } from "@/lib/client-auth";
 import * as XLSX from "xlsx";
 import Pagination from "@/components/Pagination";
+import { sheetWithHeader } from "@/lib/excel-header";
 
 type Tx = {
   id: string;
@@ -42,6 +43,8 @@ export default function BranchTransactionsPage() {
   const [to, setTo] = useState("");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
+
+  
 
   const loadTransactions = useCallback(async () => {
     setLoading(true);
@@ -96,6 +99,7 @@ export default function BranchTransactionsPage() {
         "Route": `${tx.senderBranch.name} → ${tx.receiverBranch.name}`,
         "Sent Amount": isSender ? Number(tx.amountSent) : 0,
         "Received Amount": !isSender ? Number(tx.amountSent) : 0,
+        "Collected Amount": Number(tx.amountCollected || 0),
         "Commission": isSender ? Number(tx.commissionAmount) : 0,
         "Status": tx.status,
         "Remaining Balance": remaining,
@@ -103,7 +107,7 @@ export default function BranchTransactionsPage() {
         "Date": new Date(tx.createdAt).toLocaleString("en-US"),
       };
     });
-    const worksheet = XLSX.utils.json_to_sheet(rows);
+    const worksheet = sheetWithHeader(rows, "Branch Transactions Report");
     const workbook = XLSX.utils.book_new();
     XLSX.utils.book_append_sheet(workbook, worksheet, "Transactions");
     XLSX.writeFile(workbook, `branch-transactions-${new Date().toISOString().slice(0, 10)}.xlsx`);
@@ -191,16 +195,18 @@ export default function BranchTransactionsPage() {
 
       {!loading && transactions.length > 0 && (
         <div className="bg-white dark:bg-slate-800 rounded-2xl shadow-sm overflow-hidden card-hover overflow-x-auto">
-          <table className="w-full text-sm table-fixed">
+          <table className="w-full min-w-[1000px] text-sm table-fixed">
             <thead>
               <tr className="...">
                 <th className="px-5 py-3 font-medium text-left">Pickup Code</th>
                 <th className="px-5 py-3 font-medium text-left">Transfer</th>
                 <th className="px-5 py-3 font-medium text-left">Sent</th>
                 <th className="px-5 py-3 font-medium text-left">Received</th>
+                <th className="px-5 py-3 font-medium text-left">Collected</th>
                 <th className="px-5 py-3 font-medium text-left">Remaining</th>
                 <th className="px-5 py-3 font-medium text-center">Status</th>
                 <th className="px-5 py-3 font-medium text-right">Date</th>
+                <th className="px-5 py-3 font-medium text-right">Action</th>
               </tr>
             </thead>
             <tbody>
@@ -223,6 +229,11 @@ export default function BranchTransactionsPage() {
                         ? `$${Number(tx.amountSent).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
                         : "$0.00"}
                     </td>
+                    <td className="px-5 py-4 font-semibold text-blue-600 dark:text-blue-400 text-left">
+                      {tx.status === "PARTIAL" || tx.status === "COMPLETED"
+                        ? `$${Number(tx.amountCollected || 0).toLocaleString("en-US", { minimumFractionDigits: 2 })}`
+                        : "$0.00"}
+                    </td>
                     <td className="px-5 py-4 font-semibold text-amber-600 dark:text-amber-400 text-left">
                       {tx.status === "PARTIAL"
                         ? `$${remaining.toLocaleString("en-US", { minimumFractionDigits: 2 })}`
@@ -236,6 +247,19 @@ export default function BranchTransactionsPage() {
                     <td className="px-5 py-4 text-slate-400 whitespace-nowrap text-right">
                       {new Date(tx.createdAt).toLocaleDateString("en-US", { month: "short", day: "numeric" })}
                     </td>
+                    <td className="px-5 py-4 text-right">
+                      {!isSender && (tx.status === "PENDING" || tx.status === "PARTIAL") ? (
+                        
+                          <a href={`/branch/complete?code=${encodeURIComponent(tx.pickupCode)}`}
+                          className="inline-block text-xs font-medium bg-blue-600 text-white rounded-lg px-3 py-1.5 hover:opacity-90"
+                        >
+                          {tx.status === "PARTIAL" ? "Continue" : "Confirm"}
+                        </a>
+                      ) : (
+                        <span className="text-xs text-slate-300 dark:text-slate-600">—</span>
+                      )}
+                    </td>
+                    
                   </tr>
                 );
               })}

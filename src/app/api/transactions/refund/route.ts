@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/require-staff";
+import { assertTellerCanPay, recordTellerLedgerEntry } from "@/lib/teller-ledger";
 
 
 const refundSchema = z.object({
@@ -56,6 +57,18 @@ if (!(await hasPermission(auth.role, "PROCESS_REFUND"))) {
     );
   }
 
+    const refundAmount = Number(transaction.totalCharged);
+
+  // Teller must have enough cash to pay the refund out
+  try {
+    await assertTellerCanPay(auth.id, refundAmount);
+  } catch (e: any) {
+    if (e.code === "INSUFFICIENT_TELLER_BALANCE") {
+      return NextResponse.json({ error: e.message }, { status: 400 });
+    }
+    throw e;
+  }
+
   const result = await prisma.$transaction(async (tx) => {
     const updated = await tx.transaction.update({
       where: { id: transaction.id },
@@ -66,12 +79,12 @@ if (!(await hasPermission(auth.role, "PROCESS_REFUND"))) {
       },
     });
 
-    await tx.subLedgerEntry.create({
+        await tx.subLedgerEntry.create({
       data: {
         branchId: staffBranchId,
         transactionId: transaction.id,
         entryType: "REFUNDED_OUT",
-        amount: transaction.amountSent,
+        amount: refundAmount,
       },
     });
 
@@ -80,9 +93,20 @@ if (!(await hasPermission(auth.role, "PROCESS_REFUND"))) {
         branchId: transaction.senderBranchId,
         transactionId: transaction.id,
         sourceType: "TRANSACTION",
-        amount: -Number(transaction.amountSent),
+        amount: -refundAmount,
       },
     });
+
+    await recordTellerLedgerEntry(
+      {
+        tellerId: auth.id,
+        type: "REFUND_PAID",
+        amount: refundAmount,
+        refType: "TRANSACTION",
+        refId: transaction.id,
+      },
+      tx
+    );
 
     await tx.auditLog.create({
       data: {
@@ -90,7 +114,7 @@ if (!(await hasPermission(auth.role, "PROCESS_REFUND"))) {
         entityId: transaction.id,
         action: "REFUNDED",
         performedByUserId: auth.id,
-        metadata: { pickupCode, amountRefunded: Number(transaction.amountSent) },
+        metadata: { pickupCode, amountRefunded: refundAmount },
       },
     });
 

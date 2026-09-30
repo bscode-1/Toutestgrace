@@ -6,6 +6,7 @@ import { useEffect, useState } from "react";
 import { logout, getUser } from "@/lib/client-auth";
 import { useTheme } from "@/context/ThemeContext";
 import { useLanguage } from "@/context/LanguageContext";
+import Logo from "@/components/Logo";
 
 
 export default function BranchLayout({ children }: { children: React.ReactNode }) {
@@ -18,20 +19,36 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
   const [permissions, setPermissions] = useState<Record<string, boolean> | null>(null);
 
   const [branchName, setBranchName] = useState("");
+  const [role, setRole] = useState("");
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
-  const NAV_ITEMS = [
-    { label: t("dashboard"), href: "/branch", icon: "fa-house", permission: null },
-    { label: t("newTransfer"), href: "/branch/new-transfer", icon: "fa-paper-plane", permission: "CREATE_TRANSFER" },
-    { label: t("completePickup"), href: "/branch/complete", icon: "fa-hand-holding-dollar", permission: "COMPLETE_PICKUP" },
-    { label: t("refund"), href: "/branch/refund", icon: "fa-rotate-left", permission: "PROCESS_REFUND" },
-    { label: t("transactions"), href: "/branch/transactions", icon: "fa-right-left", permission: "VIEW_TRANSACTIONS" },
-  ];
-
+  const NAV_ITEMS: {
+  label: string;
+  href: string;
+  icon: string;
+  permission: string | null;
+  roles?: string[];
+}[] = [
+  { label: t("dashboard"), href: "/branch", icon: "fa-house", permission: null },
+  { label: t("newTransfer"), href: "/branch/new-transfer", icon: "fa-paper-plane", permission: "CREATE_TRANSFER" },
+  { label: t("completePickup"), href: "/branch/complete", icon: "fa-hand-holding-dollar", permission: "COMPLETE_PICKUP" },
+  { label: t("refund"), href: "/branch/refund", icon: "fa-rotate-left", permission: "PROCESS_REFUND" },
+  { label: "Commission", href: "/branch/commission", icon: "fa-percent", permission: null, roles: ["BRANCH_MANAGER"] },
+  { label: t("transactions"), href: "/branch/transactions", icon: "fa-right-left", permission: "VIEW_TRANSACTIONS" },
+  { label: "My Wallet", href: "/branch/wallet", icon: "fa-wallet", permission: null, roles: ["TELLER"] },
+  { label: "Manager Cash", href: "/branch/manager-cash", icon: "fa-hand-holding-dollar", permission: null, roles: ["TELLER"] },
+  
+  { label: "Team", href: "/branch/team", icon: "fa-users", permission: null, roles: ["BRANCH_MANAGER"] },
+  { label: "Capital Returns", href: "/branch/capital", icon: "fa-money-bill-transfer", permission: null, roles: ["BRANCH_MANAGER"] },
+ 
+];
 
   useEffect(() => {
     const user = getUser();
-    if (user) setUserName(user.name);
+    if (user) {
+      setUserName(user.name);
+      setRole(user.role ?? "");
+    }
     setToday(
       new Date().toLocaleDateString("en-US", {
         weekday: "long",
@@ -61,8 +78,10 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
 }, []);
 
   const visibleNav = NAV_ITEMS.filter(
-    (item) => item.permission === null || permissions === null || permissions[item.permission]
-  );
+  (item) =>
+    (!item.roles || item.roles.includes(role)) &&
+    (item.permission === null || permissions === null || permissions[item.permission])
+);
 
   function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
     return (
@@ -93,11 +112,8 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
     <div className="flex h-screen bg-slate-100 dark:bg-slate-900 overflow-hidden">
       {/* Desktop sidebar */}
       <aside className="hidden lg:flex w-64 bg-white dark:bg-slate-800 border-r border-slate-200 dark:border-slate-700 flex-col shrink-0">
-        <div className="p-5 flex items-center gap-3">
-          <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-            <i className="fa-solid fa-building-columns text-white text-sm" />
-          </div>
-          <span className="text-lg font-bold text-slate-900 dark:text-white">Port Transfer</span>
+        <div className="p-5">
+          <Logo size={32} nameClassName="text-lg text-slate-900 dark:text-white" />
         </div>
 
         <nav className="mt-4 px-3 flex-1">
@@ -134,12 +150,7 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
         }`}
       >
         <div className="p-5 flex items-center justify-between border-b border-slate-100 dark:border-slate-700">
-          <div className="flex items-center gap-3">
-            <div className="w-9 h-9 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-lg flex items-center justify-center">
-              <i className="fa-solid fa-building-columns text-white text-sm" />
-            </div>
-            <span className="text-lg font-bold text-slate-900 dark:text-white">Port Transfer</span>
-          </div>
+          <Logo size={32} nameClassName="text-lg text-slate-900 dark:text-white" />
           <button
             onClick={() => setSidebarOpen(false)}
             className="p-2 rounded-lg hover:bg-slate-100 dark:hover:bg-slate-700"

@@ -167,6 +167,7 @@ exports.Prisma.BranchScalarFieldEnum = {
   currencyId: 'currencyId',
   defaultLanguage: 'defaultLanguage',
   createdBySuperAdminId: 'createdBySuperAdminId',
+  createdByUserId: 'createdByUserId',
   createdAt: 'createdAt',
   updatedAt: 'updatedAt'
 };
@@ -191,6 +192,7 @@ exports.Prisma.PartnerScalarFieldEnum = {
   email: 'email',
   phone: 'phone',
   createdById: 'createdById',
+  createdByUserId: 'createdByUserId',
   createdAt: 'createdAt'
 };
 
@@ -260,6 +262,7 @@ exports.Prisma.TopupScalarFieldEnum = {
   amount: 'amount',
   currencyId: 'currencyId',
   initiatedById: 'initiatedById',
+  initiatedByUserId: 'initiatedByUserId',
   branchManagerId: 'branchManagerId',
   receiptNumber: 'receiptNumber',
   status: 'status',
@@ -310,6 +313,7 @@ exports.Prisma.ExpenseScalarFieldEnum = {
   description: 'description',
   amount: 'amount',
   paidById: 'paidById',
+  paidByUserId: 'paidByUserId',
   paidAt: 'paidAt',
   createdAt: 'createdAt'
 };
@@ -321,6 +325,7 @@ exports.Prisma.SalaryPaymentScalarFieldEnum = {
   amount: 'amount',
   period: 'period',
   paidById: 'paidById',
+  paidByUserId: 'paidByUserId',
   paidAt: 'paidAt',
   createdAt: 'createdAt'
 };
@@ -338,6 +343,7 @@ exports.Prisma.FundSourceScalarFieldEnum = {
   cashValue: 'cashValue',
   description: 'description',
   recordedById: 'recordedById',
+  recordedByUserId: 'recordedByUserId',
   code: 'code',
   recordedAt: 'recordedAt',
   createdAt: 'createdAt'
@@ -352,8 +358,29 @@ exports.Prisma.PartnerDistributionScalarFieldEnum = {
   topupId: 'topupId',
   fundSourceId: 'fundSourceId',
   recordedById: 'recordedById',
+  recordedByUserId: 'recordedByUserId',
   distributedAt: 'distributedAt',
   createdAt: 'createdAt'
+};
+
+exports.Prisma.TellerLedgerEntryScalarFieldEnum = {
+  id: 'id',
+  tellerId: 'tellerId',
+  type: 'type',
+  amount: 'amount',
+  refType: 'refType',
+  refId: 'refId',
+  givenById: 'givenById',
+  createdAt: 'createdAt'
+};
+
+exports.Prisma.BranchCapitalReturnScalarFieldEnum = {
+  id: 'id',
+  branchId: 'branchId',
+  partnerId: 'partnerId',
+  amount: 'amount',
+  recordedById: 'recordedById',
+  recordedAt: 'recordedAt'
 };
 
 exports.Prisma.SortOrder = {
@@ -386,6 +413,14 @@ exports.CommissionMode = exports.$Enums.CommissionMode = {
   PAID_BY_SENDER: 'PAID_BY_SENDER'
 };
 
+exports.TellerLedgerType = exports.$Enums.TellerLedgerType = {
+  DEPOSIT_COLLECTED: 'DEPOSIT_COLLECTED',
+  WITHDRAWAL_PAID: 'WITHDRAWAL_PAID',
+  REFUND_PAID: 'REFUND_PAID',
+  MANAGER_FUNDING: 'MANAGER_FUNDING',
+  TELLER_RETURN: 'TELLER_RETURN'
+};
+
 exports.Prisma.ModelName = {
   SystemConfig: 'SystemConfig',
   Currency: 'Currency',
@@ -407,7 +442,9 @@ exports.Prisma.ModelName = {
   SalaryPayment: 'SalaryPayment',
   ExpenseCategory: 'ExpenseCategory',
   FundSource: 'FundSource',
-  PartnerDistribution: 'PartnerDistribution'
+  PartnerDistribution: 'PartnerDistribution',
+  TellerLedgerEntry: 'TellerLedgerEntry',
+  BranchCapitalReturn: 'BranchCapitalReturn'
 };
 
 /**

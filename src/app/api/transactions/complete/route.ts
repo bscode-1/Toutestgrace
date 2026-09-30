@@ -1,8 +1,10 @@
 import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
+import { assertTellerCanPay } from "@/lib/teller-ledger";
 import { requireStaff } from "@/lib/require-staff";
 import { hasPermission } from "@/lib/permissions";
+import { recordTellerLedgerEntry } from "@/lib/teller-ledger";
 
 const completeSchema = z.object({
   pickupCode: z.string().length(16),
@@ -55,6 +57,16 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Nothing left to collect on this transaction" }, { status: 400 });
   }
 
+  // Teller must have enough cash to pay out
+  try {
+    await assertTellerCanPay(auth.id, remaining);
+  } catch (e: any) {
+    if (e.code === "INSUFFICIENT_TELLER_BALANCE") {
+      return NextResponse.json({ error: e.message }, { status: 400 });
+    }
+    throw e;
+  }
+
   const result = await prisma.$transaction(async (tx) => {
     const updated = await tx.transaction.update({
       where: { id: transaction.id },
@@ -65,6 +77,27 @@ export async function POST(req: NextRequest) {
         completedAt: new Date(),
       },
     });
+
+    // Full completion must also create a PickupEvent, otherwise branch-capital withdrawals miss it
+    const event = await tx.pickupEvent.create({
+      data: {
+        transactionId: transaction.id,
+        amount: remaining,
+        collectedById: auth.id,
+        receiptNumber: `PKP-${Date.now()}`,
+      },
+    });
+
+    await recordTellerLedgerEntry(
+      {
+        tellerId: auth.id,
+        type: "WITHDRAWAL_PAID",
+        amount: remaining,
+        refType: "PICKUP_EVENT",
+        refId: event.id,
+      },
+      tx
+    );
 
     await tx.generalLedgerEntry.create({
       data: {

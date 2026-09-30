@@ -2,10 +2,11 @@ import type { Metadata } from "next";
 import "./globals.css";
 import { ThemeProvider } from "@/context/ThemeContext";
 import { LanguageProvider } from "@/context/LanguageContext";
+import Logo from "@/components/Logo";
 
 
 export const metadata: Metadata = {
-  title: "Port Transfer System",
+  title: "TIMS B",
   description: "Branch money transfer management system",
 };
 

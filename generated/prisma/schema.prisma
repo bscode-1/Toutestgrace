@@ -91,33 +91,38 @@ model SuperAdmin {
 // BRANCH
 // ============================================================
 model Branch {
-  id                    String     @id @default(uuid())
-  name                  String
-  location              String?
-  address               String?
-  phone                 String?
-  branchCode            String?    @unique @map("branch_code")
-  status                String     @default("INACTIVE") // ACTIVE | INACTIVE
-  managerId             String?    @unique @map("manager_id")
-  manager               AppUser?   @relation("BranchManager", fields: [managerId], references: [id])
-  currencyId            String?    @map("currency_id")
-  currency              Currency?  @relation(fields: [currencyId], references: [id])
-  defaultLanguage       String     @default("en") @map("default_language")
-  createdBySuperAdminId String     @map("created_by_super_admin_id")
-  createdBySuperAdmin   SuperAdmin @relation(fields: [createdBySuperAdminId], references: [id])
-  createdAt             DateTime   @default(now()) @map("created_at")
-  updatedAt             DateTime   @updatedAt @map("updated_at")
+  id              String    @id @default(uuid())
+  name            String
+  location        String?
+  address         String?
+  phone           String?
+  branchCode      String?   @unique @map("branch_code")
+  status          String    @default("INACTIVE") // ACTIVE | INACTIVE
+  managerId       String?   @unique @map("manager_id")
+  manager         AppUser?  @relation("BranchManager", fields: [managerId], references: [id])
+  currencyId      String?   @map("currency_id")
+  currency        Currency? @relation(fields: [currencyId], references: [id])
+  defaultLanguage String    @default("en") @map("default_language")
+
+  createdBySuperAdminId String?     @map("created_by_super_admin_id")
+  createdBySuperAdmin   SuperAdmin? @relation(fields: [createdBySuperAdminId], references: [id])
+  createdByUserId       String?     @map("created_by_user_id")
+  createdByUser         AppUser?    @relation("BranchCreatedByUser", fields: [createdByUserId], references: [id])
+
+  createdAt DateTime @default(now()) @map("created_at")
+  updatedAt DateTime @updatedAt @map("updated_at")
 
   distributions PartnerDistribution[]
 
-  users                AppUser[]            @relation("BranchStaff")
+  users                AppUser[]             @relation("BranchStaff")
   commissionTiers      CommissionTier[]
-  sentTransactions     Transaction[]        @relation("SenderBranch")
-  receivedTransactions Transaction[]        @relation("ReceiverBranch")
+  sentTransactions     Transaction[]         @relation("SenderBranch")
+  receivedTransactions Transaction[]         @relation("ReceiverBranch")
   subLedgerEntries     SubLedgerEntry[]
   generalLedgerEntries GeneralLedgerEntry[]
   topups               Topup[]
   expenses             Expense[]
+  capitalReturns       BranchCapitalReturn[]
 
   @@map("branch")
 }
@@ -138,14 +143,23 @@ model AppUser {
   isActive          Boolean  @default(true) @map("is_active")
   createdAt         DateTime @default(now()) @map("created_at")
 
-  managesBranch         Branch?         @relation("BranchManager")
-  createdTransactions   Transaction[]   @relation("CreatedByTeller")
-  completedTransactions Transaction[]   @relation("CompletedByTeller")
-  refundedTransactions  Transaction[]   @relation("RefundedByTeller")
-  topupsReceived        Topup[]         @relation("BranchManagerTopup")
+  managesBranch         Branch?             @relation("BranchManager")
+  createdTransactions   Transaction[]       @relation("CreatedByTeller")
+  completedTransactions Transaction[]       @relation("CompletedByTeller")
+  refundedTransactions  Transaction[]       @relation("RefundedByTeller")
+  topupsReceived        Topup[]             @relation("BranchManagerTopup")
   auditLogs             AuditLog[]
   salaryPayments        SalaryPayment[]
   pickupEvents          PickupEvent[]
+  tellerLedgerEntries   TellerLedgerEntry[]
+
+  branchesCreated       Branch[]              @relation("BranchCreatedByUser")
+  topupsInitiated       Topup[]               @relation("TopupInitiatedByUser")
+  expensesPaid          Expense[]             @relation("ExpensePaidByUser")
+  salariesPaid          SalaryPayment[]       @relation("SalaryPaidByUser")
+  fundSourcesRecorded   FundSource[]          @relation("FundSourceRecordedByUser")
+  distributionsRecorded PartnerDistribution[] @relation("DistributionRecordedByUser")
+  partnersCreated       Partner[]             @relation("PartnerCreatedByUser")
 
   mustChangePassword Boolean @default(false)
 
@@ -153,15 +167,20 @@ model AppUser {
 }
 
 model Partner {
-  id            String                @id @default(cuid())
-  name          String
-  email         String?
-  phone         String?
-  createdById   String?
-  createdBy     SuperAdmin?           @relation(fields: [createdById], references: [id])
-  fundSources   FundSource[]
-  distributions PartnerDistribution[]
-  createdAt     DateTime              @default(now())
+  id    String  @id @default(cuid())
+  name  String
+  email String?
+  phone String?
+
+  createdById     String?
+  createdBy       SuperAdmin? @relation(fields: [createdById], references: [id])
+  createdByUserId String?
+  createdByUser   AppUser?    @relation("PartnerCreatedByUser", fields: [createdByUserId], references: [id])
+
+  fundSources    FundSource[]
+  distributions  PartnerDistribution[]
+  capitalReturns BranchCapitalReturn[]
+  createdAt      DateTime              @default(now())
 
   @@map("partner")
 }
@@ -284,21 +303,25 @@ model GeneralLedgerEntry {
 // TOPUP — super admin only, signed A4 receipt flow
 // ============================================================
 model Topup {
-  id              String     @id @default(uuid())
-  branchId        String     @map("branch_id")
-  branch          Branch     @relation(fields: [branchId], references: [id])
-  amount          Decimal    @db.Decimal(18, 2)
-  currencyId      String?    @map("currency_id")
-  currency        Currency?  @relation(fields: [currencyId], references: [id])
-  initiatedById   String     @map("initiated_by")
-  initiatedBy     SuperAdmin @relation(fields: [initiatedById], references: [id])
-  branchManagerId String     @map("branch_manager_id")
-  branchManager   AppUser    @relation("BranchManagerTopup", fields: [branchManagerId], references: [id])
-  receiptNumber   String     @unique @map("receipt_number")
-  status          String     @default("ISSUED") // ISSUED | ACKNOWLEDGED
+  id         String    @id @default(uuid())
+  branchId   String    @map("branch_id")
+  branch     Branch    @relation(fields: [branchId], references: [id])
+  amount     Decimal   @db.Decimal(18, 2)
+  currencyId String?   @map("currency_id")
+  currency   Currency? @relation(fields: [currencyId], references: [id])
+
+  initiatedById     String?     @map("initiated_by")
+  initiatedBy       SuperAdmin? @relation(fields: [initiatedById], references: [id])
+  initiatedByUserId String?     @map("initiated_by_user")
+  initiatedByUser   AppUser?    @relation("TopupInitiatedByUser", fields: [initiatedByUserId], references: [id])
+
+  branchManagerId String    @map("branch_manager_id")
+  branchManager   AppUser   @relation("BranchManagerTopup", fields: [branchManagerId], references: [id])
+  receiptNumber   String    @unique @map("receipt_number")
+  status          String    @default("ISSUED") // ISSUED | ACKNOWLEDGED
   note            String?
-  createdAt       DateTime   @default(now()) @map("created_at")
-  acknowledgedAt  DateTime?  @map("acknowledged_at")
+  createdAt       DateTime  @default(now()) @map("created_at")
+  acknowledgedAt  DateTime? @map("acknowledged_at")
 
   distribution PartnerDistribution?
 
@@ -358,31 +381,38 @@ model PickupEvent {
 }
 
 model Expense {
-  id          String     @id @default(uuid())
-  branchId    String?    @map("branch_id")
-  branch      Branch?    @relation(fields: [branchId], references: [id])
+  id          String  @id @default(uuid())
+  branchId    String? @map("branch_id")
+  branch      Branch? @relation(fields: [branchId], references: [id])
   category    String // RENT, UTILITIES, BILLS, SUPPLIES, OTHER, etc.
   description String?
-  amount      Decimal    @db.Decimal(18, 2)
-  paidById    String     @map("paid_by")
-  paidBy      SuperAdmin @relation(fields: [paidById], references: [id])
-  paidAt      DateTime   @default(now()) @map("paid_at")
-  createdAt   DateTime   @default(now()) @map("created_at")
+  amount      Decimal @db.Decimal(18, 2)
+
+  paidById     String?     @map("paid_by")
+  paidBy       SuperAdmin? @relation(fields: [paidById], references: [id])
+  paidByUserId String?     @map("paid_by_user")
+  paidByUser   AppUser?    @relation("ExpensePaidByUser", fields: [paidByUserId], references: [id])
+  paidAt       DateTime    @default(now()) @map("paid_at")
+
+  createdAt DateTime @default(now()) @map("created_at")
 
   @@map("expense")
 }
 
 model SalaryPayment {
-  id        String     @id @default(uuid())
-  staffId   String?    @map("staff_id")
-  staff     AppUser?   @relation(fields: [staffId], references: [id])
-  staffName String     @map("staff_name") // snapshot, survives staff deletion
-  amount    Decimal    @db.Decimal(18, 2)
+  id        String   @id @default(uuid())
+  staffId   String?  @map("staff_id")
+  staff     AppUser? @relation(fields: [staffId], references: [id])
+  staffName String   @map("staff_name") // snapshot, survives staff deletion
+  amount    Decimal  @db.Decimal(18, 2)
   period    String // e.g. "August 2026"
-  paidById  String     @map("paid_by")
-  paidBy    SuperAdmin @relation(fields: [paidById], references: [id])
-  paidAt    DateTime   @default(now()) @map("paid_at")
-  createdAt DateTime   @default(now()) @map("created_at")
+
+  paidById     String?     @map("paid_by")
+  paidBy       SuperAdmin? @relation(fields: [paidById], references: [id])
+  paidByUserId String?     @map("paid_by_user")
+  paidByUser   AppUser?    @relation("SalaryPaidByUser", fields: [paidByUserId], references: [id])
+  paidAt       DateTime    @default(now()) @map("paid_at")
+  createdAt    DateTime    @default(now()) @map("created_at")
 
   @@map("salary_payment")
 }
@@ -406,9 +436,12 @@ model FundSource {
 
   distributions PartnerDistribution[]
 
-  recordedById String     @map("recorded_by")
-  recordedBy   SuperAdmin @relation("FundSourceRecorder", fields: [recordedById], references: [id])
-  code         String     @unique // Human-readable cash-in code, e.g. CI-7K2M9P
+  recordedById     String?     @map("recorded_by")
+  recordedBy       SuperAdmin? @relation("FundSourceRecorder", fields: [recordedById], references: [id])
+  recordedByUserId String?     @map("recorded_by_user")
+  recordedByUser   AppUser?    @relation("FundSourceRecordedByUser", fields: [recordedByUserId], references: [id])
+
+  code String @unique // Human-readable cash-in code, e.g. CI-7K2M9P
 
   recordedAt DateTime @default(now()) @map("recorded_at")
   createdAt  DateTime @default(now()) @map("created_at")
@@ -434,11 +467,50 @@ model PartnerDistribution {
   fundSourceId String     @map("fund_source_id")
   fundSource   FundSource @relation(fields: [fundSourceId], references: [id])
 
-  recordedById String     @map("recorded_by")
-  recordedBy   SuperAdmin @relation("DistributionRecorder", fields: [recordedById], references: [id])
+  recordedById     String?     @map("recorded_by")
+  recordedBy       SuperAdmin? @relation("DistributionRecorder", fields: [recordedById], references: [id])
+  recordedByUserId String?     @map("recorded_by_user")
+  recordedByUser   AppUser?    @relation("DistributionRecordedByUser", fields: [recordedByUserId], references: [id])
 
   distributedAt DateTime @default(now()) @map("distributed_at")
   createdAt     DateTime @default(now()) @map("created_at")
 
   @@map("partner_distribution")
+}
+
+// prisma/schema.prisma — add these (also add back-relations on AppUser, Branch, Partner)
+enum TellerLedgerType {
+  DEPOSIT_COLLECTED
+  WITHDRAWAL_PAID
+  REFUND_PAID
+  MANAGER_FUNDING
+  TELLER_RETURN // <-- ADD THIS LINE
+}
+
+model TellerLedgerEntry {
+  id        String           @id @default(cuid())
+  tellerId  String
+  teller    AppUser          @relation(fields: [tellerId], references: [id])
+  type      TellerLedgerType
+  amount    Decimal          @db.Decimal(18, 2)
+  refType   String?
+  refId     String?
+  givenById String?
+  createdAt DateTime         @default(now())
+
+  @@index([tellerId, createdAt])
+  @@map("teller_ledger_entry")
+}
+
+model BranchCapitalReturn {
+  id           String   @id @default(uuid())
+  branchId     String
+  branch       Branch   @relation(fields: [branchId], references: [id])
+  partnerId    String
+  partner      Partner  @relation(fields: [partnerId], references: [id])
+  amount       Decimal  @db.Decimal(18, 2)
+  recordedById String
+  recordedAt   DateTime @default(now())
+
+  @@map("branch_capital_return")
 }

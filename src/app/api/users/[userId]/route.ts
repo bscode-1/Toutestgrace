@@ -2,6 +2,7 @@ import { NextRequest, NextResponse } from "next/server";
 import { z } from "zod";
 import { prisma } from "@/lib/prisma";
 import { requirePermission } from "@/lib/require-permission";
+import { assertTellerCanDeactivate } from "@/lib/teller-ledger";
 
 
 const updateUserSchema = z.object({
@@ -63,6 +64,20 @@ export async function PATCH(
         metadata: { reason: "manager reassigned or role changed", userId },
       },
     });
+  }
+
+    const targetId = userId;              // the [userId] param in this route
+  const nextActive = body.isActive;     // the parsed isActive value from the request
+
+  if (nextActive === false) {
+    try {
+      await assertTellerCanDeactivate(targetId);
+    } catch (e: any) {
+      if (e.code === "TELLER_HAS_BALANCE") {
+        return NextResponse.json({ error: e.message }, { status: 400 });
+      }
+      throw e;
+    }
   }
 
   const user = await prisma.appUser.update({

@@ -4,6 +4,7 @@ import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/require-staff";
 import { calculateCommission } from "@/lib/commission";
 import { generatePickupCode, buildQrPayload } from "@/lib/pickup-code";
+import { recordTellerLedgerEntry } from "@/lib/teller-ledger";
 
 const createTransactionSchema = z.object({
   receiverBranchId: z.string().uuid(),
@@ -103,6 +104,17 @@ export async function POST(req: NextRequest) {
       },
     });
 
+    await recordTellerLedgerEntry(
+      {
+        tellerId: auth.id,
+        type: "DEPOSIT_COLLECTED",
+        amount: Number(totalCharged),
+        refType: "TRANSACTION",
+        refId: transaction.id,
+      },
+      tx
+    );
+
     await tx.auditLog.create({
       data: {
         entityType: "TRANSACTION",
@@ -200,6 +212,4 @@ const withBalances = transactions.map((tx) => {
   return { ...tx, amountCollected, remainingBalance };
 });
   return NextResponse.json({ transactions: withBalances });
-
-  return NextResponse.json({ transactions });
 }

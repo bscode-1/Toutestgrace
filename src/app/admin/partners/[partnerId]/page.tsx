@@ -7,6 +7,7 @@ import { useLanguage } from "@/context/LanguageContext";
 import * as XLSX from "xlsx";
 import jsPDF from "jspdf";
 import autoTable from "jspdf-autotable";
+import { EditRecordModal, HistoryModal, FieldConfig } from "@/components/partners/EditRecordModals";
 
 type Allocation = { branchName: string; amount: number; distributedAt: string; note: string | null };
 
@@ -25,6 +26,10 @@ type LedgerEntry = {
   allocations?: Allocation[];
   branchName?: string;
   note?: string;
+  // NEW
+  source?: string;
+  branchId?: string;
+  fundSourceId?: string;
 };
 
 type AvailableSource = { id: string; code: string; commodityName: string; remaining: number };
@@ -39,6 +44,18 @@ type PartnerBalance = {
 };
 
 type BranchOption = { id: string; name: string };
+
+// NEW: reads role/permissions from the JWT-independent /api/permissions/me + token role
+function getTokenRole(): string | null {
+  try {
+    const token = localStorage.getItem("token");
+    if (!token) return null;
+    const payload = JSON.parse(atob(token.split(".")[1].replace(/-/g, "+").replace(/_/g, "/")));
+    return payload.role ?? null;
+  } catch {
+    return null;
+  }
+}
 
 export default function PartnerDetailPage() {
   const { partnerId } = useParams() as { partnerId: string };
@@ -64,13 +81,40 @@ export default function PartnerDetailPage() {
 
   const [selectedId, setSelectedId] = useState<string | null>(null);
 
+  // NEW: edit / history state
+  const [editRow, setEditRow] = useState<LedgerEntry | null>(null);
+  const [historyRow, setHistoryRow] = useState<LedgerEntry | null>(null);
+  const [canManage, setCanManage] = useState(false);
+
   // All Branch Transactions view
   const [showAllTx, setShowAllTx] = useState(false);
   const [txBranchFilter, setTxBranchFilter] = useState("");
   const [txFrom, setTxFrom] = useState("");
   const [txTo, setTxTo] = useState("");
 
+  
+
   const { t } = useLanguage();
+
+  // NEW: MANAGE_PARTNERS check (SUPER_ADMIN bypasses)
+  useEffect(() => {
+    async function checkPermission() {
+      if (getTokenRole() === "SUPER_ADMIN") {
+        setCanManage(true);
+        return;
+      }
+      try {
+        const res = await apiFetch("/api/permissions/me");
+        if (!res.ok) return;
+        const json = await res.json();
+        const list: string[] = Array.isArray(json) ? json : json.permissions ?? [];
+        setCanManage(list.includes("MANAGE_PARTNERS"));
+      } catch {
+        setCanManage(false);
+      }
+    }
+    checkPermission();
+  }, []);
 
   async function load() {
     setLoading(true);
@@ -154,6 +198,11 @@ export default function PartnerDetailPage() {
   function fmtDate(d: string) {
     return new Date(d).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" });
   }
+
+  // NEW helpers
+  const isFund = (r: LedgerEntry) => r.type === "CASH_IN";
+  const toDateInput = (d: string) => new Date(d).toISOString().slice(0, 10);
+  const isEditable = (r: LedgerEntry) => r.source !== "CAPITAL_RETURN";
 
   // ---- Cycle-based Cash In History (one row per fund-source cycle) ----
   const cycles = useMemo(() => {
@@ -284,6 +333,42 @@ export default function PartnerDetailPage() {
 
   const selected = data.ledger.find((e) => e.id === selectedId && e.type === "CASH_IN");
   const selectedSource = data.availableSources.find((s) => s.id === fundSourceId);
+
+  // NEW: modal field configs (defined here because they depend on loaded data)
+  const partnerCashIns = data.ledger.filter((e) => e.type === "CASH_IN" && isEditable(e));
+
+  const fundFields: FieldConfig[] = [
+    { key: "commodityName", label: "Commodity", type: "text" },
+    { key: "cashValue", label: "Cash value", type: "number" },
+    { key: "recordedAt", label: "Date", type: "date" },
+  ];
+
+  const distFields: FieldConfig[] = [
+    { key: "amount", label: "Amount", type: "number" },
+    { key: "branchId", label: "Branch", type: "select",
+      options: branches.map((b) => ({ value: b.id, label: b.name })) },
+    { key: "fundSourceId", label: "Cash-in source", type: "select",
+      options: partnerCashIns.map((f) => ({ value: f.id, label: f.code ?? f.id })) },
+    { key: "notes", label: "Notes", type: "text" },
+    { key: "recordedAt", label: "Date", type: "date" },
+  ];
+
+  // NEW: reusable actions cell
+  const renderActions = (row: LedgerEntry) => {
+    if (!isEditable(row)) return null;
+    return (
+      <div className="flex gap-3 justify-center" onClick={(ev) => ev.stopPropagation()}>
+        {canManage && (
+          <button title="Edit" onClick={() => setEditRow(row)} className="text-slate-400 hover:text-blue-600 transition-colors">
+            <i className="fa-solid fa-pen-to-square" />
+          </button>
+        )}
+        <button title="History" onClick={() => setHistoryRow(row)} className="text-slate-400 hover:text-blue-600 transition-colors">
+          <i className="fa-solid fa-clock-rotate-left" />
+        </button>
+      </div>
+    );
+  };
 
   return (
     <div>
@@ -449,10 +534,12 @@ export default function PartnerDetailPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                      <th className="px-4 py-2.5 font-medium">{t("date")}</th>
-<th className="px-4 py-2.5 font-medium">{t("branch")}</th>
-<th className="px-4 py-2.5 font-medium">{t("issuedBy")}</th>
-<th className="px-4 py-2.5 font-medium">{t("amount")}</th>
+                    <th className="px-4 py-2.5 font-medium">{t("date")}</th>
+                    <th className="px-4 py-2.5 font-medium">{t("branch")}</th>
+                    <th className="px-4 py-2.5 font-medium">{t("issuedBy")}</th>
+                    <th className="px-4 py-2.5 font-medium">{t("amount")}</th>
+                    {/* NEW */}
+                    <th className="px-4 py-2.5 font-medium text-center">{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -462,6 +549,8 @@ export default function PartnerDetailPage() {
                       <td className="px-4 py-3 font-medium text-slate-700 dark:text-slate-200">{e.branchName ?? "—"}</td>
                       <td className="px-4 py-3 text-slate-500 dark:text-slate-400">{e.recordedByName ?? "—"}</td>
                       <td className="px-4 py-3 font-semibold text-rose-600 dark:text-rose-400">{fmt(e.cashOut)}</td>
+                      {/* NEW */}
+                      <td className="px-4 py-3">{renderActions(e)}</td>
                     </tr>
                   ))}
                 </tbody>
@@ -469,6 +558,7 @@ export default function PartnerDetailPage() {
                   <tr className="bg-slate-50 dark:bg-slate-900/30">
                     <td className="px-4 py-3 font-semibold text-slate-700 dark:text-slate-200" colSpan={3}>{t("total")}</td>
                     <td className="px-4 py-3 font-bold text-slate-900 dark:text-white">{fmt(filteredTotal)}</td>
+                    <td />
                   </tr>
                 </tfoot>
               </table>
@@ -492,13 +582,14 @@ export default function PartnerDetailPage() {
               <table className="w-full text-sm">
                 <thead>
                   <tr className="border-b border-slate-100 dark:border-slate-700 text-left text-xs text-slate-400 uppercase tracking-wide">
-                    
                     <th className="px-4 py-2.5 font-medium">{t("code")}</th>
                     <th className="px-4 py-2.5 font-medium">{t("date")}</th>
                     <th className="px-4 py-2.5 font-medium">{t("cashInCol")}</th>
                     <th className="px-4 py-2.5 font-medium">{t("cashOutCol")}</th>
                     <th className="px-4 py-2.5 font-medium">{t("balance")}</th>
-                    <th  className="px-4 py-2.5 font-medium text-center">{t("cycle")}</th>
+                    <th className="px-4 py-2.5 font-medium text-center">{t("cycle")}</th>
+                    {/* NEW */}
+                    <th className="px-4 py-2.5 font-medium text-center">{t("actions")}</th>
                   </tr>
                 </thead>
                 <tbody>
@@ -526,6 +617,8 @@ export default function PartnerDetailPage() {
                             <i className="fa-regular fa-clock text-slate-300 dark:text-slate-500" title={t("cycleInProgress")} />
                           )}
                         </td>
+                        {/* NEW */}
+                        <td className="px-4 py-3">{renderActions(e)}</td>
                       </tr>
                     );
                   })}
@@ -573,6 +666,49 @@ export default function PartnerDetailPage() {
           )}
         </div>
       </div>
+
+      {/* NEW: Edit modal */}
+      {editRow && (
+        <EditRecordModal
+          title={isFund(editRow) ? "Edit Cash-In" : "Edit Cash-Out"}
+          url={isFund(editRow)
+            ? `/api/fund-sources/${editRow.id}`
+            : `/api/partner-distributions/${editRow.id}`}
+          fields={isFund(editRow) ? fundFields : distFields}
+          initial={{
+            ...(isFund(editRow)
+              ? { commodityName: editRow.commodityName, cashValue: editRow.cashIn }
+              : {
+                  amount: editRow.cashOut,
+                  branchId: editRow.branchId,
+                  fundSourceId: editRow.fundSourceId,
+                  notes: editRow.note,
+                }),
+            recordedAt: toDateInput(editRow.date),
+          }}
+          onClose={() => setEditRow(null)}
+          onSaved={async () => {
+            setEditRow(null);
+            await load();
+          }}
+        />
+      )}
+
+      {/* NEW: History modal */}
+      {historyRow && (
+        <HistoryModal
+          title="Edit History"
+          url={isFund(historyRow)
+            ? `/api/fund-sources/${historyRow.id}/history`
+            : `/api/partner-distributions/${historyRow.id}/history`}
+          labels={{
+            commodityName: "Commodity", cashValue: "Cash value", amount: "Amount",
+            branchId: "Branch", fundSourceId: "Cash-in source", partnerId: "Partner",
+            notes: "Notes", recordedAt: "Date",
+          }}
+          onClose={() => setHistoryRow(null)}
+        />
+      )}
     </div>
   );
 }

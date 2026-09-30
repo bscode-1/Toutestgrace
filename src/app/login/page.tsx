@@ -3,6 +3,7 @@
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { useLanguage } from "@/context/LanguageContext";
+import Logo from "@/components/Logo";
 
 export default function LoginPage() {
   const router = useRouter();
@@ -59,10 +60,7 @@ export default function LoginPage() {
         <div className="w-full max-w-sm">
          <div className="flex items-center justify-between mb-10">
           <div className="flex items-center gap-2">
-            <div className="w-9 h-9 rounded-xl bg-gradient-to-br from-blue-500 to-indigo-600 flex items-center justify-center">
-              <i className="fa-solid fa-building-columns text-white text-sm" />
-            </div>
-            <span className="text-lg font-semibold text-slate-900">Port Transfer</span>
+            <Logo size={36} nameClassName="text-lg text-slate-900" />
           </div>
           <button
             type="button"
