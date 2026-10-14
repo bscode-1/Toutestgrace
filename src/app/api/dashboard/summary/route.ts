@@ -41,33 +41,38 @@ export async function GET(req: NextRequest) {
     branchId = branchIdParam;
   }
 
+   const isTeller = payload.role === "TELLER";
   const dateFilter = { createdAt: { gte: from, lte: to } };
   const branchFilter = branchId ? { senderBranchId: branchId } : {};
   const branchFilterReceiver = branchId ? { receiverBranchId: branchId } : {};
 
+  // Tellers only see their own activity
+  const ownSent = isTeller ? { createdById: payload.id } : {};
+  const ownReceived = isTeller ? { pickupEvents: { some: { collectedById: payload.id } } } : {};
+
   const [sent, received, pending, completed, refunded] = await Promise.all([
     prisma.transaction.aggregate({
-      where: { ...dateFilter, ...branchFilter },
+      where: { ...dateFilter, ...branchFilter, ...ownSent },
       _count: true,
       _sum: { amountSent: true },
     }),
     prisma.transaction.aggregate({
-      where: { ...dateFilter, ...branchFilterReceiver },
+      where: { ...dateFilter, ...branchFilterReceiver, ...ownReceived },
       _count: true,
       _sum: { amountPayable: true },
     }),
     prisma.transaction.aggregate({
-      where: { ...dateFilter, ...branchFilter, status: "PENDING" },
+      where: { ...dateFilter, ...branchFilter, ...ownSent, status: "PENDING" },
       _count: true,
       _sum: { amountSent: true },
     }),
     prisma.transaction.aggregate({
-      where: { ...dateFilter, ...branchFilter, status: "COMPLETED" },
+      where: { ...dateFilter, ...branchFilter, ...ownSent, status: "COMPLETED" },
       _count: true,
       _sum: { amountSent: true },
     }),
     prisma.transaction.aggregate({
-      where: { ...dateFilter, ...branchFilter, status: "REFUNDED" },
+      where: { ...dateFilter, ...branchFilter, ...ownSent, status: "REFUNDED" },
       _count: true,
       _sum: { amountSent: true },
     }),

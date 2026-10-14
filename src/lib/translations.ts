@@ -233,6 +233,7 @@ enterValidAmount: "Enter a valid amount.",
 failedToLoadBranchCapital: "Failed to load branch capital data.",
 failedToRecordReturn: "Failed to record capital return.",
 loadingBranchCapital: "Loading branch capital...",
+myWallet: "My Wallet"
   },
   fr: {
     dashboard: "Tableau de bord",
@@ -467,6 +468,7 @@ enterValidAmount: "Entrez un montant valide.",
 failedToLoadBranchCapital: "Échec du chargement des données de capital des succursales.",
 failedToRecordReturn: "Échec de l'enregistrement de la restitution de capital.",
 loadingBranchCapital: "Chargement du capital des succursales...",
+myWallet: "Mon portefeuille",
   },
 } as const;
 

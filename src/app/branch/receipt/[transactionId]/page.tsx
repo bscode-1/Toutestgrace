@@ -155,7 +155,7 @@ export default function ReceiptPage() {
         </div>
 
         <p className="text-center text-[10px] text-slate-300 mt-4 pt-3 border-t border-dashed border-slate-300">
-          Issued by {tx.createdBy.name} — Port Transfer System
+          Issued by {tx.createdBy.name} — TIMS B
         </p>
 
         <div className="grid grid-cols-2 gap-2 mt-4 print:hidden">
@@ -169,20 +169,18 @@ export default function ReceiptPage() {
 
           <a
             href={`https://wa.me/?text=${encodeURIComponent(
-              `Money transfer receipt\n\nSender: ${tx.senderName}\nReceiver: ${tx.receiverName}\nAmount Sent: $${Number(
-                tx.amountSent
-              ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nAmount Receiver Gets: $${Number(
-                tx.amountPayable
-              ).toLocaleString("en-US", { minimumFractionDigits: 2 })}${
-                isPaidBySender
-                  ? `\nTotal Charged to Sender: $${Number(tx.totalCharged).toLocaleString("en-US", {
-                      minimumFractionDigits: 2,
-                    })}`
-                  : ""
-              }\nPickup Code: ${tx.pickupCode}\n\nReceipt: ${
-                typeof window !== "undefined" ? window.location.href : ""
-              }`
-            )}`}
+  `Money transfer receipt\n\nSender: ${tx.senderName}\nReceiver: ${tx.receiverName}\nAmount Sent: $${Number(
+    tx.amountSent
+  ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\nAmount Receiver Gets: $${Number(
+    tx.amountPayable
+  ).toLocaleString("en-US", { minimumFractionDigits: 2 })}${
+    isPaidBySender
+      ? `\nTotal Charged to Sender: $${Number(tx.totalCharged).toLocaleString("en-US", {
+          minimumFractionDigits: 2,
+        })}`
+      : ""
+  }\nPickup Code: ${tx.pickupCode}`
+)}`}
             target="_blank"
             rel="noopener noreferrer"
             className="flex items-center justify-center gap-2 bg-green-600 text-white text-sm font-medium rounded-xl py-2.5"

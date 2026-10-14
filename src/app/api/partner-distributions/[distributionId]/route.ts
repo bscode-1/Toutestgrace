@@ -7,7 +7,7 @@ import { auditActor } from "@/lib/audit-actor";
 const schema = z.object({
   partnerId: z.string().min(1).optional(),          // cuid
   branchId: z.string().uuid().optional(),
-  fundSourceId: z.string().uuid().optional(),
+  fundSourceId: z.union([z.string().uuid(), z.literal("RETURNED")]).optional(),
   amount: z.number().positive().optional(),
   notes: z.string().nullable().optional(),
   recordedAt: z.string().datetime().optional(),
@@ -31,17 +31,52 @@ export async function PATCH(
   if (!existing) return NextResponse.json({ error: "Cash-out record not found" }, { status: 404 });
 
   const newPartnerId = input.partnerId ?? existing.partnerId;
-  const newFundSourceId = input.fundSourceId ?? existing.fundSourceId;
+  const rawSource = input.fundSourceId ?? existing.fundSourceId; // may be null or "RETURNED"
+  const newFundSourceId: string | null = rawSource === "RETURNED" ? null : rawSource;
   const newAmount = input.amount ?? Number(existing.amount);
 
-  // The (possibly new) fund source must belong to the (possibly new) partner
-  const fundSource = await prisma.fundSource.findUnique({ where: { id: newFundSourceId } });
-  if (!fundSource) return NextResponse.json({ error: "Cash-in source not found" }, { status: 404 });
-  if (fundSource.partnerId !== newPartnerId) {
-    return NextResponse.json(
-      { error: "That cash-in source doesn't belong to the selected partner." },
-      { status: 400 }
-    );
+  if (newFundSourceId) {
+    // The (possibly new) fund source must belong to the (possibly new) partner
+    const fundSource = await prisma.fundSource.findUnique({ where: { id: newFundSourceId } });
+    if (!fundSource) return NextResponse.json({ error: "Cash-in source not found" }, { status: 404 });
+    if (fundSource.partnerId !== newPartnerId) {
+      return NextResponse.json(
+        { error: "That cash-in source doesn't belong to the selected partner." },
+        { status: 400 }
+      );
+    }
+
+    // Total distributed from this fund source (excluding this record) + new amount must fit
+    const others = await prisma.partnerDistribution.findMany({
+      where: { fundSourceId: newFundSourceId, id: { not: distributionId } },
+    });
+    const otherTotal = others.reduce((s, d) => s + Number(d.amount), 0);
+    if (otherTotal + newAmount > Number(fundSource.cashValue) + 0.005) {
+      const room = Number(fundSource.cashValue) - otherTotal;
+      return NextResponse.json(
+        { error: `Amount exceeds what's left on cash-in ${fundSource.code} (${room.toFixed(2)} available).` },
+        { status: 400 }
+      );
+    }
+  } else {
+    // Paid from the returned-capital pool
+    const [ret, usedByOthers] = await Promise.all([
+      prisma.branchCapitalReturn.aggregate({
+        where: { partnerId: newPartnerId },
+        _sum: { amount: true },
+      }),
+      prisma.partnerDistribution.aggregate({
+        where: { partnerId: newPartnerId, fundSourceId: null, id: { not: distributionId } },
+        _sum: { amount: true },
+      }),
+    ]);
+    const room = Number(ret._sum.amount ?? 0) - Number(usedByOthers._sum.amount ?? 0);
+    if (newAmount > room + 0.005) {
+      return NextResponse.json(
+        { error: `Amount exceeds the returned capital available (${Math.max(0, room).toFixed(2)}).` },
+        { status: 400 }
+      );
+    }
   }
 
   if (input.branchId) {
@@ -49,29 +84,17 @@ export async function PATCH(
     if (!branch) return NextResponse.json({ error: "Branch not found" }, { status: 404 });
   }
 
-  // Total distributed from this fund source (excluding this record) + new amount must fit
-  const others = await prisma.partnerDistribution.findMany({
-    where: { fundSourceId: newFundSourceId, id: { not: distributionId } },
-  });
-  const otherTotal = others.reduce((s, d) => s + Number(d.amount), 0);
-  if (otherTotal + newAmount > Number(fundSource.cashValue)) {
-    const room = Number(fundSource.cashValue) - otherTotal;
-    return NextResponse.json(
-      { error: `Amount exceeds what's left on cash-in ${fundSource.code} (${room.toFixed(2)} available).` },
-      { status: 400 }
-    );
-  }
-
   const data: Record<string, any> = {};
   const before: Record<string, any> = {};
   const after: Record<string, any> = {};
 
+  // NOTE: the model field is `note` (POST + detail route use it); the edit modal sends `notes`
   const candidates: Record<string, any> = {
     partnerId: input.partnerId,
     branchId: input.branchId,
-    fundSourceId: input.fundSourceId,
+    fundSourceId: input.fundSourceId === undefined ? undefined : newFundSourceId,
     amount: input.amount,
-    notes: input.notes,
+    note: input.notes,
     recordedAt: input.recordedAt ? new Date(input.recordedAt) : undefined,
   };
   for (const [k, v] of Object.entries(candidates)) {

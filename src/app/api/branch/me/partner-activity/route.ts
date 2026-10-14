@@ -1,8 +1,14 @@
 import { NextRequest, NextResponse } from "next/server";
 import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/require-staff";
+import { requireBranchManager } from "@/lib/require-branch-manager";
+
 
 export async function GET(req: NextRequest) {
+  // first lines of the handler:
+const guard = requireBranchManager(req);
+if ("error" in guard) return guard.error;
+
   const auth: any = requireStaff(req);
   if (auth instanceof NextResponse) return auth;
   if (auth.role !== "BRANCH_MANAGER" || !auth.branchId) {

@@ -1,4 +1,6 @@
 import { prisma } from "@/lib/prisma";
+import { getBranchCashPosition } from "@/lib/branch-cash";
+
 type Db = Pick<typeof prisma, "tellerLedgerEntry">;
 
 
@@ -51,12 +53,25 @@ export async function getTellerBalance(tellerId: string): Promise<number> {
   return balance;
 }
 
-export async function assertTellerCanPay(tellerId: string, amount: number) {
-  const balance = Number(await getTellerBalance(tellerId));
-  if (balance < amount) {
-    throw new Error(
-      `Insufficient teller balance (available ${balance.toFixed(2)}, needed ${amount.toFixed(2)}). Ask your branch manager for funding.`
+export async function assertTellerCanPay(userId: string, amount: number) {
+  const user = await prisma.appUser.findUnique({
+    where: { id: userId },
+    select: { role: true, branchId: true },
+  });
+
+  const isManager = user?.role === "BRANCH_MANAGER" && !!user.branchId;
+  const available = isManager
+    ? (await getBranchCashPosition(user!.branchId as string)).cashPosition
+    : Number(await getTellerBalance(userId));
+
+  if (available + 0.005 < amount) {
+    const e: any = new Error(
+      isManager
+        ? `Insufficient branch cash (available ${available.toFixed(2)}, needed ${amount.toFixed(2)}). Get cash from a partner or collect it back from a teller.`
+        : `Insufficient teller balance (available ${available.toFixed(2)}, needed ${amount.toFixed(2)}). Ask your branch manager for funding.`
     );
+    e.code = "INSUFFICIENT_TELLER_BALANCE";
+    throw e;
   }
 }
 

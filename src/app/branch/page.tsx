@@ -1,7 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { apiFetch } from "@/lib/client-auth";
+import { apiFetch, getUser } from "@/lib/client-auth";
 import { useLanguage } from "@/context/LanguageContext";
 
 type BranchInfo = {
@@ -45,6 +45,7 @@ export default function BranchDashboardPage() {
   const [transactions, setTransactions] = useState<Tx[]>([]);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
+  const [isTeller, setIsTeller] = useState(false);
   
 
   useEffect(() => {
@@ -56,10 +57,17 @@ export default function BranchDashboardPage() {
           apiFetch("/api/transactions?limit=6"),
         ]);
 
+        const role = getUser()?.role;
+        setIsTeller(getUser()?.role === "TELLER");
+
         if (meRes.ok) {
           const data = await meRes.json();
           setBranchInfo(data.branch);
           setBalance(data.balance);
+        }
+        if (role === "TELLER") {
+          const walletRes = await apiFetch("/api/tellers/me/ledger");
+          if (walletRes.ok) setBalance(Number((await walletRes.json()).balance ?? 0));
         }
         if (summaryRes.ok) setSummary(await summaryRes.json());
         if (txRes.ok) setTransactions((await txRes.json()).transactions);
@@ -130,7 +138,7 @@ export default function BranchDashboardPage() {
       {/* Summary cards */}
       <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4 mb-6">
         <div className="bg-white dark:bg-slate-800 rounded-2xl p-5 shadow-sm card-hover">
-          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{t("branchBalance")}</p>
+          <p className="text-xs text-slate-400 uppercase tracking-wide mb-2">{isTeller ? t("myWallet") : t("branchBalance")}</p>
           <p className="text-2xl font-bold text-slate-900 dark:text-white">
             {currencySymbol}
             {balance !== null ? Number(balance).toLocaleString("en-US", { minimumFractionDigits: 2 }) : "—"}

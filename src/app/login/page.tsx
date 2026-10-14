@@ -166,7 +166,7 @@ export default function LoginPage() {
         </div>
 
         <div className="absolute bottom-8 text-xs text-slate-400">
-          Port Transfer System — built for speed, accuracy, and trust across every branch.
+          TIMS B — built for speed, accuracy, and trust across every branch.
         </div>
       </div>
     </div>

@@ -2,6 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { apiFetch } from "@/lib/client-auth";
+import BranchesSituation from "@/components/accounts/BranchesSituation";
+import { downloadBranchesPdf } from "@/lib/accounts-pdf";
+import type { BranchSituation } from "@/lib/branch-accounts";
 
 type CashAtHand = {
   netCashAtHand: number;
@@ -12,13 +15,35 @@ type CashAtHand = {
   totalSalaries: number;
 };
 
+const pad = (x: number) => String(x).padStart(2, "0");
+const todayStr = () => new Date().toLocaleDateString("en-CA");
+const monthStartStr = () => {
+  const d = new Date();
+  return `${d.getFullYear()}-${pad(d.getMonth() + 1)}-01`;
+};
+
 export default function AccountsOverviewPage() {
   const [data, setData] = useState<CashAtHand | null>(null);
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
 
-  useEffect(() => {
-    apiFetch("/api/reports/cash-at-hand")
+  const [from, setFrom] = useState("");
+  const [to, setTo] = useState("");
+  const [rows, setRows] = useState<BranchSituation[]>([]);
+  const [rowsLoading, setRowsLoading] = useState(true);
+  const [rowsError, setRowsError] = useState<string | null>(null);
+
+  const periodLabel =
+    from || to ? `${from || "start"} to ${to || todayStr()}` : "All time";
+
+    useEffect(() => {
+    const qs = new URLSearchParams();
+    if (from) qs.set("from", new Date(`${from}T00:00:00`).toISOString());
+    if (to) qs.set("to", new Date(`${to}T23:59:59.999`).toISOString());
+
+    setLoading(true);
+    setError(null);
+    apiFetch(`/api/reports/cash-at-hand?${qs.toString()}`)
       .then((res) => {
         if (!res.ok) throw new Error("Failed to load company situation");
         return res.json();
@@ -26,19 +51,97 @@ export default function AccountsOverviewPage() {
       .then(setData)
       .catch((err) => setError(err.message))
       .finally(() => setLoading(false));
-  }, []);
+  }, [from, to]);
+
+  useEffect(() => {
+    const qs = new URLSearchParams();
+    if (from) qs.set("from", new Date(`${from}T00:00:00`).toISOString());
+    if (to) qs.set("to", new Date(`${to}T23:59:59.999`).toISOString());
+
+    setRowsLoading(true);
+    setRowsError(null);
+    apiFetch(`/api/accounts/branches-overview?${qs.toString()}`)
+      .then(async (res) => {
+        const json = await res.json();
+        if (!res.ok) throw new Error(json.error || "Failed to load branches");
+        setRows(json.branches);
+      })
+      .catch((err) => setRowsError(err.message))
+      .finally(() => setRowsLoading(false));
+  }, [from, to]);
 
   function fmt(n: number) {
     return `$${n.toLocaleString("en-US", { minimumFractionDigits: 2 })}`;
   }
 
+  const inputCls =
+    "rounded-lg border border-slate-200 bg-white px-3 py-1.5 text-sm text-slate-800 dark:border-slate-700 dark:bg-slate-800 dark:text-slate-100";
+  const chipCls =
+    "rounded-lg border border-slate-200 px-3 py-1.5 text-xs text-slate-600 hover:bg-slate-50 dark:border-slate-700 dark:text-slate-300 dark:hover:bg-slate-700/40";
+
   return (
     <div>
-      <div className="mb-6">
-        <h1 className="text-xl font-semibold text-slate-900 dark:text-white">Accounts Overview</h1>
-        <p className="text-sm text-slate-500 dark:text-slate-400">
-          The company&apos;s exact financial situation, right now
-        </p>
+      <div className="mb-6 flex flex-wrap items-start justify-between gap-4">
+        <div>
+          <h1 className="text-xl font-semibold text-slate-900 dark:text-white">
+            Accounts Overview
+          </h1>
+          <p className="text-sm text-slate-500 dark:text-slate-400">
+            The company&apos;s exact financial situation, right now
+          </p>
+        </div>
+
+        <div className="flex flex-wrap items-center gap-2">
+          <input
+            type="date"
+            value={from}
+            max={to || undefined}
+            onChange={(e) => setFrom(e.target.value)}
+            className={inputCls}
+          />
+          <span className="text-xs text-slate-400">to</span>
+          <input
+            type="date"
+            value={to}
+            min={from || undefined}
+            onChange={(e) => setTo(e.target.value)}
+            className={inputCls}
+          />
+          <button
+            className={chipCls}
+            onClick={() => {
+              setFrom(todayStr());
+              setTo(todayStr());
+            }}
+          >
+            Today
+          </button>
+          <button
+            className={chipCls}
+            onClick={() => {
+              setFrom(monthStartStr());
+              setTo(todayStr());
+            }}
+          >
+            This month
+          </button>
+          <button
+            className={chipCls}
+            onClick={() => {
+              setFrom("");
+              setTo("");
+            }}
+          >
+            All
+          </button>
+          <button
+            disabled={rowsLoading || rows.length === 0}
+            onClick={() => downloadBranchesPdf(rows, periodLabel)}
+            className="rounded-lg bg-slate-800 px-3 py-1.5 text-xs font-medium text-white hover:bg-slate-700 disabled:opacity-50 dark:bg-slate-200 dark:text-slate-900 dark:hover:bg-white"
+          >
+            <i className="fa-solid fa-file-pdf mr-1" /> PDF Report
+          </button>
+        </div>
       </div>
 
       {loading && <p className="text-sm text-slate-500">Loading...</p>}
@@ -90,8 +193,8 @@ export default function AccountsOverviewPage() {
                   <i className="fa-solid fa-file-invoice-dollar text-rose-500" />
                 </div>
                 <div>
-                  <p className="text-sm font-semibold text-slate-900 dark:text-white">Expenses</p>
-                  <p className="text-xs text-slate-400">{fmt(data.totalExpenses)} paid to date</p>
+                  <p className="text-xs text-slate-400">{fmt(data.totalExpenses)} {periodLabel === "All time" ? "paid to date" : `paid, ${periodLabel}`}</p>
+                  <p className="text-xs text-slate-400">{fmt(data.totalSalaries)} {periodLabel === "All time" ? "paid to date" : `paid, ${periodLabel}`}</p>
                 </div>
               </div>
               <i className="fa-solid fa-chevron-right text-slate-300 text-xs" />
@@ -114,7 +217,13 @@ export default function AccountsOverviewPage() {
           </div>
         </>
       )}
+
+      <BranchesSituation
+        rows={rows}
+        loading={rowsLoading}
+        error={rowsError}
+        periodLabel={periodLabel}
+      />
     </div>
   );
 }
-

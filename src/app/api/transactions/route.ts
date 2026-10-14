@@ -164,30 +164,38 @@ export async function GET(req: NextRequest) {
   const to = searchParams.get("to");
   const search = searchParams.get("search");
 
+    const isTeller = payload.role === "TELLER";
   const scopedBranchId = isStaff ? payload.branchId : branchId || undefined;
 
-  const where: Record<string, unknown> = {};
+  const and: Record<string, unknown>[] = [];
 
   if (scopedBranchId) {
-    where.OR = [{ senderBranchId: scopedBranchId }, { receiverBranchId: scopedBranchId }];
+    and.push({ OR: [{ senderBranchId: scopedBranchId }, { receiverBranchId: scopedBranchId }] });
   }
+  // Tellers only see transfers they created or paid out. Managers stay branch-wide.
+  if (isTeller) {
+    and.push({
+      OR: [{ createdById: payload.id }, { pickupEvents: { some: { collectedById: payload.id } } }],
+    });
+  }
+  if (search) {
+    and.push({
+      OR: [
+        { pickupCode: { contains: search } },
+        { senderName: { contains: search, mode: "insensitive" } },
+        { receiverName: { contains: search, mode: "insensitive" } },
+      ],
+    });
+  }
+
+  const where: Record<string, unknown> = {};
+  if (and.length) where.AND = and;
   if (status) where.status = status;
   if (from || to) {
     where.createdAt = {
       ...(from ? { gte: new Date(from) } : {}),
       ...(to ? { lte: new Date(to) } : {}),
     };
-  }
-  if (search) {
-    where.AND = [
-      {
-        OR: [
-          { pickupCode: { contains: search } },
-          { senderName: { contains: search, mode: "insensitive" } },
-          { receiverName: { contains: search, mode: "insensitive" } },
-        ],
-      },
-    ];
   }
 
  const transactions = await prisma.transaction.findMany({

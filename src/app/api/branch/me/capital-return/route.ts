@@ -21,12 +21,12 @@ export async function POST(req: NextRequest) {
     return NextResponse.json({ error: "Invalid input" }, { status: 400 });
   const { partnerId, amount } = parsed.data;
 
-  const funded = await prisma.partnerDistribution.findFirst({
-    where: { branchId: auth.branchId, partnerId },
+  const partner = await prisma.partner.findUnique({
+    where: { id: partnerId },
     select: { id: true },
   });
-  if (!funded)
-    return NextResponse.json({ error: "This partner has not funded your branch" }, { status: 400 });
+  if (!partner)
+    return NextResponse.json({ error: "Partner not found" }, { status: 404 });
 
   const c: any = await calculateBranchCapital(auth.branchId);
   const toTransfer = Number(c?.outstanding) || 0;

@@ -7,7 +7,7 @@ import { logout, getUser } from "@/lib/client-auth";
 import { useTheme } from "@/context/ThemeContext";
 import { useLanguage } from "@/context/LanguageContext";
 import Logo from "@/components/Logo";
-
+import RoleBadge from "@/components/RoleBadge";
 
 export default function BranchLayout({ children }: { children: React.ReactNode }) {
   const pathname = usePathname();
@@ -23,25 +23,23 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
   const [showProfileMenu, setShowProfileMenu] = useState(false);
 
   const NAV_ITEMS: {
-  label: string;
-  href: string;
-  icon: string;
-  permission: string | null;
-  roles?: string[];
-}[] = [
-  { label: t("dashboard"), href: "/branch", icon: "fa-house", permission: null },
-  { label: t("newTransfer"), href: "/branch/new-transfer", icon: "fa-paper-plane", permission: "CREATE_TRANSFER" },
-  { label: t("completePickup"), href: "/branch/complete", icon: "fa-hand-holding-dollar", permission: "COMPLETE_PICKUP" },
-  { label: t("refund"), href: "/branch/refund", icon: "fa-rotate-left", permission: "PROCESS_REFUND" },
-  { label: "Commission", href: "/branch/commission", icon: "fa-percent", permission: null, roles: ["BRANCH_MANAGER"] },
-  { label: t("transactions"), href: "/branch/transactions", icon: "fa-right-left", permission: "VIEW_TRANSACTIONS" },
-  { label: "My Wallet", href: "/branch/wallet", icon: "fa-wallet", permission: null, roles: ["TELLER"] },
-  { label: "Manager Cash", href: "/branch/manager-cash", icon: "fa-hand-holding-dollar", permission: null, roles: ["TELLER"] },
-  
-  { label: "Team", href: "/branch/team", icon: "fa-users", permission: null, roles: ["BRANCH_MANAGER"] },
-  { label: "Capital Returns", href: "/branch/capital", icon: "fa-money-bill-transfer", permission: null, roles: ["BRANCH_MANAGER"] },
- 
-];
+    label: string;
+    href: string;
+    icon: string;
+    permission: string | null;
+    roles?: string[];
+  }[] = [
+    { label: t("dashboard"), href: "/branch", icon: "fa-house", permission: null },
+    { label: t("newTransfer"), href: "/branch/new-transfer", icon: "fa-paper-plane", permission: "CREATE_TRANSFER" },
+    { label: t("completePickup"), href: "/branch/complete", icon: "fa-hand-holding-dollar", permission: "COMPLETE_PICKUP" },
+    { label: t("refund"), href: "/branch/refund", icon: "fa-rotate-left", permission: "PROCESS_REFUND" },
+    { label: "Commission", href: "/branch/commission", icon: "fa-percent", permission: null, roles: ["BRANCH_MANAGER"] },
+    { label: t("transactions"), href: "/branch/transactions", icon: "fa-right-left", permission: "VIEW_TRANSACTIONS" },
+    { label: "My Wallet", href: "/branch/wallet", icon: "fa-wallet", permission: null, roles: ["TELLER"] },
+    { label: "Manager Cash", href: "/branch/manager-cash", icon: "fa-hand-holding-dollar", permission: null, roles: ["TELLER"] },
+    { label: "Team", href: "/branch/team", icon: "fa-users", permission: null, roles: ["BRANCH_MANAGER"] },
+    { label: "Capital Returns", href: "/branch/capital", icon: "fa-money-bill-transfer", permission: null, roles: ["BRANCH_MANAGER"] },
+  ];
 
   useEffect(() => {
     const user = getUser();
@@ -68,20 +66,20 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
   }, []);
 
   useEffect(() => {
-  const user = getUser();
-  if (!user?.branchId) return;
-  fetch(`/api/branches/${user.branchId}`, {
-    headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
-  })
-    .then((res) => (res.ok ? res.json() : null))
-    .then((data) => data && setBranchName(data.branch.name));
-}, []);
+    const user = getUser();
+    if (!user?.branchId) return;
+    fetch(`/api/branches/${user.branchId}`, {
+      headers: { Authorization: `Bearer ${localStorage.getItem("token")}` },
+    })
+      .then((res) => (res.ok ? res.json() : null))
+      .then((data) => data && setBranchName(data.branch.name));
+  }, []);
 
   const visibleNav = NAV_ITEMS.filter(
-  (item) =>
-    (!item.roles || item.roles.includes(role)) &&
-    (item.permission === null || permissions === null || permissions[item.permission])
-);
+    (item) =>
+      (!item.roles || item.roles.includes(role)) &&
+      (item.permission === null || permissions === null || permissions[item.permission])
+  );
 
   function NavLinks({ onNavigate }: { onNavigate?: () => void }) {
     return (
@@ -126,6 +124,9 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
         <div className="p-4 m-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl text-white">
           <p className="text-xs text-white/70 mb-1">Signed in as</p>
           <p className="text-sm font-semibold truncate">{userName || "..."}</p>
+          <div className="mt-1.5">
+            <RoleBadge role={role} />
+          </div>
           <button
             onClick={logout}
             className="mt-3 w-full text-xs bg-white/20 hover:bg-white/30 transition-colors rounded-lg px-3 py-1.5"
@@ -170,6 +171,9 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
         <div className="p-4 m-3 bg-gradient-to-br from-blue-500 to-indigo-600 rounded-xl text-white">
           <p className="text-xs text-white/70 mb-1">Signed in as</p>
           <p className="text-sm font-semibold truncate">{userName || "..."}</p>
+          <div className="mt-1.5">
+            <RoleBadge role={role} />
+          </div>
           <button
             onClick={logout}
             className="mt-3 w-full text-xs bg-white/20 hover:bg-white/30 transition-colors rounded-lg px-3 py-1.5"
@@ -190,13 +194,15 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
             >
               <i className="fa-solid fa-bars text-slate-600 dark:text-slate-300" />
             </button>
-            
-              {branchName && (
-                <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-sm font-semibold text-blue-600 dark:text-blue-400">
-                  <i className="fa-solid fa-building-columns text-[10px]" />
-                  {branchName}
-                </div>
-              )}
+
+            {branchName && (
+              <div className="hidden sm:flex items-center gap-1.5 px-3 py-1 rounded-full bg-blue-50 dark:bg-blue-900/20 text-sm font-semibold text-blue-600 dark:text-blue-400">
+                <i className="fa-solid fa-building-columns text-[10px]" />
+                {branchName}
+              </div>
+            )}
+
+            <RoleBadge role={role} />
 
             <div className="hidden sm:flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
               <i className="fa-regular fa-calendar text-slate-400" />
@@ -222,7 +228,7 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
                 <i className="fa-solid fa-moon text-yellow-400" />
               )}
             </button>
-            
+
             <div className="relative">
               <button
                 onClick={() => setShowProfileMenu((v) => !v)}
@@ -235,6 +241,14 @@ export default function BranchLayout({ children }: { children: React.ReactNode }
                   className="absolute right-0 mt-2 w-48 bg-white dark:bg-slate-800 border border-slate-200 dark:border-slate-700 rounded-lg shadow-lg py-1 z-50"
                   onMouseLeave={() => setShowProfileMenu(false)}
                 >
+                  <div className="px-4 py-2 border-b border-slate-100 dark:border-slate-700">
+                    <p className="text-sm font-semibold text-slate-800 dark:text-slate-100 truncate">
+                      {userName}
+                    </p>
+                    <div className="mt-1">
+                      <RoleBadge role={role} />
+                    </div>
+                  </div>
                   <Link
                     href="/account/change-password"
                     onClick={() => setShowProfileMenu(false)}

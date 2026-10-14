@@ -182,19 +182,16 @@ export default function NewTransferPage() {
               {t("printReceipt")}
             </a>
 
-            <a
-                          
+            <a                          
               href={`https://wa.me/?text=${encodeURIComponent(
-                `${t("moneyTransferReceipt")}\n\n${t("senderLabel")}: ${result.senderName}\n${t("receiverLabel")}: ${result.receiverName}\n${t("amountSentLabel")}: $${Number(
-                  result.amountSent
-                ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("receiverGetsAmount")}: $${Number(
-                  result.amountPayable
-                ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("collectedFromSender")}: $${Number(
-                  result.totalCharged
-                ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("pickupCodeLabel")}: ${result.pickupCode}\n\n${t("receiptLabel")}: ${
-                  typeof window !== "undefined" ? window.location.origin : ""
-                }/branch/receipt/${result.id}`
-              )}`}
+  `${t("moneyTransferReceipt")}\n\n${t("senderLabel")}: ${result.senderName}\n${t("receiverLabel")}: ${result.receiverName}\n${t("amountSentLabel")}: $${Number(
+    result.amountSent
+  ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("receiverGetsAmount")}: $${Number(
+    result.amountPayable
+  ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("collectedFromSender")}: $${Number(
+    result.totalCharged
+  ).toLocaleString("en-US", { minimumFractionDigits: 2 })}\n${t("pickupCodeLabel")}: ${result.pickupCode}`
+)}`}
               target="_blank"
               rel="noopener noreferrer"
               className="flex items-center justify-center gap-2 bg-green-600 text-white text-sm font-medium rounded-xl py-3 hover:opacity-90 transition-opacity"

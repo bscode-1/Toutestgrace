@@ -3,6 +3,7 @@ import { prisma } from "@/lib/prisma";
 import { requireStaff } from "@/lib/require-staff";
 import { getBranchCashPosition } from "@/lib/branch-cash";
 import { calculateBranchCapital } from "@/lib/branch-capital";
+import { requireBranchManager } from "@/lib/require-branch-manager";
 
 const num = (v: any) => Number(v) || 0;
 const pick = (o: any, ...keys: string[]) => {
@@ -11,6 +12,9 @@ const pick = (o: any, ...keys: string[]) => {
 };
 
 export async function GET(req: NextRequest) {
+  // first lines of the handler:
+  const guard = requireBranchManager(req);
+  if ("error" in guard) return guard.error;
   const auth = requireStaff(req);
   if (auth instanceof NextResponse) return auth;
   if (auth.role !== "BRANCH_MANAGER" || !auth.branchId)
@@ -29,12 +33,11 @@ export async function GET(req: NextRequest) {
   const returned = pick(c, "alreadyReturned", "totalReturned", "returned");
   const toTransfer = pick(c, "outstanding");
 
-  const dists = await prisma.partnerDistribution.findMany({
-    where: { branchId: auth.branchId },
-    distinct: ["partnerId"],
-    select: { partner: { select: { id: true, name: true } } },
+    const partners = await prisma.partner.findMany({
+    select: { id: true, name: true },
+    orderBy: { name: "asc" },
   });
-
+  
   return NextResponse.json({
     cashPosition,
     capital: {
@@ -46,6 +49,6 @@ export async function GET(req: NextRequest) {
       toTransfer,
       capitalAtHand: toTransfer + commission,
     },
-    partners: dists.map((d) => d.partner),
+    partners,
   });
 }

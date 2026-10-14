@@ -4,6 +4,7 @@ import React, { useState, useEffect } from "react";
 import { useTheme } from "@/context/ThemeContext";
 import { logout, apiFetch, getUser } from "@/lib/client-auth";
 import { useLanguage } from "@/context/LanguageContext";
+import RoleBadge from "@/components/RoleBadge";
 
 export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
   const { theme, toggleTheme } = useTheme();
@@ -12,6 +13,7 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
   const [today, setToday] = useState("");
   const [branchLabel, setBranchLabel] = useState<string | null>(null);
   const [branchSubtitle, setBranchSubtitle] = useState<string>("");
+  const [role, setRole] = useState("");
   const { language, setLanguage, t } = useLanguage();
 
   useEffect(() => {
@@ -28,6 +30,8 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
   useEffect(() => {
     const user = getUser();
     if (!user) return;
+
+    setRole(user.role ?? "");
 
     if (user.role === "SUPER_ADMIN") {
       setBranchLabel(t("allBranches"));
@@ -70,6 +74,8 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
           )}
         </div>
 
+        <RoleBadge role={role} />
+
         <div className="hidden sm:flex items-center gap-2 text-sm text-slate-500 dark:text-slate-400">
           <i className="fa-regular fa-calendar text-slate-400" />
           {today}
@@ -77,8 +83,8 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
       </div>
 
       <div className="flex items-center gap-2 lg:gap-3">
-        
-         <a href="/admin/reports"
+        <a
+          href="/admin/reports"
           className="w-9 h-9 rounded-lg bg-slate-50 dark:bg-slate-700 flex items-center justify-center text-slate-500 dark:text-slate-300 hover:bg-slate-100 dark:hover:bg-slate-600 transition"
           aria-label="Reports"
           title="Reports"
@@ -133,8 +139,11 @@ export default function TopBar({ onMenuToggle }: { onMenuToggle: () => void }) {
 
           {showProfileMenu && (
             <div className="absolute right-0 top-12 w-56 bg-white dark:bg-slate-800 rounded-2xl shadow-2xl border border-slate-200 dark:border-slate-700 z-50 overflow-hidden">
-              
-              <a  href="/account/change-password"
+              <div className="px-4 py-3 border-b border-slate-100 dark:border-slate-700">
+                <RoleBadge role={role} />
+              </div>
+              <a
+                href="/account/change-password"
                 onClick={() => setShowProfileMenu(false)}
                 className="flex items-center gap-2 px-4 py-3 text-sm text-slate-600 dark:text-slate-300 hover:bg-slate-50 dark:hover:bg-slate-700 transition"
               >

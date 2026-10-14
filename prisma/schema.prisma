@@ -465,8 +465,8 @@ model PartnerDistribution {
   topupId String? @unique @map("topup_id")
   topup   Topup?  @relation(fields: [topupId], references: [id])
 
-  fundSourceId String     @map("fund_source_id")
-  fundSource   FundSource @relation(fields: [fundSourceId], references: [id])
+  fundSourceId String? @map("fund_source_id")
+  fundSource   FundSource? @relation(fields: [fundSourceId], references: [id])
 
   recordedById     String?     @map("recorded_by")
   recordedBy       SuperAdmin? @relation("DistributionRecorder", fields: [recordedById], references: [id])

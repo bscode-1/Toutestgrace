@@ -4,15 +4,13 @@ import { prisma } from "@/lib/prisma";
 import { requirePermission } from "@/lib/require-permission";
 
 const createSchema = z.object({
-  partnerId: z.string().min(1),   // Partner.id is cuid(), not uuid — only this one changes
+  partnerId: z.string().min(1),
   branchId: z.string().uuid(),
-  fundSourceId: z.string().uuid(),
+  fundSourceId: z.union([z.string().uuid(), z.literal("RETURNED")]).optional(),
   amount: z.number().positive(),
   note: z.string().optional(),
 });
 
-// POST /api/partner-distributions — distribute cash from partner to branch
-// auto-creates a Topup so the branch ledger stays in sync
 export async function POST(req: NextRequest) {
   const auth = await requirePermission(req, "RECORD_DISTRIBUTION");
   if (auth instanceof NextResponse) return auth;
@@ -24,6 +22,7 @@ export async function POST(req: NextRequest) {
   }
 
   const { partnerId, branchId, fundSourceId, amount, note } = parsed.data;
+  const fromReturned = fundSourceId === "RETURNED";
 
   const partner = await prisma.partner.findUnique({ where: { id: partnerId } });
   if (!partner) {
@@ -41,26 +40,57 @@ export async function POST(req: NextRequest) {
     );
   }
 
-  // Check partner has enough balance
-  const [cashInTotal, cashOutTotal] = await Promise.all([
+  // Overall partner balance = fund sources + returned capital − distributions
+  const [cashInTotal, returnedTotal, cashOutTotal] = await Promise.all([
     prisma.fundSource.aggregate({ where: { partnerId }, _sum: { cashValue: true } }),
+    prisma.branchCapitalReturn.aggregate({ where: { partnerId }, _sum: { amount: true } }),
     prisma.partnerDistribution.aggregate({ where: { partnerId }, _sum: { amount: true } }),
   ]);
 
+  const returned = Number(returnedTotal._sum.amount ?? 0);
   const balance =
-    Number(cashInTotal._sum.cashValue ?? 0) - Number(cashOutTotal._sum.amount ?? 0);
+    Number(cashInTotal._sum.cashValue ?? 0) + returned - Number(cashOutTotal._sum.amount ?? 0);
 
-  if (amount > balance) {
+  if (amount > balance + 0.005) {
     return NextResponse.json(
       { error: `Insufficient partner balance. Available: $${balance.toFixed(2)}` },
       { status: 400 }
     );
   }
 
-  // Generate receipt number for the topup
+  // Per-source check
+  if (fromReturned) {
+    const used = await prisma.partnerDistribution.aggregate({
+      where: { partnerId, fundSourceId: null },
+      _sum: { amount: true },
+    });
+    const pool = returned - Number(used._sum.amount ?? 0);
+    if (amount > pool + 0.005) {
+      return NextResponse.json(
+        { error: `Only $${Math.max(0, pool).toFixed(2)} of returned capital is available.` },
+        { status: 400 }
+      );
+    }
+  } else {
+    const source = await prisma.fundSource.findUnique({ where: { id: fundSourceId } });
+    if (!source || source.partnerId !== partnerId) {
+      return NextResponse.json({ error: "Cash-in source not found for this partner" }, { status: 404 });
+    }
+    const used = await prisma.partnerDistribution.aggregate({
+      where: { fundSourceId },
+      _sum: { amount: true },
+    });
+    const left = Number(source.cashValue) - Number(used._sum.amount ?? 0);
+    if (amount > left + 0.005) {
+      return NextResponse.json(
+        { error: `Only $${Math.max(0, left).toFixed(2)} left on cash-in ${source.code}.` },
+        { status: 400 }
+      );
+    }
+  }
+
   const receiptNumber = `TUP-${Date.now()}`;
 
-  // Use a transaction to create both records atomically
   const [topup, distribution] = await prisma.$transaction(async (tx) => {
     const newTopup = await tx.topup.create({
       data: {
@@ -87,7 +117,7 @@ export async function POST(req: NextRequest) {
       data: {
         partnerId,
         branchId,
-        fundSourceId,
+        fundSourceId: fromReturned ? null : fundSourceId,
         amount,
         note,
         topupId: newTopup.id,
@@ -105,7 +135,7 @@ export async function POST(req: NextRequest) {
       action: "CREATED",
       performedByAdminId: auth.role === "SUPER_ADMIN" ? auth.id : undefined,
       performedByUserId: auth.role === "SUPER_ADMIN" ? undefined : auth.id,
-      metadata: { partnerId, branchId, amount, topupId: topup.id },
+      metadata: { partnerId, branchId, amount, topupId: topup.id, fromReturned },
     },
   });
 

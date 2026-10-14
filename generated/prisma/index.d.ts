@@ -28219,7 +28219,7 @@ export namespace Prisma {
     amount: Decimal
     note: string | null
     topupId: string | null
-    fundSourceId: string
+    fundSourceId: string | null
     recordedById: string | null
     recordedByUserId: string | null
     distributedAt: Date
@@ -28260,7 +28260,7 @@ export namespace Prisma {
     partner?: boolean | PartnerDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
-    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    fundSource?: boolean | PartnerDistribution$fundSourceArgs<ExtArgs>
     recordedBy?: boolean | PartnerDistribution$recordedByArgs<ExtArgs>
     recordedByUser?: boolean | PartnerDistribution$recordedByUserArgs<ExtArgs>
   }, ExtArgs["result"]["partnerDistribution"]>
@@ -28280,7 +28280,7 @@ export namespace Prisma {
     partner?: boolean | PartnerDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
-    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    fundSource?: boolean | PartnerDistribution$fundSourceArgs<ExtArgs>
     recordedBy?: boolean | PartnerDistribution$recordedByArgs<ExtArgs>
     recordedByUser?: boolean | PartnerDistribution$recordedByUserArgs<ExtArgs>
   }, ExtArgs["result"]["partnerDistribution"]>
@@ -28300,7 +28300,7 @@ export namespace Prisma {
     partner?: boolean | PartnerDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
-    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    fundSource?: boolean | PartnerDistribution$fundSourceArgs<ExtArgs>
     recordedBy?: boolean | PartnerDistribution$recordedByArgs<ExtArgs>
     recordedByUser?: boolean | PartnerDistribution$recordedByUserArgs<ExtArgs>
   }, ExtArgs["result"]["partnerDistribution"]>
@@ -28324,7 +28324,7 @@ export namespace Prisma {
     partner?: boolean | PartnerDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
-    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    fundSource?: boolean | PartnerDistribution$fundSourceArgs<ExtArgs>
     recordedBy?: boolean | PartnerDistribution$recordedByArgs<ExtArgs>
     recordedByUser?: boolean | PartnerDistribution$recordedByUserArgs<ExtArgs>
   }
@@ -28332,7 +28332,7 @@ export namespace Prisma {
     partner?: boolean | PartnerDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
-    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    fundSource?: boolean | PartnerDistribution$fundSourceArgs<ExtArgs>
     recordedBy?: boolean | PartnerDistribution$recordedByArgs<ExtArgs>
     recordedByUser?: boolean | PartnerDistribution$recordedByUserArgs<ExtArgs>
   }
@@ -28340,7 +28340,7 @@ export namespace Prisma {
     partner?: boolean | PartnerDefaultArgs<ExtArgs>
     branch?: boolean | BranchDefaultArgs<ExtArgs>
     topup?: boolean | PartnerDistribution$topupArgs<ExtArgs>
-    fundSource?: boolean | FundSourceDefaultArgs<ExtArgs>
+    fundSource?: boolean | PartnerDistribution$fundSourceArgs<ExtArgs>
     recordedBy?: boolean | PartnerDistribution$recordedByArgs<ExtArgs>
     recordedByUser?: boolean | PartnerDistribution$recordedByUserArgs<ExtArgs>
   }
@@ -28351,7 +28351,7 @@ export namespace Prisma {
       partner: Prisma.$PartnerPayload<ExtArgs>
       branch: Prisma.$BranchPayload<ExtArgs>
       topup: Prisma.$TopupPayload<ExtArgs> | null
-      fundSource: Prisma.$FundSourcePayload<ExtArgs>
+      fundSource: Prisma.$FundSourcePayload<ExtArgs> | null
       recordedBy: Prisma.$SuperAdminPayload<ExtArgs> | null
       recordedByUser: Prisma.$AppUserPayload<ExtArgs> | null
     }
@@ -28362,7 +28362,7 @@ export namespace Prisma {
       amount: Prisma.Decimal
       note: string | null
       topupId: string | null
-      fundSourceId: string
+      fundSourceId: string | null
       recordedById: string | null
       recordedByUserId: string | null
       distributedAt: Date
@@ -28764,7 +28764,7 @@ export namespace Prisma {
     partner<T extends PartnerDefaultArgs<ExtArgs> = {}>(args?: Subset<T, PartnerDefaultArgs<ExtArgs>>): Prisma__PartnerClient<$Result.GetResult<Prisma.$PartnerPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     branch<T extends BranchDefaultArgs<ExtArgs> = {}>(args?: Subset<T, BranchDefaultArgs<ExtArgs>>): Prisma__BranchClient<$Result.GetResult<Prisma.$BranchPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
     topup<T extends PartnerDistribution$topupArgs<ExtArgs> = {}>(args?: Subset<T, PartnerDistribution$topupArgs<ExtArgs>>): Prisma__TopupClient<$Result.GetResult<Prisma.$TopupPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
-    fundSource<T extends FundSourceDefaultArgs<ExtArgs> = {}>(args?: Subset<T, FundSourceDefaultArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | Null, Null, ExtArgs, GlobalOmitOptions>
+    fundSource<T extends PartnerDistribution$fundSourceArgs<ExtArgs> = {}>(args?: Subset<T, PartnerDistribution$fundSourceArgs<ExtArgs>>): Prisma__FundSourceClient<$Result.GetResult<Prisma.$FundSourcePayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     recordedBy<T extends PartnerDistribution$recordedByArgs<ExtArgs> = {}>(args?: Subset<T, PartnerDistribution$recordedByArgs<ExtArgs>>): Prisma__SuperAdminClient<$Result.GetResult<Prisma.$SuperAdminPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     recordedByUser<T extends PartnerDistribution$recordedByUserArgs<ExtArgs> = {}>(args?: Subset<T, PartnerDistribution$recordedByUserArgs<ExtArgs>>): Prisma__AppUserClient<$Result.GetResult<Prisma.$AppUserPayload<ExtArgs>, T, "findUniqueOrThrow", GlobalOmitOptions> | null, null, ExtArgs, GlobalOmitOptions>
     /**
@@ -29224,6 +29224,25 @@ export namespace Prisma {
      */
     include?: TopupInclude<ExtArgs> | null
     where?: TopupWhereInput
+  }
+
+  /**
+   * PartnerDistribution.fundSource
+   */
+  export type PartnerDistribution$fundSourceArgs<ExtArgs extends $Extensions.InternalArgs = $Extensions.DefaultArgs> = {
+    /**
+     * Select specific fields to fetch from the FundSource
+     */
+    select?: FundSourceSelect<ExtArgs> | null
+    /**
+     * Omit specific fields from the FundSource
+     */
+    omit?: FundSourceOmit<ExtArgs> | null
+    /**
+     * Choose, which related nodes to fetch as well
+     */
+    include?: FundSourceInclude<ExtArgs> | null
+    where?: FundSourceWhereInput
   }
 
   /**
@@ -33743,7 +33762,7 @@ export namespace Prisma {
     amount?: DecimalFilter<"PartnerDistribution"> | Decimal | DecimalJsLike | number | string
     note?: StringNullableFilter<"PartnerDistribution"> | string | null
     topupId?: StringNullableFilter<"PartnerDistribution"> | string | null
-    fundSourceId?: StringFilter<"PartnerDistribution"> | string
+    fundSourceId?: StringNullableFilter<"PartnerDistribution"> | string | null
     recordedById?: StringNullableFilter<"PartnerDistribution"> | string | null
     recordedByUserId?: StringNullableFilter<"PartnerDistribution"> | string | null
     distributedAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
@@ -33751,7 +33770,7 @@ export namespace Prisma {
     partner?: XOR<PartnerScalarRelationFilter, PartnerWhereInput>
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     topup?: XOR<TopupNullableScalarRelationFilter, TopupWhereInput> | null
-    fundSource?: XOR<FundSourceScalarRelationFilter, FundSourceWhereInput>
+    fundSource?: XOR<FundSourceNullableScalarRelationFilter, FundSourceWhereInput> | null
     recordedBy?: XOR<SuperAdminNullableScalarRelationFilter, SuperAdminWhereInput> | null
     recordedByUser?: XOR<AppUserNullableScalarRelationFilter, AppUserWhereInput> | null
   }
@@ -33763,7 +33782,7 @@ export namespace Prisma {
     amount?: SortOrder
     note?: SortOrderInput | SortOrder
     topupId?: SortOrderInput | SortOrder
-    fundSourceId?: SortOrder
+    fundSourceId?: SortOrderInput | SortOrder
     recordedById?: SortOrderInput | SortOrder
     recordedByUserId?: SortOrderInput | SortOrder
     distributedAt?: SortOrder
@@ -33786,7 +33805,7 @@ export namespace Prisma {
     branchId?: StringFilter<"PartnerDistribution"> | string
     amount?: DecimalFilter<"PartnerDistribution"> | Decimal | DecimalJsLike | number | string
     note?: StringNullableFilter<"PartnerDistribution"> | string | null
-    fundSourceId?: StringFilter<"PartnerDistribution"> | string
+    fundSourceId?: StringNullableFilter<"PartnerDistribution"> | string | null
     recordedById?: StringNullableFilter<"PartnerDistribution"> | string | null
     recordedByUserId?: StringNullableFilter<"PartnerDistribution"> | string | null
     distributedAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
@@ -33794,7 +33813,7 @@ export namespace Prisma {
     partner?: XOR<PartnerScalarRelationFilter, PartnerWhereInput>
     branch?: XOR<BranchScalarRelationFilter, BranchWhereInput>
     topup?: XOR<TopupNullableScalarRelationFilter, TopupWhereInput> | null
-    fundSource?: XOR<FundSourceScalarRelationFilter, FundSourceWhereInput>
+    fundSource?: XOR<FundSourceNullableScalarRelationFilter, FundSourceWhereInput> | null
     recordedBy?: XOR<SuperAdminNullableScalarRelationFilter, SuperAdminWhereInput> | null
     recordedByUser?: XOR<AppUserNullableScalarRelationFilter, AppUserWhereInput> | null
   }, "id" | "topupId">
@@ -33806,7 +33825,7 @@ export namespace Prisma {
     amount?: SortOrder
     note?: SortOrderInput | SortOrder
     topupId?: SortOrderInput | SortOrder
-    fundSourceId?: SortOrder
+    fundSourceId?: SortOrderInput | SortOrder
     recordedById?: SortOrderInput | SortOrder
     recordedByUserId?: SortOrderInput | SortOrder
     distributedAt?: SortOrder
@@ -33828,7 +33847,7 @@ export namespace Prisma {
     amount?: DecimalWithAggregatesFilter<"PartnerDistribution"> | Decimal | DecimalJsLike | number | string
     note?: StringNullableWithAggregatesFilter<"PartnerDistribution"> | string | null
     topupId?: StringNullableWithAggregatesFilter<"PartnerDistribution"> | string | null
-    fundSourceId?: StringWithAggregatesFilter<"PartnerDistribution"> | string
+    fundSourceId?: StringNullableWithAggregatesFilter<"PartnerDistribution"> | string | null
     recordedById?: StringNullableWithAggregatesFilter<"PartnerDistribution"> | string | null
     recordedByUserId?: StringNullableWithAggregatesFilter<"PartnerDistribution"> | string | null
     distributedAt?: DateTimeWithAggregatesFilter<"PartnerDistribution"> | Date | string
@@ -35743,7 +35762,7 @@ export namespace Prisma {
     partner: PartnerCreateNestedOneWithoutDistributionsInput
     branch: BranchCreateNestedOneWithoutDistributionsInput
     topup?: TopupCreateNestedOneWithoutDistributionInput
-    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    fundSource?: FundSourceCreateNestedOneWithoutDistributionsInput
     recordedBy?: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
     recordedByUser?: AppUserCreateNestedOneWithoutDistributionsRecordedInput
   }
@@ -35755,7 +35774,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
@@ -35771,7 +35790,7 @@ export namespace Prisma {
     partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
     branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
     topup?: TopupUpdateOneWithoutDistributionNestedInput
-    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    fundSource?: FundSourceUpdateOneWithoutDistributionsNestedInput
     recordedBy?: SuperAdminUpdateOneWithoutDistributionsRecordedNestedInput
     recordedByUser?: AppUserUpdateOneWithoutDistributionsRecordedNestedInput
   }
@@ -35783,7 +35802,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -35797,7 +35816,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
@@ -35819,7 +35838,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -37287,9 +37306,9 @@ export namespace Prisma {
     cashValue?: SortOrder
   }
 
-  export type FundSourceScalarRelationFilter = {
-    is?: FundSourceWhereInput
-    isNot?: FundSourceWhereInput
+  export type FundSourceNullableScalarRelationFilter = {
+    is?: FundSourceWhereInput | null
+    isNot?: FundSourceWhereInput | null
   }
 
   export type PartnerDistributionCountOrderByAggregateInput = {
@@ -40251,10 +40270,12 @@ export namespace Prisma {
     update?: XOR<XOR<TopupUpdateToOneWithWhereWithoutDistributionInput, TopupUpdateWithoutDistributionInput>, TopupUncheckedUpdateWithoutDistributionInput>
   }
 
-  export type FundSourceUpdateOneRequiredWithoutDistributionsNestedInput = {
+  export type FundSourceUpdateOneWithoutDistributionsNestedInput = {
     create?: XOR<FundSourceCreateWithoutDistributionsInput, FundSourceUncheckedCreateWithoutDistributionsInput>
     connectOrCreate?: FundSourceCreateOrConnectWithoutDistributionsInput
     upsert?: FundSourceUpsertWithoutDistributionsInput
+    disconnect?: FundSourceWhereInput | boolean
+    delete?: FundSourceWhereInput | boolean
     connect?: FundSourceWhereUniqueInput
     update?: XOR<XOR<FundSourceUpdateToOneWithWhereWithoutDistributionsInput, FundSourceUpdateWithoutDistributionsInput>, FundSourceUncheckedUpdateWithoutDistributionsInput>
   }
@@ -41331,7 +41352,7 @@ export namespace Prisma {
     partner: PartnerCreateNestedOneWithoutDistributionsInput
     branch: BranchCreateNestedOneWithoutDistributionsInput
     topup?: TopupCreateNestedOneWithoutDistributionInput
-    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    fundSource?: FundSourceCreateNestedOneWithoutDistributionsInput
     recordedByUser?: AppUserCreateNestedOneWithoutDistributionsRecordedInput
   }
 
@@ -41342,7 +41363,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
     createdAt?: Date | string
@@ -41643,7 +41664,7 @@ export namespace Prisma {
     amount?: DecimalFilter<"PartnerDistribution"> | Decimal | DecimalJsLike | number | string
     note?: StringNullableFilter<"PartnerDistribution"> | string | null
     topupId?: StringNullableFilter<"PartnerDistribution"> | string | null
-    fundSourceId?: StringFilter<"PartnerDistribution"> | string
+    fundSourceId?: StringNullableFilter<"PartnerDistribution"> | string | null
     recordedById?: StringNullableFilter<"PartnerDistribution"> | string | null
     recordedByUserId?: StringNullableFilter<"PartnerDistribution"> | string | null
     distributedAt?: DateTimeFilter<"PartnerDistribution"> | Date | string
@@ -41978,7 +41999,7 @@ export namespace Prisma {
     createdAt?: Date | string
     partner: PartnerCreateNestedOneWithoutDistributionsInput
     topup?: TopupCreateNestedOneWithoutDistributionInput
-    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    fundSource?: FundSourceCreateNestedOneWithoutDistributionsInput
     recordedBy?: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
     recordedByUser?: AppUserCreateNestedOneWithoutDistributionsRecordedInput
   }
@@ -41989,7 +42010,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
@@ -43551,7 +43572,7 @@ export namespace Prisma {
     partner: PartnerCreateNestedOneWithoutDistributionsInput
     branch: BranchCreateNestedOneWithoutDistributionsInput
     topup?: TopupCreateNestedOneWithoutDistributionInput
-    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    fundSource?: FundSourceCreateNestedOneWithoutDistributionsInput
     recordedBy?: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
   }
 
@@ -43562,7 +43583,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     distributedAt?: Date | string
     createdAt?: Date | string
@@ -44150,7 +44171,7 @@ export namespace Prisma {
     createdAt?: Date | string
     branch: BranchCreateNestedOneWithoutDistributionsInput
     topup?: TopupCreateNestedOneWithoutDistributionInput
-    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    fundSource?: FundSourceCreateNestedOneWithoutDistributionsInput
     recordedBy?: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
     recordedByUser?: AppUserCreateNestedOneWithoutDistributionsRecordedInput
   }
@@ -44161,7 +44182,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
@@ -46325,7 +46346,7 @@ export namespace Prisma {
     createdAt?: Date | string
     partner: PartnerCreateNestedOneWithoutDistributionsInput
     branch: BranchCreateNestedOneWithoutDistributionsInput
-    fundSource: FundSourceCreateNestedOneWithoutDistributionsInput
+    fundSource?: FundSourceCreateNestedOneWithoutDistributionsInput
     recordedBy?: SuperAdminCreateNestedOneWithoutDistributionsRecordedInput
     recordedByUser?: AppUserCreateNestedOneWithoutDistributionsRecordedInput
   }
@@ -46336,7 +46357,7 @@ export namespace Prisma {
     branchId: string
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
@@ -46678,7 +46699,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
     branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
-    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    fundSource?: FundSourceUpdateOneWithoutDistributionsNestedInput
     recordedBy?: SuperAdminUpdateOneWithoutDistributionsRecordedNestedInput
     recordedByUser?: AppUserUpdateOneWithoutDistributionsRecordedNestedInput
   }
@@ -46689,7 +46710,7 @@ export namespace Prisma {
     branchId?: StringFieldUpdateOperationsInput | string
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49454,7 +49475,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
     createdAt?: Date | string
@@ -49602,7 +49623,7 @@ export namespace Prisma {
     partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
     branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
     topup?: TopupUpdateOneWithoutDistributionNestedInput
-    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    fundSource?: FundSourceUpdateOneWithoutDistributionsNestedInput
     recordedByUser?: AppUserUpdateOneWithoutDistributionsRecordedNestedInput
   }
 
@@ -49613,7 +49634,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49626,7 +49647,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -49848,7 +49869,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
@@ -49992,7 +50013,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
     topup?: TopupUpdateOneWithoutDistributionNestedInput
-    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    fundSource?: FundSourceUpdateOneWithoutDistributionsNestedInput
     recordedBy?: SuperAdminUpdateOneWithoutDistributionsRecordedNestedInput
     recordedByUser?: AppUserUpdateOneWithoutDistributionsRecordedNestedInput
   }
@@ -50003,7 +50024,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50016,7 +50037,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -50665,7 +50686,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     distributedAt?: Date | string
     createdAt?: Date | string
@@ -51331,7 +51352,7 @@ export namespace Prisma {
     partner?: PartnerUpdateOneRequiredWithoutDistributionsNestedInput
     branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
     topup?: TopupUpdateOneWithoutDistributionNestedInput
-    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    fundSource?: FundSourceUpdateOneWithoutDistributionsNestedInput
     recordedBy?: SuperAdminUpdateOneWithoutDistributionsRecordedNestedInput
   }
 
@@ -51342,7 +51363,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51355,7 +51376,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51412,7 +51433,7 @@ export namespace Prisma {
     amount: Decimal | DecimalJsLike | number | string
     note?: string | null
     topupId?: string | null
-    fundSourceId: string
+    fundSourceId?: string | null
     recordedById?: string | null
     recordedByUserId?: string | null
     distributedAt?: Date | string
@@ -51473,7 +51494,7 @@ export namespace Prisma {
     createdAt?: DateTimeFieldUpdateOperationsInput | Date | string
     branch?: BranchUpdateOneRequiredWithoutDistributionsNestedInput
     topup?: TopupUpdateOneWithoutDistributionNestedInput
-    fundSource?: FundSourceUpdateOneRequiredWithoutDistributionsNestedInput
+    fundSource?: FundSourceUpdateOneWithoutDistributionsNestedInput
     recordedBy?: SuperAdminUpdateOneWithoutDistributionsRecordedNestedInput
     recordedByUser?: AppUserUpdateOneWithoutDistributionsRecordedNestedInput
   }
@@ -51484,7 +51505,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
@@ -51497,7 +51518,7 @@ export namespace Prisma {
     amount?: DecimalFieldUpdateOperationsInput | Decimal | DecimalJsLike | number | string
     note?: NullableStringFieldUpdateOperationsInput | string | null
     topupId?: NullableStringFieldUpdateOperationsInput | string | null
-    fundSourceId?: StringFieldUpdateOperationsInput | string
+    fundSourceId?: NullableStringFieldUpdateOperationsInput | string | null
     recordedById?: NullableStringFieldUpdateOperationsInput | string | null
     recordedByUserId?: NullableStringFieldUpdateOperationsInput | string | null
     distributedAt?: DateTimeFieldUpdateOperationsInput | Date | string
